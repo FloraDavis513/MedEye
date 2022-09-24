@@ -30,8 +30,8 @@ namespace MedEye.Views
             Avalonia.Controls.Shapes.Rectangle target = this.Get<Avalonia.Controls.Shapes.Rectangle>("Target");
             double height = target.Height;
             double width = target.Width;
-            Canvas.SetTop(target, rnd.Next(0, Convert.ToInt32(this.Height - height)));
-            Canvas.SetLeft(target, rnd.Next(0, Convert.ToInt32(this.Width - width)));
+            Canvas.SetTop(target, rnd.Next(0, Convert.ToInt32(this.ClientSize.Height - height)));
+            Canvas.SetLeft(target, rnd.Next(0, Convert.ToInt32(this.ClientSize.Width - width)));
         }
 
         protected override void OnPointerPressed(PointerPressedEventArgs e)
