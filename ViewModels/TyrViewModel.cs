@@ -1,13 +1,4 @@
-﻿using Avalonia.Controls;
-using Avalonia.Interactivity;
-using MedEye.Views;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MedEye.ViewModels
+﻿namespace MedEye.ViewModels
 {
     public class TyrViewModel : ViewModelBase
     {

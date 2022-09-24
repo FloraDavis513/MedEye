@@ -13,12 +13,12 @@
         <vm:MainWindowViewModel/>
     </Design.DataContext>
 
-  <Grid Name="Menu" ColumnDefinitions="Auto" RowDefinitions="Auto, Auto, Auto, Auto, Auto" >
-      <Button Name="Tyr" Content="Тир" Command="{Binding OnClickCommand}" Grid.Row="0" Grid.Column="0" />
-      <Button Content="Погоня" Grid.Row="1" Grid.Column="0"/>
-      <Button Content="Слияние" Grid.Row="2" Grid.Column="0"/>
-      <Button Content="Совмещение" Grid.Row="3" Grid.Column="0"/>
-      <Button Content="Контур" Grid.Row="4" Grid.Column="0"/>
+  <Grid Name="Menu" RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto" >
+      <Button Name="Tyr" Content="Тир" Command="{Binding OnClickCommand}" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center" />
+      <Button Content="Погоня" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center"/>
+      <Button Content="Слияние" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Center"/>
+      <Button Content="Совмещение" Grid.Row="3" Grid.Column="0" HorizontalAlignment="Center"/>
+      <Button Content="Контур" Grid.Row="4" Grid.Column="0" HorizontalAlignment="Center"/>
   </Grid>
   
 </Window>

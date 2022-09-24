@@ -8,6 +8,23 @@
         Title="Tyr"
         WindowState="FullScreen"
         Background="Black">
-  <Canvas>
-  </Canvas>
+
+    <Canvas>
+      <Border
+           Background="Red"
+           HorizontalAlignment="Left"
+           CornerRadius="50"
+           Height="75"
+           Width="75"
+           Name="Scope"
+           ZIndex="2">
+      </Border>
+      <Rectangle 
+        Name="Target" 
+        Height="150" 
+        Width="150" 
+        Classes="red"
+        Fill="Red"/>
+    </Canvas>
+
 </Window>
