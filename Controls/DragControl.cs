@@ -2,6 +2,9 @@
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Media;
+using MedEye.Consts;
+using System;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace MedEye.Controls
 {
@@ -14,6 +17,12 @@ namespace MedEye.Controls
         protected override void OnPointerPressed(PointerPressedEventArgs e)
         {
             _isPressed = true;
+
+            if (this.Background == ColorConst.STRABISMUS_MOVE_COLOR && this.Name == "FirstObject")
+                this.Background = ColorConst.STRABISMUS_FIRST_COLOR;
+            else if (this.Background == ColorConst.STRABISMUS_MOVE_COLOR && this.Name == "SecondObject")
+                this.Background = ColorConst.STRABISMUS_SECOND_COLOR;
+
             _positionInBlock = e.GetPosition(Parent);
 
             if (_transform != null!)
@@ -28,6 +37,11 @@ namespace MedEye.Controls
         {
             _isPressed = false;
 
+            if (this.Background == ColorConst.STRABISMUS_MOVE_COLOR && this.Name == "FirstObject")
+                this.Background = ColorConst.STRABISMUS_FIRST_COLOR;
+            else if (this.Background == ColorConst.STRABISMUS_MOVE_COLOR && this.Name == "SecondObject")
+                this.Background = ColorConst.STRABISMUS_SECOND_COLOR;
+
             base.OnPointerReleased(e);
         }
 
@@ -35,6 +49,13 @@ namespace MedEye.Controls
         {
             if (!_isPressed)
                 return;
+
+            if (this.Background == ColorConst.STRABISMUS_MOVE_COLOR && this.Name == "FirstObject")
+                this.Background = ColorConst.STRABISMUS_FIRST_COLOR;
+            else if(this.Background == ColorConst.STRABISMUS_MOVE_COLOR && this.Name == "SecondObject")
+                this.Background = ColorConst.STRABISMUS_SECOND_COLOR;
+            else
+                this.Background = ColorConst.STRABISMUS_MOVE_COLOR;
 
             if (Parent == null)
                 return;

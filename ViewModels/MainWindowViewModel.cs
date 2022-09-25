@@ -4,9 +4,14 @@ namespace MedEye.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        public void OnClickCommand()
+        public void StartTyr()
         {
             new Tyr().Show();
+        }
+
+        public void StartCombination()
+        {
+            new Combination().Show();
         }
     }
 }

@@ -31,5 +31,8 @@
     <Compile Update="Views\Tyr.axaml.cs">
       <DependentUpon>Tyr.axaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\Combination.axaml.cs">
+      <DependentUpon>Combination.axaml</DependentUpon>
+    </Compile>
   </ItemGroup>
 </Project>
