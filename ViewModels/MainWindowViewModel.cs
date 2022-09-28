@@ -13,5 +13,10 @@ namespace MedEye.ViewModels
         {
             new Combination().Show();
         }
+
+        public void StartFollowing()
+        {
+            new Following().Show();
+        }
     }
 }
