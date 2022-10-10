@@ -9,6 +9,9 @@
         WindowState="FullScreen"
         Background="Black">
     <Canvas>
+        <TextBlock Background="White" Name="Angle"/>
+        <TextBlock Background="White" Name="DX"/>
+        <TextBlock Background="White" Name="DY"/>
         <Border
             BorderBrush="Red"
             BorderThickness="10"
@@ -16,7 +19,7 @@
             HorizontalAlignment="Left"
             Height="150"
             Width="150"
-            Name="Target"
+            Name="Stalker"
             ZIndex="2">
         </Border>
         <Border
@@ -25,7 +28,7 @@
             CornerRadius="50"
             Height="75"
             Width="75"
-            Name="Stalker"
+            Name="Target"
             ZIndex="2">
         </Border>
     </Canvas>
