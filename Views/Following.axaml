@@ -9,9 +9,6 @@
         WindowState="FullScreen"
         Background="Black">
     <Canvas>
-        <TextBlock Background="White" Name="Angle"/>
-        <TextBlock Background="White" Name="DX"/>
-        <TextBlock Background="White" Name="DY"/>
         <Border
             BorderBrush="Red"
             BorderThickness="10"
