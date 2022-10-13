@@ -1,10 +1,7 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
-using Avalonia.Media;
 using MedEye.Consts;
-using System;
-using static System.Formats.Asn1.AsnWriter;
 
 namespace MedEye.Controls
 {
@@ -12,36 +9,17 @@ namespace MedEye.Controls
     {
         private bool _isPressed;
         private Point _positionInBlock;
-        private TranslateTransform _transform = null!;
 
         protected override void OnPointerPressed(PointerPressedEventArgs e)
         {
             _isPressed = true;
-
-            if (this.Background == ColorConst.STRABISMUS_MOVE_COLOR && this.Name == "FirstObject")
-                this.Background = ColorConst.STRABISMUS_FIRST_COLOR;
-            else if (this.Background == ColorConst.STRABISMUS_MOVE_COLOR && this.Name == "SecondObject")
-                this.Background = ColorConst.STRABISMUS_SECOND_COLOR;
-
-            _positionInBlock = e.GetPosition(Parent);
-
-            if (_transform != null!)
-                _positionInBlock = new Point(
-                    _positionInBlock.X - _transform.X,
-                    _positionInBlock.Y - _transform.Y);
-
+            _positionInBlock = e.GetPosition(this);
             base.OnPointerPressed(e);
         }
 
         protected override void OnPointerReleased(PointerReleasedEventArgs e)
         {
             _isPressed = false;
-
-            if (this.Background == ColorConst.STRABISMUS_MOVE_COLOR && this.Name == "FirstObject")
-                this.Background = ColorConst.STRABISMUS_FIRST_COLOR;
-            else if (this.Background == ColorConst.STRABISMUS_MOVE_COLOR && this.Name == "SecondObject")
-                this.Background = ColorConst.STRABISMUS_SECOND_COLOR;
-
             base.OnPointerReleased(e);
         }
 
@@ -50,23 +28,33 @@ namespace MedEye.Controls
             if (!_isPressed)
                 return;
 
-            if (this.Background == ColorConst.STRABISMUS_MOVE_COLOR && this.Name == "FirstObject")
-                this.Background = ColorConst.STRABISMUS_FIRST_COLOR;
-            else if(this.Background == ColorConst.STRABISMUS_MOVE_COLOR && this.Name == "SecondObject")
-                this.Background = ColorConst.STRABISMUS_SECOND_COLOR;
-            else
-                this.Background = ColorConst.STRABISMUS_MOVE_COLOR;
-
             if (Parent == null)
                 return;
+            
+            if(this.Name == "PartOne")
+            {
+                Border first_1 = Parent.Parent.Get<Border>("BigOne");
+                Border first_2 = Parent.Parent.Get<Border>("SmallOne");
+                first_1.Background = ColorConst.STRABISMUS_MOVE_COLOR;
+                first_2.Background = ColorConst.STRABISMUS_MOVE_COLOR;
+            }
+            else if (this.Name == "PartTwo")
+            {
+                Border second_1 = Parent.Parent.Get<Border>("BigTwo");
+                Border second_2 = Parent.Parent.Get<Border>("SmallTwo");
+                second_1.Background = ColorConst.STRABISMUS_MOVE_COLOR;
+                second_2.Background = ColorConst.STRABISMUS_MOVE_COLOR;
+            }
+            else
+                this.Background = ColorConst.STRABISMUS_MOVE_COLOR;
 
             var currentPosition = e.GetPosition(Parent);
 
             var offsetX = currentPosition.X - _positionInBlock.X;
             var offsetY = currentPosition.Y - _positionInBlock.Y;
 
-            _transform = new TranslateTransform(offsetX, offsetY);
-            RenderTransform = _transform;
+            Canvas.SetLeft(this, offsetX);
+            Canvas.SetTop(this, offsetY);
 
             base.OnPointerMoved(e);
         }
