@@ -13,16 +13,16 @@
       <Border
            Background="Red"
            HorizontalAlignment="Left"
-           CornerRadius="50"
-           Height="75"
-           Width="75"
+           CornerRadius="150"
+           Height="300"
+           Width="300"
            Name="Scope"
            ZIndex="2">
       </Border>
       <Rectangle 
         Name="Target" 
-        Height="150" 
-        Width="150" 
+        Height="300" 
+        Width="300" 
         Classes="red"
         Fill="Red"/>
     </Canvas>

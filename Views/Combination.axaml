@@ -11,26 +11,39 @@
   <Canvas>
     <controls:DragControl 
       Background="Red"
-      Height="50"
-      Width="50"
+      Height="100"
+      Width="100"
       Name="FirstObject"
       ZIndex="2">
     </controls:DragControl>
     <controls:DragControl
       Background="Blue"
-      Height="150"
-      Width="150"
+      Height="350"
+      Width="350"
       Name="SecondObject"
-      Canvas.Left="200"
-      Canvas.Top="200"
-      CornerRadius="75">
+      CornerRadius="175">
       <Border
         Background="Black"
-        Height="125"
-        Width="125"
-        CornerRadius="62.5">
+        Height="300"
+        Width="300"
+        CornerRadius="150">
       </Border>
     </controls:DragControl>
-    <Label Background="White" Height="100" Width="300" Name="Log"></Label>
+    <Border
+        Background="White"
+        Height="150"
+        Width="500"
+        CornerRadius="15"
+        Name="Log"
+        Opacity="0">
+      <Label
+      Background="White"
+      Height="140"
+      Width="450"
+      ZIndex="3"
+      FontSize="30">Отклонение:
+      </Label>
+    </Border>
+    
   </Canvas>
 </Window>

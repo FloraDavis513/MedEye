@@ -6,7 +6,9 @@ namespace MedEye.ViewModels
     {
         public void StartTyr()
         {
-            new Tyr().Show();
+            Tyr tyr = new Tyr();
+            tyr.SetDifficultLevel(0);
+            tyr.Show();
         }
 
         public void StartCombination()
@@ -17,6 +19,11 @@ namespace MedEye.ViewModels
         public void StartFollowing()
         {
             new Following().Show();
+        }
+
+        public void StartMerger()
+        {
+            new Merger().Show();
         }
     }
 }
