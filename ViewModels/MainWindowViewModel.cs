@@ -25,5 +25,10 @@ namespace MedEye.ViewModels
         {
             new Merger().Show();
         }
+
+        public void Start()
+        {
+            new MainMenu().Show();
+        }
     }
 }
