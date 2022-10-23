@@ -5,18 +5,18 @@
         mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
         x:Class="MedEye.Views.MainMenu"
         Title="MainMenu"
-        WindowState="Maximized">
-  <Grid 
-    Background="#1372B7" 
+        WindowState="FullScreen">
+  <Grid
+    Background="#1372B7"
     Opacity="0.25"
     ColumnDefinitions="*, 5*, 12*">
     <Panel Grid.Row="0" Grid.Column="0">
     </Panel>
     <StackPanel Background="White" Opacity="100" Grid.Row="0" Grid.Column="1"  Name="GroupButton">
-      <TextBlock FontSize="96" TextAlignment="Center" TextWrapping="Wrap">
+      <TextBlock Name="MainHeader" FontSize="96" TextAlignment="Center" TextWrapping="Wrap">
         MedEye
       </TextBlock>
-      <TextBlock FontSize="48" TextAlignment="Center" TextWrapping="Wrap">
+      <TextBlock Name="SubHeader" FontSize="48" TextAlignment="Center" TextWrapping="Wrap">
         Лечение косоглазия и амблиопии
       </TextBlock>
       <Grid Name="Buttons" RowDefinitions="2*, *, *, *" HorizontalAlignment="Center" Margin="0 75 0 0">

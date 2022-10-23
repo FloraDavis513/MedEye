@@ -17,9 +17,9 @@ namespace MedEye
         {
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
-                desktop.MainWindow = new MainWindow
+                desktop.MainWindow = new MainMenu
                 {
-                    DataContext = new MainWindowViewModel(),
+                    DataContext = new MainMenuViewModel(),
                 };
             }
 
