@@ -14,11 +14,11 @@
     </Design.DataContext>
 
   <Grid Name="Menu" RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto" >
+      <Button Content="Меню" Command="{Binding Start}" Grid.Row="4" Grid.Column="0" HorizontalAlignment="Center"/>
       <Button Name="Tyr" Content="Тир" Command="{Binding StartTyr}" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center" />
       <Button Content="Погоня" Command="{Binding StartFollowing}" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center"/>
       <Button Content="Слияние" Command="{Binding StartMerger}" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Center"/>
       <Button Content="Совмещение" Command="{Binding StartCombination}" Grid.Row="3" Grid.Column="0" HorizontalAlignment="Center"/>
-      <Button Content="Контур" Command="{Binding Start}" Grid.Row="4" Grid.Column="0" HorizontalAlignment="Center"/>
   </Grid>
   
 </Window>

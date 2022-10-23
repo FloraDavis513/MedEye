@@ -1,0 +1,46 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="MedEye.Views.SetupMenu"
+        Title="SetupMenu">
+    <Grid 
+        Background="#1372B7" 
+        Opacity="0.25"
+        ColumnDefinitions="*, 5*, 12*">
+        <Panel Grid.Row="0" Grid.Column="0">
+        </Panel>
+        <StackPanel Background="White" Opacity="100" Grid.Row="0" Grid.Column="1"  Name="GroupComboBox">
+          <TextBlock FontSize="36" TextAlignment="Center" TextWrapping="Wrap">
+            Настройка упражнений
+          </TextBlock>
+          <Grid Name="Buttons" RowDefinitions="2*, *, *, *" HorizontalAlignment="Center" Margin="0 75 0 0">
+            <ComboBox Name="Game1" Grid.Row="0" SelectedIndex="0" >
+              <ComboBoxItem>Выбирете игру</ComboBoxItem>
+              <ComboBoxItem>Тир</ComboBoxItem>
+              <ComboBoxItem>Погоня</ComboBoxItem>
+              <ComboBoxItem>Совмещение</ComboBoxItem>
+              <ComboBoxItem>Слияние</ComboBoxItem>
+            </ComboBox>
+            <Grid.Styles>
+              <Style Selector="Button">
+                <Setter Property="BorderBrush" Value="#00B1A7"></Setter>
+                <Setter Property="Background" Value="#CFE0F2"></Setter>
+                <Setter Property="BorderThickness" Value="2.5"></Setter>
+                <Setter Property="CornerRadius" Value="15"></Setter>
+                <Setter Property="Margin" Value="0 25 0 0"></Setter>
+                <Setter Property="Padding" Value="0 15 0 15"></Setter>
+                <Setter Property="TextBlock.FontSize" Value="32"></Setter>
+                <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
+              </Style>
+              <Style Selector="Button:pointerover /template/ ContentPresenter">
+                <Setter Property="BorderBrush" Value="Red"></Setter>
+                <Setter Property="Background" Value="#CFE0F2"></Setter>
+                <Setter Property="TextBlock.Foreground" Value="Red"></Setter>
+              </Style>
+            </Grid.Styles>
+          </Grid>
+        </StackPanel>
+      </Grid>
+</Window>

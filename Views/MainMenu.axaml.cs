@@ -1,11 +1,7 @@
 using Avalonia;
-using Avalonia.Collections;
 using Avalonia.Controls;
-using Avalonia.Input;
 using Avalonia.Interactivity;
-using Avalonia.LogicalTree;
 using Avalonia.Media.Imaging;
-using Avalonia.Svg;
 using System;
 
 namespace MedEye.Views
@@ -17,6 +13,7 @@ namespace MedEye.Views
             InitializeComponent();
 
             var button = this.FindControl<Button>("Exit");
+            Cabinet.Click += (sender, args) => new SetupMenu().Show();
 
             button.Click += Button_Click;
         }
@@ -37,7 +34,7 @@ namespace MedEye.Views
 
             var logo = this.Get<Image>("Logo");
 
-            logo.Source = new Bitmap("C:\\Users\\Alex\\source\\repos\\MedEye\\Assets\\logo.png");
+            logo.Source = new Bitmap("..\\..\\..\\Assets\\logo.png");
 
             base.OnOpened(e);
         }
