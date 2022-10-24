@@ -29,14 +29,14 @@ namespace MedEye.Views
             DragControl first = this.Get<DragControl>("PartOne");
             double first_height = first.Height;
             double first_width = first.Width;
-            Canvas.SetTop(first, rnd.Next(Convert.ToInt32(first_height), Convert.ToInt32(this.ClientSize.Height - first_height)));
-            Canvas.SetLeft(first, rnd.Next(Convert.ToInt32(first_width), Convert.ToInt32(this.ClientSize.Width - first_width)));
+            Canvas.SetTop(first, rnd.Next(0, Convert.ToInt32(this.ClientSize.Height - first_height)));
+            Canvas.SetLeft(first, rnd.Next(0, Convert.ToInt32(this.ClientSize.Width - first_width)));
 
             DragControl second = this.Get<DragControl>("PartTwo");
             double second_height = second.Height;
             double second_width = second.Width;
-            Canvas.SetTop(second, rnd.Next(Convert.ToInt32(second_height), Convert.ToInt32(this.ClientSize.Height - second_height)));
-            Canvas.SetLeft(second, rnd.Next(Convert.ToInt32(this.ClientSize.Width / 2), Convert.ToInt32(this.ClientSize.Width - second_width)));
+            Canvas.SetTop(second, rnd.Next(0, Convert.ToInt32(this.ClientSize.Height - second_height)));
+            Canvas.SetLeft(second, rnd.Next(0, Convert.ToInt32(this.ClientSize.Width - second_width)));
         }
 
         protected override void OnKeyDown(KeyEventArgs e)
