@@ -1,0 +1,158 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="MedEye.Views.SetupMenu"
+        Title="SetupMenu"
+        WindowState="FullScreen">
+    <Grid
+        Background="#1372B7"
+        Opacity="0.25"
+        ColumnDefinitions="*, 5*, *, 10*, *">
+        <Panel Grid.Row="0" Grid.Column="0">
+        </Panel>
+        <StackPanel Background="White" Opacity="100" Grid.Row="0" Grid.Column="1" Name="GroupComboBox">
+            <TextBlock Name="Header1" FontSize="36" TextAlignment="Center" TextWrapping="Wrap">
+                Игры
+            </TextBlock>
+            <Grid Name="ComboBoxes" RowDefinitions="2*, *, *, *, *, *, *" HorizontalAlignment="Center"
+                  Margin="0 75 0 0">
+                <ComboBox Name="Game1" Grid.Row="0" PlaceholderText="Выбрать игру">
+                    <ComboBoxItem>Тир</ComboBoxItem>
+                    <ComboBoxItem>Погоня</ComboBoxItem>
+                    <ComboBoxItem>Совмещение</ComboBoxItem>
+                    <ComboBoxItem>Слияние</ComboBoxItem>
+                </ComboBox>
+                <Button Name="MainMenu" Grid.Row="6">Главное меню</Button>
+                <Grid.Styles>
+                    <Style Selector="Button">
+                        <Setter Property="BorderBrush" Value="#00B1A7"></Setter>
+                        <Setter Property="Background" Value="#CFE0F2"></Setter>
+                        <Setter Property="BorderThickness" Value="2.5"></Setter>
+                        <Setter Property="CornerRadius" Value="15"></Setter>
+                        <Setter Property="Margin" Value="0 25 0 0"></Setter>
+                        <Setter Property="Padding" Value="0 15 0 15"></Setter>
+                        <Setter Property="TextBlock.FontSize" Value="32"></Setter>
+                        <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
+                    </Style>
+                    <Style Selector="ComboBox">
+                        <Setter Property="BorderBrush" Value="#00B1A7"></Setter>
+                        <Setter Property="Background" Value="#CFE0F2"></Setter>
+                        <Setter Property="BorderThickness" Value="2.5"></Setter>
+                        <Setter Property="CornerRadius" Value="15"></Setter>
+                        <Setter Property="Margin" Value="0 25 0 0"></Setter>
+                        <Setter Property="Padding" Value="0 15 0 15"></Setter>
+                        <Setter Property="TextBlock.FontSize" Value="32"></Setter>
+                        <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
+                    </Style>
+                    <Style Selector="Button:pointerover /template/ ContentPresenter">
+                        <Setter Property="BorderBrush" Value="Red"></Setter>
+                        <Setter Property="Background" Value="#CFE0F2"></Setter>
+                        <Setter Property="TextBlock.Foreground" Value="Red"></Setter>
+                    </Style>
+                </Grid.Styles>
+            </Grid>
+        </StackPanel>
+        <StackPanel Background="White" Opacity="100" Grid.Row="0" Grid.Column="3" Name="Settings">
+            <TextBlock Name="Header2" FontSize="36" TextAlignment="Center" TextWrapping="Wrap">
+                Настройки игры
+            </TextBlock>
+            <Grid Name="SettingControls" RowDefinitions="*, *, *, *, *, *, *, *, *" HorizontalAlignment="Center"
+                  Margin="0 75 0 0">
+                <Grid Grid.Row="0" ColumnDefinitions="3*, *, *, *, *">
+                    <TextBlock Name="Distance" Grid.Column="0" FontSize="36" TextAlignment="Center" TextWrapping="Wrap">
+                        Растояние до экрана
+                    </TextBlock>
+                    <RadioButton Grid.Column="2" IsChecked="False" GroupName="Distance" Content="55" />
+                    <RadioButton Grid.Column="3" IsChecked="False" GroupName="Distance" Content="60" />
+                    <RadioButton Grid.Column="4" IsChecked="False" GroupName="Distance" Content="65" />
+                </Grid>
+                <Grid Grid.Row="1" ColumnDefinitions="3*, *, *, *">
+                    <TextBlock Name="LeftFilterColor" Grid.Column="0" FontSize="36" TextAlignment="Center" TextWrapping="Wrap">
+                        Цвет левого фильтра
+                    </TextBlock>
+                    <RadioButton Grid.Column="2" IsChecked="False" GroupName="LeftColor" Content="Красный" />
+                    <RadioButton Grid.Column="3" IsChecked="False" GroupName="LeftColor" Content="Синий" />
+                </Grid>
+                <Grid Grid.Row="2" ColumnDefinitions="*, *">
+                    <TextBlock Name="FrequencyFlickerText" Grid.Column="0" FontSize="36" VerticalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap">
+                        Частота мерцания, Гц
+                    </TextBlock>
+                    <ComboBox Name="FrequencyFlickerBox" Grid.Column="1" SelectedIndex="3">
+                        <ComboBoxItem>10</ComboBoxItem>
+                        <ComboBoxItem>20</ComboBoxItem>
+                        <ComboBoxItem>30</ComboBoxItem>
+                        <ComboBoxItem>40</ComboBoxItem>
+                    </ComboBox>
+                </Grid>
+                <Grid Grid.Row="3" ColumnDefinitions="*, *">
+                    <TextBlock Name="TypeFlickerText"  Grid.Column="0" FontSize="36" VerticalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap">
+                        Цвет мерцания
+                    </TextBlock>
+                    <ComboBox Name="TypeFlickerBox"  Grid.Column="1" SelectedIndex="2">
+                        <ComboBoxItem>Красный</ComboBoxItem>
+                        <ComboBoxItem>Синий</ComboBoxItem>
+                        <ComboBoxItem>Одновременно</ComboBoxItem>
+                        <ComboBoxItem>Попеременно</ComboBoxItem>
+                    </ComboBox>
+                </Grid>
+                <Grid Grid.Row="4" ColumnDefinitions="*, *">
+                    <TextBlock  Name="BrightRedColor" Grid.Column="0" FontSize="36" TextAlignment="Center" TextWrapping="Wrap">
+                        Яркость красного цвета
+                    </TextBlock>
+                    <Slider Grid.Column="1"></Slider>
+                </Grid>
+                <Grid Grid.Row="5" ColumnDefinitions="*, *">
+                    <TextBlock Name="BrightBlueColor" Grid.Column="0" FontSize="36" TextAlignment="Center" TextWrapping="Wrap">
+                        Яркость синего цвета
+                    </TextBlock>
+                    <Slider Grid.Column="1"></Slider>
+                </Grid>
+                <Grid Grid.Row="6" ColumnDefinitions="*, *">
+                    <TextBlock Name="Level" Grid.Column="0" FontSize="36" TextAlignment="Center" TextWrapping="Wrap">
+                        Уровень сложности
+                    </TextBlock>
+                    <Slider Grid.Column="1"></Slider>
+                </Grid>
+                <Grid Grid.Row="7" ColumnDefinitions="*, *">
+                    <TextBlock Name="Timer" Grid.Column="0" FontSize="36" TextAlignment="Center" TextWrapping="Wrap">
+                        Таймер (в минутах)
+                    </TextBlock>
+                    <TextBox Grid.Column="1"></TextBox>
+                </Grid>
+                <Grid Grid.Row="8" ColumnDefinitions="*, *">
+                    <Button Name="DeleteGame" Grid.Column="0">Удалить</Button>
+                    <Button Name="StartGame" Grid.Column="1">Запустить</Button>
+                </Grid>
+                <Grid.Styles>
+                    <Style Selector="Button">
+                        <Setter Property="BorderBrush" Value="#00B1A7"></Setter>
+                        <Setter Property="Background" Value="#CFE0F2"></Setter>
+                        <Setter Property="BorderThickness" Value="2.5"></Setter>
+                        <Setter Property="CornerRadius" Value="15"></Setter>
+                        <Setter Property="Margin" Value="0 25 0 0"></Setter>
+                        <Setter Property="Padding" Value="0 15 0 15"></Setter>
+                        <Setter Property="TextBlock.FontSize" Value="32"></Setter>
+                        <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
+                    </Style>
+                    <Style Selector="ComboBox">
+                        <Setter Property="BorderBrush" Value="#00B1A7"></Setter>
+                        <Setter Property="Background" Value="#CFE0F2"></Setter>
+                        <Setter Property="BorderThickness" Value="2.5"></Setter>
+                        <Setter Property="CornerRadius" Value="15"></Setter>
+                        <Setter Property="Margin" Value="0 25 0 0"></Setter>
+                        <Setter Property="Padding" Value="0 15 0 15"></Setter>
+                        <Setter Property="TextBlock.FontSize" Value="32"></Setter>
+                        <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
+                    </Style>
+                    <Style Selector="Button:pointerover /template/ ContentPresenter">
+                        <Setter Property="BorderBrush" Value="Red"></Setter>
+                        <Setter Property="Background" Value="#CFE0F2"></Setter>
+                        <Setter Property="TextBlock.Foreground" Value="Red"></Setter>
+                    </Style>
+                </Grid.Styles>
+            </Grid>
+        </StackPanel>
+    </Grid>
+</Window>
