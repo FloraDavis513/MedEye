@@ -1,24 +1,20 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:vm="using:MedEye.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="MedEye.Views.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
         Title="MedEye"
-        WindowState="Maximized">
+        WindowState="FullScreen">
 
-    <Design.DataContext>
-        <vm:MainWindowViewModel/>
-    </Design.DataContext>
 
-  <Grid Name="Menu" RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto" >
-      <Button Name="Tyr" Content="Тир" Command="{Binding StartTyr}" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center" />
-      <Button Content="Погоня" Command="{Binding StartFollowing}" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center"/>
-      <Button Content="Слияние" Command="{Binding StartMerger}" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Center"/>
-      <Button Content="Совмещение" Command="{Binding StartCombination}" Grid.Row="3" Grid.Column="0" HorizontalAlignment="Center"/>
-      <Button Content="Контур" Grid.Row="4" Grid.Column="0" HorizontalAlignment="Center"/>
+  <Grid Name="Menu" RowDefinitions="Auto, Auto, Auto, Auto, Auto" >
+      <Button Name="Tyr" Content="Тир" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center" FontSize="24" Width="200" HorizontalContentAlignment="Center"/>
+      <Button Name="Following" Content="Погоня" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" FontSize="24" Width="200" HorizontalContentAlignment="Center"/>
+      <Button Name="Merger" Content="Слияние" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Center" FontSize="24" Width="200" HorizontalContentAlignment="Center"/>
+      <Button Name="Combination" Content="Совмещение" Grid.Row="3" Grid.Column="0" HorizontalAlignment="Center" FontSize="24" Width="200" HorizontalContentAlignment="Center"/>
+      <Button Name="Exit" Content="Выход" Grid.Row="4" Grid.Column="0" HorizontalAlignment="Center" FontSize="24" Width="200" HorizontalContentAlignment="Center"/>
   </Grid>
   
 </Window>
