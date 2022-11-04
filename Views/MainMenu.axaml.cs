@@ -46,9 +46,8 @@ namespace MedEye.Views
             
             var reg = this.Get<Button>("Registry");
             var cab = this.Get<Button>("Cabinet");
-            var settings = this.Get<Button>("Settings");
             var exit = this.Get<Button>("Exit");
-            if (!reg.IsInitialized || !cab.IsInitialized || !settings.IsInitialized || !exit.IsInitialized)
+            if (!reg.IsInitialized || !cab.IsInitialized || !exit.IsInitialized)
                 return;
 
             if (change.Property.Name == "WindowState" || change.Property.Name == "Width")
@@ -71,7 +70,8 @@ namespace MedEye.Views
 
         private void RegistryClick(object? sender, RoutedEventArgs e)
         {
-            new ModalWindow().Show();
+            new Registry().Show();
+            close_timer.Start();
         }
 
         private void CloseAfterRoute(object? sender, EventArgs e)
@@ -86,17 +86,14 @@ namespace MedEye.Views
 
             var reg = this.Get<Button>("Registry");
             var cab = this.Get<Button>("Cabinet");
-            var settings = this.Get<Button>("Settings");
             var exit = this.Get<Button>("Exit");
 
             reg.Width = buttonWidth;
             cab.Width = buttonWidth;
-            settings.Width = buttonWidth;
             exit.Width = buttonWidth;
 
             reg.FontSize = 32 * (this.ClientSize.Width / 1920);
             cab.FontSize = 32 * (this.ClientSize.Width / 1920);
-            settings.FontSize = 32 * (this.ClientSize.Width / 1920);
             exit.FontSize = 32 * (this.ClientSize.Width / 1920);
 
             var h1 = this.Get<TextBlock>("MainHeader");

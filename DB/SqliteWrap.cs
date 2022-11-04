@@ -1,0 +1,145 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SQLite;
+
+namespace MedEye.DB
+{
+    struct Gamer 
+    {
+        public int id;
+        public string first_name;
+        public string second_name;
+        public string last_name;
+        public string birth_date;
+        public string sex;
+    }
+
+
+    static class SqliteWrap
+    {
+        private static SortedDictionary<string, int> users = new SortedDictionary<string, int>();
+        public static void AddUser(string first_name, string second_name, string last_name, string birth_date, 
+            string sex)
+        {
+            using (SQLiteConnection conn = new SQLiteConnection("data source = ..\\..\\..\\DB\\medeye.db"))
+            {
+                using (SQLiteCommand cmd = new SQLiteCommand())
+                {
+                    string strSql = "INSERT INTO[Users] ([first_name], [second_name], [last_name], [birth_date], " +
+                        "[sex]) VALUES(@param1, @param2, @param3, @param4, @param5)";
+                    cmd.CommandText = strSql;
+                    cmd.Connection = conn;
+                    cmd.Parameters.Add(new SQLiteParameter("@param1", first_name));
+                    cmd.Parameters.Add(new SQLiteParameter("@param2", second_name));
+                    cmd.Parameters.Add(new SQLiteParameter("@param3", last_name));
+                    cmd.Parameters.Add(new SQLiteParameter("@param4", birth_date));
+                    cmd.Parameters.Add(new SQLiteParameter("@param5", sex));
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                    conn.Close();
+                }
+            }
+        }
+
+        public static void UpdateUser(int user_id, string first_name, string second_name, string last_name, 
+            string birth_date, string sex)
+        {
+            using (SQLiteConnection conn = new SQLiteConnection("data source = ..\\..\\..\\DB\\medeye.db"))
+            {
+                using (SQLiteCommand cmd = new SQLiteCommand())
+                {
+                    string strSql = "UPDATE [Users] SET [first_name] = @param1, [second_name] = @param2, " +
+                        "[last_name] = @param3, [birth_date] = @param4, [sex] = @param5 WHERE [id] = @param6";
+                    cmd.CommandText = strSql;
+                    cmd.Connection = conn;
+                    cmd.Parameters.Add(new SQLiteParameter("@param1", first_name));
+                    cmd.Parameters.Add(new SQLiteParameter("@param2", second_name));
+                    cmd.Parameters.Add(new SQLiteParameter("@param3", last_name));
+                    cmd.Parameters.Add(new SQLiteParameter("@param4", birth_date));
+                    cmd.Parameters.Add(new SQLiteParameter("@param5", sex));
+                    cmd.Parameters.Add(new SQLiteParameter("@param6", user_id));
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                    conn.Close();
+                }
+            }
+        }
+
+        public static void DeleteUserById(int user_id)
+        {
+            using (SQLiteConnection conn = new SQLiteConnection("data source = ..\\..\\..\\DB\\medeye.db"))
+            {
+                using (SQLiteCommand cmd = new SQLiteCommand())
+                {
+                    string strSql = "DELETE FROM [Users] WHERE [id] = @param1";
+                    cmd.CommandText = strSql;
+                    cmd.Connection = conn;
+                    cmd.Parameters.Add(new SQLiteParameter("@param1", user_id));
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                    conn.Close();
+                }
+            }
+        }
+
+        public static SortedDictionary<string, int> GetUserList()
+        {
+            users.Clear();
+            using (SQLiteConnection conn = new SQLiteConnection("data source = ..\\..\\..\\DB\\medeye.db"))
+            {
+                using (SQLiteCommand cmd = new SQLiteCommand())
+                {
+                    string strSql = "SELECT [id], [first_name], [second_name], [last_name] FROM [Users];";
+                    cmd.CommandText = strSql;
+                    cmd.Connection = conn;
+                    conn.Open();
+
+                    SQLiteDataReader sqlite_datareader;
+                    sqlite_datareader = cmd.ExecuteReader();
+                    while (sqlite_datareader.Read())
+                    {
+                        var user_id = sqlite_datareader.GetInt32("id");
+                        var first_name = sqlite_datareader.GetValue("first_name");
+                        var second_name = sqlite_datareader.GetValue("second_name");
+                        var last_name = sqlite_datareader.GetValue("last_name");
+                        var name = $"{first_name} {second_name} {last_name}";
+                        users.Add(name, user_id);
+                    }
+                    conn.Close();
+                }
+            }
+            return users;
+        }
+
+        public static Gamer GetUserById(int user_id)
+        {
+            var gamer = new Gamer();
+            using (SQLiteConnection conn = new SQLiteConnection("data source = ..\\..\\..\\DB\\medeye.db"))
+            {
+                using (SQLiteCommand cmd = new SQLiteCommand())
+                {
+                    string strSql = "SELECT * FROM [Users] WHERE id = @param1;";
+                    cmd.CommandText = strSql;
+                    cmd.Parameters.Add(new SQLiteParameter("@param1", user_id));
+                    cmd.Connection = conn;
+                    conn.Open();
+
+                    SQLiteDataReader sqlite_datareader;
+                    sqlite_datareader = cmd.ExecuteReader();
+                    while (sqlite_datareader.Read())
+                    {
+                        gamer.id = sqlite_datareader.GetInt32("id");
+                        gamer.first_name = sqlite_datareader.GetString("first_name");
+                        gamer.second_name = sqlite_datareader.GetString("second_name");
+                        gamer.last_name = sqlite_datareader.GetString("last_name");
+                        gamer.sex = sqlite_datareader.GetString("sex");
+                        gamer.birth_date = sqlite_datareader.GetString("birth_date");
+                    }
+                    conn.Close();
+                }
+            }
+            return gamer;
+        }
+    }
+}
