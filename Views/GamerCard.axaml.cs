@@ -109,7 +109,8 @@ namespace MedEye.Views
 
             reg.FontSize = 32 * (this.ClientSize.Width / 1920);
             cab.FontSize = 32 * (this.ClientSize.Width / 1920);
-            GamerHeader.Width = 1820 * (this.ClientSize.Width / 1920);
+            GamerHeader.Width = 1920 * (this.ClientSize.Width / 1920);
+            
         }
     }
 }

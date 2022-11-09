@@ -1,17 +1,21 @@
 ﻿using System;
+using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
+using Avalonia.Styling;
 using Avalonia.Threading;
+using MedEye.DB;
 
 namespace MedEye.Views;
 
 public partial class SetupMenu : Window
 {
-    private static readonly DispatcherTimer closeTimer = new DispatcherTimer();
-    
+    private static readonly DispatcherTimer CloseTimer = new DispatcherTimer();
+
     public SetupMenu()
     {
         InitializeComponent();
@@ -21,9 +25,17 @@ public partial class SetupMenu : Window
 
         MainMenu.Click += MainMenuClick;
         StartGame.Click += StartGameClick;
-        
-        closeTimer.Tick += CloseAfterRoute;
-        closeTimer.Interval = new TimeSpan(1000000);
+
+        Game1.SelectionChanged += SelectGame;
+
+
+        CloseTimer.Tick += CloseAfterRoute;
+        CloseTimer.Interval = new TimeSpan(1000000);
+
+        foreach (var settings in SettingsWrap.GetSettings(0))
+        {
+            SettingsWrap.DeleteSettings(settings);
+        }
     }
 
     protected override void OnOpened(EventArgs e)
@@ -36,38 +48,133 @@ public partial class SetupMenu : Window
     private void MainMenuClick(object? sender, RoutedEventArgs e)
     {
         new MainMenu().Show();
-        closeTimer.Start();
+        CloseTimer.Start();
     }
-    
+
     private void CloseAfterRoute(object? sender, EventArgs e)
     {
         Close();
-        closeTimer.Stop();
+        CloseTimer.Stop();
+    }
+
+    private Settings GetCurrentSettings()
+    {
+        var distance = DistanceRadioButtons.Children
+            .OfType<RadioButton>()
+            .FirstOrDefault(r => r.IsChecked ?? false);
+
+        var isRed = IsRedRadioButtons.Children
+            .OfType<RadioButton>()
+            .FirstOrDefault(r => r.IsChecked ?? false);
+
+        var gameId = ((ComboBox)Games.Children[^1]).SelectedIndex + 1;
+        var priority = Games.Children.Count - 1;
+        var distanceValue = distance is null ? 0 : int.Parse((string)distance.Content);
+        var isRedValue = isRed is not null && (isRed.IsChecked ?? false);
+        var frequency = (FrequencyFlickerBox.SelectedIndex + 1) * 10;
+        var flickerMode = TypeFlickerBox.SelectedIndex;
+        var redBrightness = (int)BrightRedColorSlider.Value;
+        var blueBrightness = (int)BrightBlueColorSlider.Value;
+        var level = (int)LevelSlider.Value;
+        var exerciseDuration = int.Parse(TimerTextBox.Text ?? "5");
+        
+        var settings = new Settings
+        {
+            UserId = 0, 
+            GameId = gameId,
+            Priority = priority,
+            Distance = distanceValue,
+            IsRed = isRedValue,
+            Frequency = frequency,
+            FlickerMode = flickerMode,
+            RedBrightness = redBrightness,
+            BlueBrightness = blueBrightness,
+            Level = level,
+            ExerciseDuration = exerciseDuration
+        };
+
+        return settings;
+    }
+
+    private void ResetSettings()
+    {
+        foreach (var radioButton in DistanceRadioButtons.Children.OfType<RadioButton>())
+        {
+            radioButton.IsChecked = false;
+        }
+        foreach (var radioButton in IsRedRadioButtons.Children.OfType<RadioButton>())
+        {
+            radioButton.IsChecked = false;
+        }
+        FrequencyFlickerBox.SelectedIndex = 3;
+        TypeFlickerBox.SelectedIndex = 2;
+        BrightRedColorSlider.Value = 0;
+        BrightBlueColorSlider.Value = 0;
+        LevelSlider.Value = 0;
+        TimerTextBox.Text = "5";
     }
     
     private void StartGameClick(object? sender, RoutedEventArgs e)
     {
-        var game = Game1.SelectedIndex;
-        switch (game)
+        for (int i = 1; i < Games.Children.Count; i++)
         {
-            case 0:
-                new Tyr().Show();
-                break;
-            case 1:
-                new Following().Show();
-                break;
-            case 2:
-                new Combination().Show();
-                break;
-            case 3:
-                new Merger().Show();
-                break;
+            var game = ((ComboBox)Games.Children[i]).SelectedIndex;
+            switch (game)
+            {
+                case 0:
+                    new Tyr().Show();
+                    break;
+                case 1:
+                    new Following().Show();
+                    break;
+                case 2:
+                    new Combination().Show();
+                    break;
+                case 3:
+                    new Merger().Show();
+                    break;
+            }
         }
+    }
+
+    private void SelectGame(object? sender, SelectionChangedEventArgs e)
+    {
+        if (e.RemovedItems.Count > 0) return;
+
+        var settings = GetCurrentSettings();
+        
+        SettingsWrap.AddSettings(settings);
+        
+        var game = new ComboBox
+        {
+            PlaceholderText = Game1.PlaceholderText,
+            Items = new ComboBoxItem[]
+            {
+                new ComboBoxItem { Content = "Тир" },
+                new ComboBoxItem { Content = "Погоня" },
+                new ComboBoxItem { Content = "Совмещение" },
+                new ComboBoxItem { Content = "Слияние" }
+            },
+            Width = 2 * this.ClientSize.Width / 9,
+            FontSize = 32 * (this.ClientSize.Width / 1920)
+        };
+
+        game.SelectionChanged += SelectGame;
+
+        Games.RowDefinitions.Add(new RowDefinition());
+
+        Grid.SetRow(MainMenu, Games.Children.Count);
+
+        Grid.SetRow(game, Games.Children.Count - 1);
+        Games.Children.Add(game);
+        
+        ResetSettings();
     }
 
     private void AdaptToScreen()
     {
         var buttonWidth = 2 * this.ClientSize.Width / 9;
+
 
         Game1.Width = buttonWidth;
         MainMenu.Width = buttonWidth;
@@ -77,19 +184,19 @@ public partial class SetupMenu : Window
         TypeFlickerBox.Width = buttonWidth;
 
         Game1.FontSize = 32 * (this.ClientSize.Width / 1920);
-        MainMenu.FontSize =  32 * (this.ClientSize.Width / 1920);
-        DeleteGame.FontSize =  32 * (this.ClientSize.Width / 1920);
-        StartGame.FontSize =  32 * (this.ClientSize.Width / 1920);
-        Distance.FontSize =  32 * (this.ClientSize.Width / 1920);
-        LeftFilterColor.FontSize =  32 * (this.ClientSize.Width / 1920);
-        FrequencyFlickerText.FontSize =  32 * (this.ClientSize.Width / 1920);
-        FrequencyFlickerBox.FontSize =  32 * (this.ClientSize.Width / 1920);
-        TypeFlickerText.FontSize =  32 * (this.ClientSize.Width / 1920);
-        TypeFlickerBox.FontSize =  32 * (this.ClientSize.Width / 1920);
-        BrightRedColor.FontSize =  32 * (this.ClientSize.Width / 1920);
-        BrightBlueColor.FontSize =  32 * (this.ClientSize.Width / 1920);
-        Level.FontSize =  32 * (this.ClientSize.Width / 1920);
-        Timer.FontSize =  32 * (this.ClientSize.Width / 1920);
+        MainMenu.FontSize = 32 * (this.ClientSize.Width / 1920);
+        DeleteGame.FontSize = 32 * (this.ClientSize.Width / 1920);
+        StartGame.FontSize = 32 * (this.ClientSize.Width / 1920);
+        Distance.FontSize = 32 * (this.ClientSize.Width / 1920);
+        LeftFilterColor.FontSize = 32 * (this.ClientSize.Width / 1920);
+        FrequencyFlickerText.FontSize = 32 * (this.ClientSize.Width / 1920);
+        FrequencyFlickerBox.FontSize = 32 * (this.ClientSize.Width / 1920);
+        TypeFlickerText.FontSize = 32 * (this.ClientSize.Width / 1920);
+        TypeFlickerBox.FontSize = 32 * (this.ClientSize.Width / 1920);
+        BrightRedColor.FontSize = 32 * (this.ClientSize.Width / 1920);
+        BrightBlueColor.FontSize = 32 * (this.ClientSize.Width / 1920);
+        Level.FontSize = 32 * (this.ClientSize.Width / 1920);
+        Timer.FontSize = 32 * (this.ClientSize.Width / 1920);
 
         Header1.FontSize = 48 * (this.ClientSize.Width / 1920);
         Header2.FontSize = 48 * (this.ClientSize.Width / 1920);
