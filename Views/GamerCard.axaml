@@ -14,7 +14,7 @@
         ---------------- Карта игрока № ----------------
       </TextBlock>
       <ScrollViewer Grid.Column="0" Grid.Row="1" >
-        <Grid RowDefinitions="*, *, *, *, *, *, *, *, *, *, *, *, *, *, *, *, *, *, *, *, *,
+        <Grid Name="GamerData" RowDefinitions="*, *, *, *, *, *, *, *, *, *, *, *, *, *, *, *, *, *, *, *, *,
               *, *, *, *, *, *, *, *, *, *, *, *, *, *, *, *, *, *, *, *, *, *, *, *, *, *, 
               *, *, *, *, *, *, *,  *, *, *, *, *, *, *,  *, *, *, *, *, *, *, *, *, *, *, *" ColumnDefinitions="*, *, *, *" Background="White" Opacity="10" Margin="50 0 50 0">
           <TextBlock Grid.Column="0" Grid.Row="1" FontSize="48" VerticalAlignment="Center" HorizontalAlignment="Center">

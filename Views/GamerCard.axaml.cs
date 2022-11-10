@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using MedEye.DB;
 using System;
+using System.Linq;
 using Avalonia.Threading;
 
 namespace MedEye.Views
@@ -111,6 +112,10 @@ namespace MedEye.Views
             cab.FontSize = 32 * (this.ClientSize.Width / 1920);
             GamerHeader.Width = 1920 * (this.ClientSize.Width / 1920);
             
+            foreach (var textBlock in GamerData.Children.OfType<TextBlock>())
+            {
+                textBlock.FontSize = 32 * (this.ClientSize.Width / 1920);
+            }
         }
     }
 }

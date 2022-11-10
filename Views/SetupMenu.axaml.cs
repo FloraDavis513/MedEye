@@ -112,7 +112,7 @@ public partial class SetupMenu : Window
     
     private void StartGameClick(object? sender, RoutedEventArgs e)
     {
-        for (int i = Games.Children.Count - 1; i > 0; i++)
+        for (int i = Games.Children.Count - 1; i > 0; i--)
         {
             var game = ((ComboBox)Games.Children[i]).SelectedIndex;
             switch (game)
