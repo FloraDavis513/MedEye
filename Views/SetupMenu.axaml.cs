@@ -2,11 +2,7 @@
 using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Data;
-using Avalonia.Input;
 using Avalonia.Interactivity;
-using Avalonia.Markup.Xaml;
-using Avalonia.Styling;
 using Avalonia.Threading;
 using MedEye.DB;
 
@@ -116,7 +112,7 @@ public partial class SetupMenu : Window
     
     private void StartGameClick(object? sender, RoutedEventArgs e)
     {
-        for (int i = 1; i < Games.Children.Count; i++)
+        for (int i = Games.Children.Count - 1; i > 0; i++)
         {
             var game = ((ComboBox)Games.Children[i]).SelectedIndex;
             switch (game)
