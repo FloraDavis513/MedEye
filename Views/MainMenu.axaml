@@ -19,17 +19,14 @@
       <TextBlock Name="SubHeader" FontSize="48" TextAlignment="Center" TextWrapping="Wrap">
         Лечение косоглазия и амблиопии
       </TextBlock>
-      <Grid Name="Buttons" RowDefinitions="2*, *, *, *" HorizontalAlignment="Center" Margin="0 75 0 0">
+      <Grid Name="Buttons" RowDefinitions="2*,  *, *" HorizontalAlignment="Center" Margin="0 75 0 0">
         <Button Name="Registry" Grid.Row="0">
           Регистратура
         </Button>
         <Button Name="Cabinet" Grid.Row="1">
           Кабинет
         </Button>
-        <Button Name="Settings" Grid.Row="2">
-          Настройки
-        </Button>
-        <Button Name="Exit" Grid.Row="3">
+        <Button Name="Exit" Grid.Row="2">
           Выход
         </Button>
         <Grid.Styles>
