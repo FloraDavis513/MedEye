@@ -1,0 +1,52 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
+        x:Class="MedEye.Views.Disclaimer"
+        Title="Disclaimer"
+        WindowState="FullScreen">
+
+  <Grid RowDefinitions="*, 2*, *" 
+        Background="#1372B7" 
+        Opacity="0.25">
+    <TextBlock Name="DisclaimerHeader"
+               Grid.Row="0"
+               FontSize="96"
+               Opacity="4"
+               HorizontalAlignment="Center"
+               Margin="50">
+      Предупреждение об эпилепсии
+    </TextBlock>
+    <TextBlock Name="DisclaimerText"
+               Grid.Row="1"
+               FontSize="48"
+               Opacity="4"
+               HorizontalAlignment="Center"
+               TextAlignment="Center"
+               Margin="50"
+               TextWrapping="Wrap">
+      В играх используются вспышки красного и синего цвета, которые могут вызывать у небольшого процента людей приступы эпилепсии или потерю сознания. Если у Вас или Ваших родственников наблюдались приступы эпилепсии при вспышках света, проконсультируйтесь с врачом. Если во время игры у Вас возникли симптомы эпилепсии, прекратите играть и немедленно обратитесь за медицинской помощью
+    </TextBlock>
+    <Button Name="ToMainMenu" Grid.Row="2" HorizontalAlignment="Right" Opacity="4">
+      Продолжить
+    </Button>
+    <Grid.Styles>
+      <Style Selector="Button">
+        <Setter Property="BorderBrush" Value="#00B1A7"></Setter>
+        <Setter Property="Background" Value="#C7E0F2"></Setter>
+        <Setter Property="BorderThickness" Value="2.5"></Setter>
+        <Setter Property="CornerRadius" Value="15"></Setter>
+        <Setter Property="Margin" Value="0 0 50 0"></Setter>
+        <Setter Property="Padding" Value="0 15 0 15"></Setter>
+        <Setter Property="TextBlock.FontSize" Value="32"></Setter>
+        <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
+      </Style>
+      <Style Selector="Button:pointerover /template/ ContentPresenter">
+        <Setter Property="BorderBrush" Value="Red"></Setter>
+        <Setter Property="Background" Value="#CFE0F2"></Setter>
+        <Setter Property="TextBlock.Foreground" Value="Red"></Setter>
+      </Style>
+    </Grid.Styles>
+  </Grid>
+</Window>
