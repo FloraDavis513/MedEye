@@ -5,6 +5,11 @@ using MedEye.DB;
 using System;
 using System.Linq;
 using Avalonia.Threading;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using Avalonia.Data;
+using Avalonia.Media;
+using DynamicData;
 
 namespace MedEye.Views
 {
@@ -22,7 +27,7 @@ namespace MedEye.Views
             var button2 = this.FindControl<Button>("Save");
             button2.Click += SaveClick;
 
-            current_gamer = SqliteWrap.GetUserById(user_id);
+            current_gamer = Users.GetUserById(user_id);
             FirstName.Text = current_gamer.first_name;
             SecondName.Text = current_gamer.second_name;
             LastName.Text = current_gamer.last_name;
@@ -32,6 +37,28 @@ namespace MedEye.Views
 
             close_timer.Tick += CloseAfterRoute;
             close_timer.Interval = new TimeSpan(1000000);
+            
+            var current_scores = ScoresWrap.GetScores(current_gamer.id);
+            if (current_scores.Count == 0)
+                return;
+            var dataSource = new ObservableCollection<string[]>();
+            foreach (var score in current_scores)
+            {
+                dataSource.Add(new []{ score.DateCompletion.ToString(), score.MeanDeviationsX.ToString(),
+                                       score.MeanDeviationsY.ToString(), score.MinDeviationsX.ToString(),
+                                       score.MinDeviationsY.ToString(), score.MaxDeviationsX.ToString(),
+                                       score.MaxDeviationsY.ToString(), score.Level.ToString(), score.Score.ToString()} );
+            }
+            string[] headers = { "Дата", "Среднее отклонение по X", "Среднее отклонение по Y",
+                                 "Минимальное отклонение по X", "Минимальное отклонение по Y",
+                                 "Максимальное отклонение по X", "Максимальное отклонение по Y",
+                                 "Уровень сложности", "Очки" };
+
+            foreach (var idx in dataSource[0].Select((value, index) => index))
+            {
+                Results.Columns.Add(new DataGridTextColumn { Header = $"{headers[idx]}", Binding = new Binding($"[{idx}]") });
+            }
+            Results.Items = dataSource;
         }
 
         public GamerCard()
@@ -47,6 +74,9 @@ namespace MedEye.Views
             close_timer.Interval = new TimeSpan(1000000);
 
             current_gamer = new Gamer { id = -1, first_name = "", second_name = "", last_name = "", birth_date = "", sex = "" };
+            var gamer_list = new List<Gamer>();
+            gamer_list.Add(current_gamer);
+            Results.Items = gamer_list;
         }
 
         protected override void OnOpened(EventArgs e)
@@ -87,11 +117,11 @@ namespace MedEye.Views
         private void SaveClick(object? sender, RoutedEventArgs e)
         {
             if (current_gamer.id == -1)
-                SqliteWrap.AddUser(FirstName.Text, SecondName.Text,
+                Users.AddUser(FirstName.Text, SecondName.Text,
                     LastName.Text, BirthDate.Text, Sex.Text);
             else
             {
-                SqliteWrap.UpdateUser(current_gamer.id, FirstName.Text, SecondName.Text,
+                Users.UpdateUser(current_gamer.id, FirstName.Text, SecondName.Text,
                     LastName.Text, BirthDate.Text, Sex.Text);
             }
             new Registry().Show();

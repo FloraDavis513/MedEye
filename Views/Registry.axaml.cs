@@ -60,7 +60,7 @@ namespace MedEye.Views
 
         private void ActualizeUserList()
         {
-            actual_users = SqliteWrap.GetUserList();
+            actual_users = Users.GetUserList();
             var users = new List<string>();
             foreach (var item in actual_users)
                 users.Add(item.Key);
@@ -104,7 +104,7 @@ namespace MedEye.Views
             if (UserList.SelectedIndex == -1)
                 return;
             string selected_user = (string)UserList.SelectedItem;
-            SqliteWrap.DeleteUserById(actual_users[selected_user]);
+            Users.DeleteUserById(actual_users[selected_user]);
             ActualizeUserList();
         }
 

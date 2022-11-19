@@ -10,7 +10,7 @@ namespace MedEye.DB
     {
         public int UserId;
         public int GameId;
-        public DateTime DateCompletion;
+        public string DateCompletion;
         public int Level;
         public double Score;
         public double MeanDeviationsX;
@@ -131,7 +131,7 @@ namespace MedEye.DB
                     {
                         cmd.CommandText = strSqlWithGameId;
                         cmd.Parameters.Add(new SQLiteParameter("@p1", userId));
-                        cmd.Parameters.Add(new SQLiteParameter("@p1", gameId));
+                        cmd.Parameters.Add(new SQLiteParameter("@p2", gameId));
                     }
 
                     conn.Open();
@@ -141,17 +141,17 @@ namespace MedEye.DB
                     {
                         var scores = new Scores
                         {
-                            UserId = sqliteDataReader.GetInt32("[user_id]"),
-                            GameId = sqliteDataReader.GetInt32("[game_id]"),
-                            DateCompletion = sqliteDataReader.GetDateTime("[date]"),
-                            Level = sqliteDataReader.GetInt32("[level]"),
-                            Score = sqliteDataReader.GetDouble("[score]"),
-                            MeanDeviationsX = sqliteDataReader.GetDouble("[mean_deviation_x]"),
-                            MeanDeviationsY = sqliteDataReader.GetDouble("[mean_deviation_y]"),
-                            MinDeviationsX = sqliteDataReader.GetDouble("[min_deviation_x]"),
-                            MinDeviationsY = sqliteDataReader.GetDouble("[min_deviation_y]"),
-                            MaxDeviationsX = sqliteDataReader.GetDouble("[max_deviation_x]"),
-                            MaxDeviationsY = sqliteDataReader.GetDouble("[max_deviation_y]")
+                            UserId = sqliteDataReader.GetInt32("user_id"),
+                            GameId = sqliteDataReader.GetInt32("game_id"),
+                            DateCompletion = sqliteDataReader.GetString("date"),
+                            Level = sqliteDataReader.GetInt32("level"),
+                            Score = sqliteDataReader.GetDouble("score"),
+                            MeanDeviationsX = sqliteDataReader.GetDouble("mean_deviation_x"),
+                            MeanDeviationsY = sqliteDataReader.GetDouble("mean_deviation_y"),
+                            MinDeviationsX = sqliteDataReader.GetDouble("min_deviation_x"),
+                            MinDeviationsY = sqliteDataReader.GetDouble("min_deviation_y"),
+                            MaxDeviationsX = sqliteDataReader.GetDouble("max_deviation_x"),
+                            MaxDeviationsY = sqliteDataReader.GetDouble("max_deviation_y")
                         };
                         scoresList.Add(scores);
                     }

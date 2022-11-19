@@ -7,16 +7,16 @@ namespace MedEye.DB
 {
     struct Gamer 
     {
-        public int id;
-        public string first_name;
-        public string second_name;
-        public string last_name;
-        public string birth_date;
-        public string sex;
+        public int id { get; set; }
+        public string first_name { get; set; }
+        public string second_name { get; set; }
+        public string last_name { get; set; }
+        public string birth_date { get; set; }
+        public string sex { get; set; }
     }
 
 
-    static class SqliteWrap
+    static class Users
     {
         private static SortedDictionary<string, int> users = new SortedDictionary<string, int>();
         public static void AddUser(string first_name, string second_name, string last_name, string birth_date, 
