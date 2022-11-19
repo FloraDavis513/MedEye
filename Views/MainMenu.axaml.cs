@@ -4,6 +4,7 @@ using Avalonia.Interactivity;
 using Avalonia.Media.Imaging;
 using Avalonia.Threading;
 using System;
+using MedEye.ExcelLoader;
 
 namespace MedEye.Views
 {
@@ -26,6 +27,7 @@ namespace MedEye.Views
 
             close_timer.Tick += CloseAfterRoute;
             close_timer.Interval = new TimeSpan(1000000);
+            ExcelGenerator.GenerateExcelByUserId(1);
         }
 
         protected override void OnOpened(EventArgs e)
