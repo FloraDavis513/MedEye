@@ -5,7 +5,7 @@ using Avalonia.Input;
 using Avalonia.Media;
 using Avalonia.Threading;
 using MedEye.Consts;
-using SkiaSharp;
+using MedEye.DB;
 
 namespace MedEye.Views;
 
@@ -14,10 +14,17 @@ public partial class Following : Window
     // Random generator for target pos.
     private static readonly Random Rnd = new Random();
 
+    // Moving Target
     private static readonly DispatcherTimer MoveTargetTimer = new DispatcherTimer();
     private static readonly DispatcherTimer DirectRotationTimer = new DispatcherTimer();
+
+    // Blink
     private static readonly DispatcherTimer TargetBlinkTimer = new DispatcherTimer();
     private static readonly DispatcherTimer StalkerBlinkTimer = new DispatcherTimer();
+    //private static readonly DispatcherTimer ChangeBlinkTimer = new DispatcherTimer();
+
+    // Close game
+    private static readonly DispatcherTimer CloseGameTimer = new DispatcherTimer();
 
     // Counter for current color.
     private int _currentColor = 0;
@@ -46,10 +53,68 @@ public partial class Following : Window
         _direct = Rnd.Next(360);
         _dx = _lenD * Math.Cos(_direct);
         _dy = _lenD * Math.Sin(_direct);
-        StartTimer();
+
+        CloseGameTimer.Tick += CloseGame;
+        CloseGameTimer.Interval = new TimeSpan(0, 5, 0);
+
+        StartBlink();
+        StartMoving();
+        CloseGameTimer.Start();
     }
 
-    private void StartTimer()
+    public Following(Settings settings)
+    {
+        InitializeComponent();
+#if DEBUG
+        this.AttachDevTools();
+#endif
+
+        Canvas.SetTop(Target, Rnd.Next(0, Convert.ToInt32(this.ClientSize.Height - Target.Height)));
+        Canvas.SetLeft(Target, Rnd.Next(0, Convert.ToInt32(this.ClientSize.Width - Target.Width)));
+
+        _direct = Rnd.Next(360);
+        _dx = _lenD * Math.Cos(_direct);
+        _dy = _lenD * Math.Sin(_direct);
+
+        CloseGameTimer.Tick += CloseGame;
+        CloseGameTimer.Interval = new TimeSpan(0, settings.ExerciseDuration, 0);
+
+        StartBlink(settings.FlickerMode, settings.Frequency);
+        StartMoving();
+        CloseGameTimer.Start();
+    }
+
+    private void StartBlink(int mode = 2, int frequency = 10)
+    {
+        TargetBlinkTimer.Tick += TargetBlink;
+        TargetBlinkTimer.Interval = new TimeSpan(0, 0, 0, (int)(1.0 / frequency));
+
+        StalkerBlinkTimer.Tick += StalkerBlink;
+        StalkerBlinkTimer.Interval = new TimeSpan(0, 0, 0, (int)(1.0 / frequency));
+
+        //ChangeBlinkTimer.Tick += ChangeBlink;
+        //ChangeBlinkTimer.Interval = new TimeSpan(0, 1, 0);
+
+        switch (mode)
+        {
+            case 0:
+                TargetBlinkTimer.Start();
+                break;
+            case 1:
+                StalkerBlinkTimer.Start();
+                break;
+            case 2:
+                TargetBlinkTimer.Start();
+                StalkerBlinkTimer.Start();
+                break;
+            case 4:
+                TargetBlinkTimer.Stop();
+                StalkerBlinkTimer.Stop();
+                break;
+        }
+    }
+
+    private void StartMoving()
     {
         MoveTargetTimer.Tick += MoveTarget;
         MoveTargetTimer.Interval = new TimeSpan(10000);
@@ -57,16 +122,8 @@ public partial class Following : Window
         DirectRotationTimer.Tick += DirectRotation;
         DirectRotationTimer.Interval = new TimeSpan(0, 0, 0, 1);
 
-        TargetBlinkTimer.Tick += TargetBlink;
-        TargetBlinkTimer.Interval = new TimeSpan(0, 0, 0, 0, 100);
-
-        StalkerBlinkTimer.Tick += StalkerBlink;
-        StalkerBlinkTimer.Interval = new TimeSpan(0, 0, 0, 0, 100);
-
         MoveTargetTimer.Start();
         DirectRotationTimer.Start();
-        TargetBlinkTimer.Start();
-        StalkerBlinkTimer.Start();
     }
 
     private void StopTimer()
@@ -75,6 +132,8 @@ public partial class Following : Window
         DirectRotationTimer.Stop();
         TargetBlinkTimer.Stop();
         StalkerBlinkTimer.Stop();
+        //ChangeBlinkTimer.Stop();
+        CloseGameTimer.Stop();
     }
 
     private void MoveTarget(object? sender, EventArgs e)
@@ -121,6 +180,26 @@ public partial class Following : Window
             : _colors[_currentColor];
     }
 
+    // private void ChangeBlink(object? sender, EventArgs e)
+    // {
+    //     if (TargetBlinkTimer.IsEnabled)
+    //     {
+    //         TargetBlinkTimer.Stop();
+    //         StalkerBlinkTimer.Start();
+    //     }
+    //     else
+    //     {
+    //         TargetBlinkTimer.Start();
+    //         StalkerBlinkTimer.Stop();
+    //     }
+    // }
+
+    private void CloseGame(object? sender, EventArgs e)
+    {
+        StopTimer();
+        Close();
+    }
+
     protected override void OnKeyDown(KeyEventArgs e)
     {
         if (e.Key == Key.Escape)
@@ -153,8 +232,6 @@ public partial class Following : Window
         {
             Canvas.SetLeft(Stalker, offsetX - (Stalker.Width / 2));
         }
-        
-        
 
         base.OnPointerMoved(e);
     }

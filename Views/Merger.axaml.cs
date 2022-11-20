@@ -4,6 +4,7 @@ using Avalonia.Threading;
 using MedEye.Consts;
 using MedEye.Controls;
 using System;
+using MedEye.DB;
 
 namespace MedEye.Views
 {
@@ -15,6 +16,13 @@ namespace MedEye.Views
         private static readonly DispatcherTimer after_move_reset_timer = new DispatcherTimer();
 
         private static readonly DispatcherTimer log_timer = new DispatcherTimer();
+        
+        // Blink
+        private static readonly DispatcherTimer PartOneBlinkTimer = new DispatcherTimer();
+        private static readonly DispatcherTimer PartTwoBlinkTimer = new DispatcherTimer();
+
+        // Close game
+        private static readonly DispatcherTimer CloseGameTimer = new DispatcherTimer();
 
         public Merger()
         {
@@ -37,6 +45,33 @@ namespace MedEye.Views
             double second_width = second.Width;
             Canvas.SetTop(second, rnd.Next(0, Convert.ToInt32(this.ClientSize.Height - second_height)));
             Canvas.SetLeft(second, rnd.Next(0, Convert.ToInt32(this.ClientSize.Width - second_width)));
+            
+            CloseGameTimer.Tick += CloseGame;
+            CloseGameTimer.Interval = new TimeSpan(0, 5, 0);
+            StartBlink(4);
+            CloseGameTimer.Start();
+        }
+        
+        public Merger(Settings settings)
+        {
+            InitializeComponent();
+
+            after_move_reset_timer.Tick += ResetColor;
+            after_move_reset_timer.Interval = new TimeSpan(500000);
+
+            log_timer.Tick += CloseLog;
+            log_timer.Interval = new TimeSpan(20000000);
+            
+            Canvas.SetTop(PartOne, rnd.Next(0, Convert.ToInt32(this.ClientSize.Height - PartOne.Height)));
+            Canvas.SetLeft(PartOne, rnd.Next(0, Convert.ToInt32(this.ClientSize.Width - PartOne.Width)));
+            
+            Canvas.SetTop(PartTwo, rnd.Next(0, Convert.ToInt32(this.ClientSize.Height - PartTwo.Height)));
+            Canvas.SetLeft(PartTwo, rnd.Next(0, Convert.ToInt32(this.ClientSize.Width - PartTwo.Width)));
+            
+            CloseGameTimer.Tick += CloseGame;
+            CloseGameTimer.Interval = new TimeSpan(0, settings.ExerciseDuration, 0);
+            StartBlink(settings.FlickerMode, settings.Frequency);
+            CloseGameTimer.Start();
         }
 
         protected override void OnKeyDown(KeyEventArgs e)
@@ -126,6 +161,63 @@ namespace MedEye.Views
             Border log = this.Get<Border>("Log");
             log.Opacity = 0;
             log_timer.Stop();
+        }
+        
+        private void StartBlink(int mode = 2, int frequency = 10)
+        {
+            PartOneBlinkTimer.Tick += PartOneBlink;
+            PartOneBlinkTimer.Interval = new TimeSpan(0, 0, 0, (int)(1.0 / frequency));
+
+            PartTwoBlinkTimer.Tick += PartTwoBlink;
+            PartTwoBlinkTimer.Interval = new TimeSpan(0, 0, 0, (int)(1.0 / frequency));
+
+            switch (mode)
+            {
+                case 0:
+                    PartOneBlinkTimer.Start();
+                    break;
+                case 1:
+                    PartTwoBlinkTimer.Start();
+                    break;
+                case 2:
+                    PartOneBlinkTimer.Start();
+                    PartTwoBlinkTimer.Start();
+                    break;
+                case 4:
+                    PartOneBlinkTimer.Stop();
+                    PartTwoBlinkTimer.Stop();
+                    break;
+            }
+        }
+
+        private void PartOneBlink(object? sender, EventArgs e)
+        {
+            BigOne.Background = Equals(BigOne.Background, ColorConst.STRABISMUS_FIRST_COLOR)
+                ? ColorConst.STRABISMUS_MOVE_COLOR
+                : ColorConst.STRABISMUS_FIRST_COLOR;
+            
+            SmallTwo.Background = Equals(SmallTwo.Background, ColorConst.STRABISMUS_FIRST_COLOR)
+                ? ColorConst.STRABISMUS_MOVE_COLOR
+                : ColorConst.STRABISMUS_FIRST_COLOR;
+        }
+
+        private void PartTwoBlink(object? sender, EventArgs e)
+        {
+            BigTwo.Background = Equals(BigTwo.Background, ColorConst.STRABISMUS_SECOND_COLOR)
+                ? ColorConst.STRABISMUS_MOVE_COLOR
+                : ColorConst.STRABISMUS_SECOND_COLOR;
+            
+            SmallTwo.Background = Equals(SmallTwo.Background, ColorConst.STRABISMUS_SECOND_COLOR)
+                ? ColorConst.STRABISMUS_MOVE_COLOR
+                : ColorConst.STRABISMUS_SECOND_COLOR;
+        }
+
+        private void CloseGame(object? sender, EventArgs e)
+        {
+            PartOneBlinkTimer.Stop();
+            PartTwoBlinkTimer.Stop();
+            CloseGameTimer.Stop();
+            Close();
         }
     }
 }

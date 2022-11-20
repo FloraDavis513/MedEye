@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
@@ -11,6 +13,11 @@ namespace MedEye.Views;
 public partial class SetupMenu : Window
 {
     private static readonly DispatcherTimer CloseTimer = new DispatcherTimer();
+
+    private int _currentGame = 0;
+    private List<Settings> _games;
+    private DispatcherTimer NextGameTimer = new DispatcherTimer();
+
 
     public SetupMenu()
     {
@@ -64,7 +71,7 @@ public partial class SetupMenu : Window
             .FirstOrDefault(r => r.IsChecked ?? false);
 
         var gameId = ((ComboBox)Games.Children[^1]).SelectedIndex + 1;
-        var priority = Games.Children.Count - 1;
+        var priority = Games.Children.Count;
         var distanceValue = distance is null ? 0 : int.Parse((string)distance.Content);
         var isRedValue = isRed is not null && (isRed.IsChecked ?? false);
         var frequency = (FrequencyFlickerBox.SelectedIndex + 1) * 10;
@@ -73,10 +80,10 @@ public partial class SetupMenu : Window
         var blueBrightness = (int)BrightBlueColorSlider.Value;
         var level = (int)LevelSlider.Value;
         var exerciseDuration = int.Parse(TimerTextBox.Text ?? "5");
-        
+
         var settings = new Settings
         {
-            UserId = 0, 
+            UserId = 0,
             GameId = gameId,
             Priority = priority,
             Distance = distanceValue,
@@ -98,10 +105,12 @@ public partial class SetupMenu : Window
         {
             radioButton.IsChecked = false;
         }
+
         foreach (var radioButton in IsRedRadioButtons.Children.OfType<RadioButton>())
         {
             radioButton.IsChecked = false;
         }
+
         FrequencyFlickerBox.SelectedIndex = 3;
         TypeFlickerBox.SelectedIndex = 2;
         BrightRedColorSlider.Value = 0;
@@ -109,28 +118,59 @@ public partial class SetupMenu : Window
         LevelSlider.Value = 0;
         TimerTextBox.Text = "5";
     }
-    
+
+    private void NextGame(object? sender, EventArgs e)
+    {
+        NextGameTimer.Stop();
+
+        _currentGame++;
+        var game = _games[_currentGame];
+        switch (game.GameId)
+        {
+            case 1:
+                new Tyr(game).Show();
+                break;
+            case 2:
+                new Following(game).Show();
+                break;
+            case 3:
+                new Combination(game).Show();
+                break;
+            case 4:
+                new Merger(game).Show();
+                break;
+        }
+
+        NextGameTimer.Interval = new TimeSpan(0, game.ExerciseDuration, 0);
+        NextGameTimer.Start();
+    }
+
     private void StartGameClick(object? sender, RoutedEventArgs e)
     {
-        for (int i = Games.Children.Count - 1; i > 0; i--)
+        NextGameTimer.Stop();
+
+        _games = SettingsWrap.GetSettings(0);
+        _currentGame = 0;
+        var game = _games[_currentGame];
+        switch (game.GameId)
         {
-            var game = ((ComboBox)Games.Children[i]).SelectedIndex;
-            switch (game)
-            {
-                case 0:
-                    new Tyr().Show();
-                    break;
-                case 1:
-                    new Following().Show();
-                    break;
-                case 2:
-                    new Combination().Show();
-                    break;
-                case 3:
-                    new Merger().Show();
-                    break;
-            }
+            case 1:
+                new Tyr(game).Show();
+                break;
+            case 2:
+                new Following(game).Show();
+                break;
+            case 3:
+                new Combination(game).Show();
+                break;
+            case 4:
+                new Merger(game).Show();
+                break;
         }
+
+        NextGameTimer.Tick += NextGame;
+        NextGameTimer.Interval = new TimeSpan(0, game.ExerciseDuration, 0);
+        NextGameTimer.Start();
     }
 
     private void SelectGame(object? sender, SelectionChangedEventArgs e)
@@ -138,9 +178,9 @@ public partial class SetupMenu : Window
         if (e.RemovedItems.Count > 0) return;
 
         var settings = GetCurrentSettings();
-        
+
         SettingsWrap.AddSettings(settings);
-        
+
         var game = new ComboBox
         {
             PlaceholderText = Game1.PlaceholderText,
@@ -163,7 +203,7 @@ public partial class SetupMenu : Window
 
         Grid.SetRow(game, Games.Children.Count - 1);
         Games.Children.Add(game);
-        
+
         ResetSettings();
     }
 

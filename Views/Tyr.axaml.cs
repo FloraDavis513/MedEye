@@ -5,6 +5,7 @@ using Avalonia.Media;
 using Avalonia.Threading;
 using MedEye.Consts;
 using System;
+using MedEye.DB;
 
 namespace MedEye.Views
 {
@@ -28,6 +29,13 @@ namespace MedEye.Views
         private int level = 0;
 
         private int success_counter = 0;
+        
+        // Blink
+        private static readonly DispatcherTimer TargetBlinkTimer = new DispatcherTimer();
+        private static readonly DispatcherTimer ScopeBlinkTimer = new DispatcherTimer();
+
+        // Close game
+        private static readonly DispatcherTimer CloseGameTimer = new DispatcherTimer();
 
         public Tyr()
         {
@@ -49,6 +57,34 @@ namespace MedEye.Views
             double width = target.Width;
             Canvas.SetTop(target, rnd.Next(0, Convert.ToInt32(this.ClientSize.Height - height)));
             Canvas.SetLeft(target, rnd.Next(0, Convert.ToInt32(this.ClientSize.Width - width)));
+            
+            CloseGameTimer.Tick += CloseGame;
+            CloseGameTimer.Interval = new TimeSpan(0, 5, 0);
+            StartBlink(4);
+            CloseGameTimer.Start();
+        }
+        
+        public Tyr(Settings settings)
+        {
+            InitializeComponent();
+
+#if DEBUG
+            this.AttachDevTools();
+#endif
+
+            after_move_reset_timer.Tick += ResetColor;
+            after_move_reset_timer.Interval = new TimeSpan(500000);
+
+            flash_timer.Tick += WinFlash;
+            flash_timer.Interval = new TimeSpan(300000);
+            
+            Canvas.SetTop(Target, rnd.Next(0, Convert.ToInt32(this.ClientSize.Height - Target.Height)));
+            Canvas.SetLeft(Target, rnd.Next(0, Convert.ToInt32(this.ClientSize.Width - Target.Width)));
+            
+            CloseGameTimer.Tick += CloseGame;
+            CloseGameTimer.Interval = new TimeSpan(0, settings.ExerciseDuration, 0);
+            StartBlink(settings.FlickerMode, settings.Frequency);
+            CloseGameTimer.Start();
         }
 
         public void SetDifficultLevel(int level)
@@ -159,6 +195,58 @@ namespace MedEye.Views
             else
                 this.Background = Avalonia.Media.Brushes.Black;
         }
+        
+        private void StartBlink(int mode = 2, int frequency = 10)
+        {
+            TargetBlinkTimer.Tick += TargetBlink;
+            TargetBlinkTimer.Interval = new TimeSpan(0, 0, 0, (int)(1.0 / frequency));
 
+            ScopeBlinkTimer.Tick += ScopeBlink;
+            ScopeBlinkTimer.Interval = new TimeSpan(0, 0, 0, (int)(1.0 / frequency));
+
+            switch (mode)
+            {
+                case 0:
+                    TargetBlinkTimer.Start();
+                    break;
+                case 1:
+                    ScopeBlinkTimer.Start();
+                    break;
+                case 2:
+                    TargetBlinkTimer.Start();
+                    ScopeBlinkTimer.Start();
+                    break;
+                case 4:
+                    TargetBlinkTimer.Stop();
+                    ScopeBlinkTimer.Stop();
+                    break;
+            }
+        }
+
+        private void TargetBlink(object? sender, EventArgs e)
+        {
+            Target.Stroke = Equals(Target.Stroke, colors[currentColor])
+                ? ColorConst.AMBLYOPIA_MOVE_COLOR
+                : colors[currentColor];
+            
+            Target.Fill = Equals(Target.Fill, colors[currentColor])
+                ? ColorConst.AMBLYOPIA_MOVE_COLOR
+                : colors[currentColor];
+        }
+
+        private void ScopeBlink(object? sender, EventArgs e)
+        {
+            Scope.Background = Equals(Scope.Background, colors[currentColor])
+                ? ColorConst.AMBLYOPIA_MOVE_COLOR
+                : colors[currentColor];
+        }
+
+        private void CloseGame(object? sender, EventArgs e)
+        {
+            TargetBlinkTimer.Stop();
+            ScopeBlinkTimer.Stop();
+            CloseGameTimer.Stop();
+            Close();
+        }
     }
 }

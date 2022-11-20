@@ -6,6 +6,7 @@ using Avalonia.Threading;
 using MedEye.Consts;
 using MedEye.Controls;
 using System;
+using MedEye.DB;
 
 namespace MedEye.Views
 {
@@ -18,13 +19,20 @@ namespace MedEye.Views
 
         private static readonly DispatcherTimer after_move_reset_timer = new DispatcherTimer();
 
+        // Blink
+        private static readonly DispatcherTimer FirstBlinkTimer = new DispatcherTimer();
+        private static readonly DispatcherTimer SecondBlinkTimer = new DispatcherTimer();
+
+        // Close game
+        private static readonly DispatcherTimer CloseGameTimer = new DispatcherTimer();
+
         public Combination()
         {
             InitializeComponent();
 
-            #if DEBUG
-                this.AttachDevTools();
-            #endif
+#if DEBUG
+            this.AttachDevTools();
+#endif
 
             log_timer.Tick += CloseLog;
             log_timer.Interval = new TimeSpan(20000000);
@@ -37,12 +45,43 @@ namespace MedEye.Views
             double first_width = first.Width;
             Canvas.SetTop(first, rnd.Next(0, Convert.ToInt32(this.ClientSize.Height - first_height)));
             Canvas.SetLeft(first, rnd.Next(0, Convert.ToInt32(this.ClientSize.Width - first_width)));
-            
+
             DragControl second = this.Get<DragControl>("SecondObject");
             double second_height = second.Height;
             double second_width = second.Width;
             Canvas.SetTop(second, rnd.Next(0, Convert.ToInt32(this.ClientSize.Height - second_height)));
             Canvas.SetLeft(second, rnd.Next(0, Convert.ToInt32(this.ClientSize.Width - second_width)));
+
+            CloseGameTimer.Tick += CloseGame;
+            CloseGameTimer.Interval = new TimeSpan(0, 5, 0);
+            StartBlink(4);
+            CloseGameTimer.Start();
+        }
+
+        public Combination(Settings settings)
+        {
+            InitializeComponent();
+
+#if DEBUG
+            this.AttachDevTools();
+#endif
+
+            log_timer.Tick += CloseLog;
+            log_timer.Interval = new TimeSpan(20000000);
+
+            after_move_reset_timer.Tick += ResetColor;
+            after_move_reset_timer.Interval = new TimeSpan(500000);
+
+            Canvas.SetTop(FirstObject, rnd.Next(0, Convert.ToInt32(this.ClientSize.Height - FirstObject.Height)));
+            Canvas.SetLeft(FirstObject, rnd.Next(0, Convert.ToInt32(this.ClientSize.Width - FirstObject.Width)));
+
+            Canvas.SetTop(SecondObject, rnd.Next(0, Convert.ToInt32(this.ClientSize.Height - SecondObject.Height)));
+            Canvas.SetLeft(SecondObject, rnd.Next(0, Convert.ToInt32(this.ClientSize.Width - SecondObject.Width)));
+
+            CloseGameTimer.Tick += CloseGame;
+            CloseGameTimer.Interval = new TimeSpan(0, settings.ExerciseDuration, 0);
+            StartBlink(settings.FlickerMode, settings.Frequency);
+            CloseGameTimer.Start();
         }
 
         protected override void OnKeyDown(KeyEventArgs e)
@@ -55,6 +94,7 @@ namespace MedEye.Views
                     log_timer.Stop();
                 this.Close();
             }
+
             base.OnKeyDown(e);
         }
 
@@ -83,17 +123,23 @@ namespace MedEye.Views
                 double first_height = first.Height;
                 double first_width = first.Width;
 
-                Canvas.SetTop(first, rnd.Next(Convert.ToInt32(first_height), Convert.ToInt32(this.ClientSize.Height - first_height)));
-                Canvas.SetLeft(first, rnd.Next(Convert.ToInt32(first_width), Convert.ToInt32(this.ClientSize.Width - first_width)));
+                Canvas.SetTop(first,
+                    rnd.Next(Convert.ToInt32(first_height), Convert.ToInt32(this.ClientSize.Height - first_height)));
+                Canvas.SetLeft(first,
+                    rnd.Next(Convert.ToInt32(first_width), Convert.ToInt32(this.ClientSize.Width - first_width)));
 
                 double second_height = second.Height;
                 double second_width = second.Width;
-                Canvas.SetTop(second, rnd.Next(Convert.ToInt32(second_height), Convert.ToInt32(this.ClientSize.Height - second_height)));
-                Canvas.SetLeft(second, rnd.Next(Convert.ToInt32(this.ClientSize.Width / 2), Convert.ToInt32(this.ClientSize.Width - second_width)));
+                Canvas.SetTop(second,
+                    rnd.Next(Convert.ToInt32(second_height), Convert.ToInt32(this.ClientSize.Height - second_height)));
+                Canvas.SetLeft(second,
+                    rnd.Next(Convert.ToInt32(this.ClientSize.Width / 2),
+                        Convert.ToInt32(this.ClientSize.Width - second_width)));
 
                 Border log = this.Get<Border>("Log");
                 Label text = (Label)log.Child;
-                text.Content = string.Format("Отклонение:\nПо вертикали: {0}\nПо горизонтали: {1}", first_center_x - second_center_x, first_center_y - second_center_y);
+                text.Content = string.Format("Отклонение:\nПо вертикали: {0}\nПо горизонтали: {1}",
+                    first_center_x - second_center_x, first_center_y - second_center_y);
                 log.Opacity = 1;
                 if (log_timer.IsEnabled)
                     log_timer.Stop();
@@ -137,6 +183,55 @@ namespace MedEye.Views
             first.Background = ColorConst.STRABISMUS_FIRST_COLOR;
             second.Background = ColorConst.STRABISMUS_SECOND_COLOR;
             after_move_reset_timer.Stop();
+        }
+
+        private void StartBlink(int mode = 2, int frequency = 10)
+        {
+            FirstBlinkTimer.Tick += FirstBlink;
+            FirstBlinkTimer.Interval = new TimeSpan(0, 0, 0, (int)(1.0 / frequency));
+
+            SecondBlinkTimer.Tick += SecondBlink;
+            SecondBlinkTimer.Interval = new TimeSpan(0, 0, 0, (int)(1.0 / frequency));
+
+            switch (mode)
+            {
+                case 0:
+                    FirstBlinkTimer.Start();
+                    break;
+                case 1:
+                    SecondBlinkTimer.Start();
+                    break;
+                case 2:
+                    FirstBlinkTimer.Start();
+                    SecondBlinkTimer.Start();
+                    break;
+                case 4:
+                    FirstBlinkTimer.Stop();
+                    SecondBlinkTimer.Stop();
+                    break;
+            }
+        }
+
+        private void FirstBlink(object? sender, EventArgs e)
+        {
+            FirstObject.Background = Equals(FirstObject.Background, ColorConst.STRABISMUS_FIRST_COLOR)
+                ? ColorConst.STRABISMUS_MOVE_COLOR
+                : ColorConst.STRABISMUS_FIRST_COLOR;
+        }
+
+        private void SecondBlink(object? sender, EventArgs e)
+        {
+            FirstObject.Background = Equals(FirstObject.Background, ColorConst.STRABISMUS_SECOND_COLOR)
+                ? ColorConst.STRABISMUS_MOVE_COLOR
+                : ColorConst.STRABISMUS_SECOND_COLOR;
+        }
+
+        private void CloseGame(object? sender, EventArgs e)
+        {
+            FirstBlinkTimer.Stop();
+            SecondBlinkTimer.Stop();
+            CloseGameTimer.Stop();
+            Close();
         }
     }
 }
