@@ -20,6 +20,7 @@ public partial class Following : Window
 
     // Blink
     private static readonly DispatcherTimer TargetBlinkTimer = new DispatcherTimer();
+
     private static readonly DispatcherTimer StalkerBlinkTimer = new DispatcherTimer();
     //private static readonly DispatcherTimer ChangeBlinkTimer = new DispatcherTimer();
 
@@ -40,6 +41,10 @@ public partial class Following : Window
     // Alias for colors amblyopia array.
     private readonly IBrush[] _colors = ColorConst.AMBLYOPIA_COLORS;
 
+    // Scores
+    private long _countScores = 0;
+    private Scores _scores = new Scores();
+
     public Following()
     {
         InitializeComponent();
@@ -57,6 +62,7 @@ public partial class Following : Window
         CloseGameTimer.Tick += CloseGame;
         CloseGameTimer.Interval = new TimeSpan(0, 5, 0);
 
+        SetDefaultScores(0, 2, 1);
         StartBlink();
         StartMoving();
         CloseGameTimer.Start();
@@ -78,6 +84,8 @@ public partial class Following : Window
 
         CloseGameTimer.Tick += CloseGame;
         CloseGameTimer.Interval = new TimeSpan(0, settings.ExerciseDuration, 0);
+
+        SetDefaultScores(settings.UserId, settings.GameId, settings.Level);
 
         StartBlink(settings.FlickerMode, settings.Frequency);
         StartMoving();
@@ -197,6 +205,10 @@ public partial class Following : Window
     private void CloseGame(object? sender, EventArgs e)
     {
         StopTimer();
+
+        _scores.DateCompletion = DateTime.Now;
+        ScoresWrap.AddScores(_scores);
+
         Close();
     }
 
@@ -233,6 +245,8 @@ public partial class Following : Window
             Canvas.SetLeft(Stalker, offsetX - (Stalker.Width / 2));
         }
 
+        CalculateScore();
+
         base.OnPointerMoved(e);
     }
 
@@ -267,6 +281,65 @@ public partial class Following : Window
             Stalker.Height -= 10;
             Stalker.Width -= 10;
             _currentColor = (_currentColor + 1) % ColorConst.AMBLYOPIA_COLORS.Length;
+        }
+    }
+
+    private void SetDefaultScores(int userId, int gameId, int level)
+    {
+        _scores.UserId = userId;
+        _scores.GameId = gameId;
+        _scores.Level = level;
+        _scores.MaxDeviationsX = 0;
+        _scores.MaxDeviationsY = 0;
+        _scores.MinDeviationsX = double.MaxValue;
+        _scores.MinDeviationsY = double.MaxValue;
+    }
+
+    private void CalculateScore()
+    {
+        var targetCenterX = Canvas.GetLeft(Target) + Target.Width / 2;
+        var targetCenterY = Canvas.GetTop(Target) + Target.Height / 2;
+
+        var stalkerCenterX = Canvas.GetLeft(Stalker) + Stalker.Width / 2;
+        var stalkerCenterY = Canvas.GetTop(Stalker) + Stalker.Height / 2;
+
+        var offsetX = targetCenterX - stalkerCenterX;
+        var offsetY = targetCenterY - stalkerCenterY;
+
+        if (Math.Abs(offsetX) <= Math.Abs(_scores.MinDeviationsX))
+        {
+            _scores.MinDeviationsX = offsetX;
+        }
+
+        if (Math.Abs(offsetY) <= Math.Abs(_scores.MinDeviationsY))
+        {
+            _scores.MinDeviationsY = offsetY;
+        }
+
+        if (Math.Abs(offsetX) >= Math.Abs(_scores.MaxDeviationsX))
+        {
+            _scores.MaxDeviationsX = offsetX;
+        }
+
+        if (Math.Abs(offsetY) >= Math.Abs(_scores.MaxDeviationsY))
+        {
+            _scores.MaxDeviationsY = offsetY;
+        }
+
+        _scores.MeanDeviationsX = (_scores.MeanDeviationsX * _countScores + offsetX) / (_countScores + 1);
+        _scores.MeanDeviationsY = (_scores.MeanDeviationsY * _countScores + offsetY) / (_countScores + 1);
+        _countScores++;
+
+        if (targetCenterX >= Canvas.GetLeft(Stalker)
+            && targetCenterX <= Canvas.GetLeft(Stalker) + Stalker.Width
+            && targetCenterY >= Canvas.GetTop(Stalker)
+            && targetCenterY <=  Canvas.GetTop(Stalker) + Stalker.Height)
+        {
+            _scores.Score += 1;
+        }
+        else
+        {
+            _scores.Score -= 1;
         }
     }
 }

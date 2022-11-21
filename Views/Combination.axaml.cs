@@ -1,7 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
-using Avalonia.Media;
 using Avalonia.Threading;
 using MedEye.Consts;
 using MedEye.Controls;
@@ -25,6 +24,10 @@ namespace MedEye.Views
 
         // Close game
         private static readonly DispatcherTimer CloseGameTimer = new DispatcherTimer();
+
+        // Scores
+        private long _countScores = 0;
+        private Scores _scores = new Scores();
 
         public Combination()
         {
@@ -54,6 +57,9 @@ namespace MedEye.Views
 
             CloseGameTimer.Tick += CloseGame;
             CloseGameTimer.Interval = new TimeSpan(0, 5, 0);
+
+            SetDefaultScores(0, 3, 1);
+
             StartBlink(4);
             CloseGameTimer.Start();
         }
@@ -80,6 +86,9 @@ namespace MedEye.Views
 
             CloseGameTimer.Tick += CloseGame;
             CloseGameTimer.Interval = new TimeSpan(0, settings.ExerciseDuration, 0);
+
+            SetDefaultScores(settings.UserId, settings.GameId, settings.Level);
+
             StartBlink(settings.FlickerMode, settings.Frequency);
             CloseGameTimer.Start();
         }
@@ -149,7 +158,9 @@ namespace MedEye.Views
             }
             else
                 first.Background = ColorConst.STRABISMUS_FIRST_COLOR;
-
+            
+            CalculateScore();
+            
             base.OnPointerReleased(e);
         }
 
@@ -231,7 +242,70 @@ namespace MedEye.Views
             FirstBlinkTimer.Stop();
             SecondBlinkTimer.Stop();
             CloseGameTimer.Stop();
+
+            _scores.DateCompletion = DateTime.Now;
+            ScoresWrap.AddScores(_scores);
+
             Close();
+        }
+
+        private void SetDefaultScores(int userId, int gameId, int level)
+        {
+            _scores.UserId = userId;
+            _scores.GameId = gameId;
+            _scores.Level = level;
+            _scores.MaxDeviationsX = 0;
+            _scores.MaxDeviationsY = 0;
+            _scores.MinDeviationsX = double.MaxValue;
+            _scores.MinDeviationsY = double.MaxValue;
+        }
+
+        private void CalculateScore()
+        {
+            var targetCenterX = Canvas.GetLeft(FirstObject) + FirstObject.Width / 2;
+            var targetCenterY = Canvas.GetTop(FirstObject) + FirstObject.Height / 2;
+
+            var stalkerCenterX = Canvas.GetLeft(SecondObject) + SecondObject.Width / 2;
+            var stalkerCenterY = Canvas.GetTop(SecondObject) + SecondObject.Height / 2;
+
+            var offsetX = targetCenterX - stalkerCenterX;
+            var offsetY = targetCenterY - stalkerCenterY;
+
+            if (Math.Abs(offsetX) <= Math.Abs(_scores.MinDeviationsX))
+            {
+                _scores.MinDeviationsX = offsetX;
+            }
+
+            if (Math.Abs(offsetY) <= Math.Abs(_scores.MinDeviationsY))
+            {
+                _scores.MinDeviationsY = offsetY;
+            }
+
+            if (Math.Abs(offsetX) >= Math.Abs(_scores.MaxDeviationsX))
+            {
+                _scores.MaxDeviationsX = offsetX;
+            }
+
+            if (Math.Abs(offsetY) >= Math.Abs(_scores.MaxDeviationsY))
+            {
+                _scores.MaxDeviationsY = offsetY;
+            }
+
+            _scores.MeanDeviationsX = (_scores.MeanDeviationsX * _countScores + offsetX) / (_countScores + 1);
+            _scores.MeanDeviationsY = (_scores.MeanDeviationsY * _countScores + offsetY) / (_countScores + 1);
+            _countScores++;
+
+            if (targetCenterX >= Canvas.GetLeft(SecondObject)
+                && targetCenterX <= Canvas.GetLeft(SecondObject) + SecondObject.Width
+                && targetCenterY >= Canvas.GetTop(SecondObject)
+                && targetCenterY <= Canvas.GetTop(SecondObject) + SecondObject.Height)
+            {
+                _scores.Score += 1;
+            }
+            else
+            {
+                _scores.Score -= 1;
+            }
         }
     }
 }

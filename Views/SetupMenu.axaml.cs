@@ -123,7 +123,10 @@ public partial class SetupMenu : Window
     {
         NextGameTimer.Stop();
 
-        _currentGame++;
+        _currentGame++; 
+        
+        if (_currentGame >= _games.Count) return;
+        
         var game = _games[_currentGame];
         switch (game.GameId)
         {
