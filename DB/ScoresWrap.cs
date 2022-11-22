@@ -19,6 +19,17 @@ namespace MedEye.DB
         public double MinDeviationsY;
         public double MaxDeviationsX;
         public double MaxDeviationsY;
+
+        public override string ToString()
+        {
+            return "Всего очков: " + Math.Abs(Score) + "\n" +
+                   "Минимальное отклонение по горизонтали: " + Math.Round(MinDeviationsX, 1) + "\n" +
+                   "Минимальное отклонение по вертикали: " + Math.Round(MinDeviationsY, 1) + "\n" +
+                   "Среднее отклонение по горизонтали: " + Math.Round(MeanDeviationsX, 1) + "\n" +
+                   "Среднее отклонение по вертикали: " + Math.Round(MeanDeviationsY, 1) + "\n" +
+                   "Максимальное отклонение по горизонтали: " + Math.Round(MaxDeviationsX, 1) + "\n" +
+                   "Максимальное отклонение по вертикали: " + Math.Round(MaxDeviationsY, 1);
+        }
     }
 
     public class ScoresWrap

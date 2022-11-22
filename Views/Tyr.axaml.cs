@@ -264,7 +264,12 @@ namespace MedEye.Views
             _scores.DateCompletion = DateTime.Now;
             ScoresWrap.AddScores(_scores);
 
-            Close();
+            ShowResult();
+
+            CloseGameTimer.Tick -= CloseGame;
+            CloseGameTimer.Tick += CloseGameAfterShowResult;
+            CloseGameTimer.Interval = new TimeSpan(0, 0, 5);
+            CloseGameTimer.Start();
         }
 
         private void SetDefaultScores(int userId, int gameId, int level)
@@ -324,6 +329,26 @@ namespace MedEye.Views
             {
                 _scores.Score -= 1;
             }
+        }
+
+        private void ShowResult()
+        {
+            Result.Content = "Результат игры:\n" + _scores;
+            Result.FontSize = 32 * (ClientSize.Width / 1920);
+            Result.Height = ClientSize.Height / 3 - 25;
+            Result.Width = ClientSize.Width / 2 - 25;
+            Log.Height = ClientSize.Height / 3;
+            Log.Width = ClientSize.Width / 2;
+            Log.CornerRadius = new CornerRadius(15);
+            Log.Opacity = 1;
+            Canvas.SetTop(Log, ClientSize.Height / 2 - Log.Height / 2);
+            Canvas.SetLeft(Log, ClientSize.Width / 2 - Log.Width / 2);
+        }
+
+        private void CloseGameAfterShowResult(object? sender, EventArgs e)
+        {
+            CloseGameTimer.Stop();
+            Close();
         }
     }
 }

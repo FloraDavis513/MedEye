@@ -40,7 +40,7 @@
                 Background="White"
                 Height="140"
                 Width="450"
-                ZIndex="3"
+                ZIndex="-1"
                 FontSize="30">
                 Результат игры:
             </Label>

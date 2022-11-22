@@ -144,7 +144,7 @@ public partial class SetupMenu : Window
                 break;
         }
 
-        NextGameTimer.Interval = new TimeSpan(0, game.ExerciseDuration, 0);
+        NextGameTimer.Interval = new TimeSpan(0, game.ExerciseDuration, 5);
         NextGameTimer.Start();
     }
 
@@ -172,7 +172,7 @@ public partial class SetupMenu : Window
         }
 
         NextGameTimer.Tick += NextGame;
-        NextGameTimer.Interval = new TimeSpan(0, game.ExerciseDuration, 0);
+        NextGameTimer.Interval = new TimeSpan(0, game.ExerciseDuration, 5);
         NextGameTimer.Start();
     }
 

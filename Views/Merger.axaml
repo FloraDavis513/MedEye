@@ -45,8 +45,9 @@
       Height="140"
       Width="450"
       ZIndex="3"
+      Name="Result"
       FontSize="30">
-        Отклонение:
+        Результат игры:
       </Label>
     </Border>
   </Canvas>

@@ -14,8 +14,6 @@ namespace MedEye.Views
         // Random generator for target pos.
         static Random rnd = new Random();
 
-        private static readonly DispatcherTimer log_timer = new DispatcherTimer();
-
         private static readonly DispatcherTimer after_move_reset_timer = new DispatcherTimer();
 
         // Blink
@@ -37,8 +35,6 @@ namespace MedEye.Views
             this.AttachDevTools();
 #endif
 
-            log_timer.Tick += CloseLog;
-            log_timer.Interval = new TimeSpan(20000000);
 
             after_move_reset_timer.Tick += ResetColor;
             after_move_reset_timer.Interval = new TimeSpan(500000);
@@ -72,8 +68,6 @@ namespace MedEye.Views
             this.AttachDevTools();
 #endif
 
-            log_timer.Tick += CloseLog;
-            log_timer.Interval = new TimeSpan(20000000);
 
             after_move_reset_timer.Tick += ResetColor;
             after_move_reset_timer.Interval = new TimeSpan(500000);
@@ -99,9 +93,7 @@ namespace MedEye.Views
             {
                 if (after_move_reset_timer.IsEnabled)
                     after_move_reset_timer.Stop();
-                if (log_timer.IsEnabled)
-                    log_timer.Stop();
-                this.Close();
+                Close();
             }
 
             base.OnKeyDown(e);
@@ -144,23 +136,12 @@ namespace MedEye.Views
                 Canvas.SetLeft(second,
                     rnd.Next(Convert.ToInt32(this.ClientSize.Width / 2),
                         Convert.ToInt32(this.ClientSize.Width - second_width)));
-
-                Border log = this.Get<Border>("Log");
-                Label text = (Label)log.Child;
-                text.Content = string.Format("Отклонение:\nПо вертикали: {0}\nПо горизонтали: {1}",
-                    first_center_x - second_center_x, first_center_y - second_center_y);
-                log.Opacity = 1;
-                if (log_timer.IsEnabled)
-                    log_timer.Stop();
-                log_timer.Start();
-                Canvas.SetTop(log, this.ClientSize.Height / 2 - log.Height / 2);
-                Canvas.SetLeft(log, this.ClientSize.Width / 2 - log.Width / 2);
             }
             else
                 first.Background = ColorConst.STRABISMUS_FIRST_COLOR;
-            
+
             CalculateScore();
-            
+
             base.OnPointerReleased(e);
         }
 
@@ -178,13 +159,6 @@ namespace MedEye.Views
                 after_move_reset_timer.Stop();
             after_move_reset_timer.Start();
             base.OnPointerMoved(e);
-        }
-
-        private void CloseLog(object? sender, EventArgs e)
-        {
-            Border log = this.Get<Border>("Log");
-            log.Opacity = 0;
-            log_timer.Stop();
         }
 
         private void ResetColor(object? sender, EventArgs e)
@@ -246,7 +220,12 @@ namespace MedEye.Views
             _scores.DateCompletion = DateTime.Now;
             ScoresWrap.AddScores(_scores);
 
-            Close();
+            ShowResult();
+
+            CloseGameTimer.Tick -= CloseGame;
+            CloseGameTimer.Tick += CloseGameAfterShowResult;
+            CloseGameTimer.Interval = new TimeSpan(0, 0, 5);
+            CloseGameTimer.Start();
         }
 
         private void SetDefaultScores(int userId, int gameId, int level)
@@ -306,6 +285,26 @@ namespace MedEye.Views
             {
                 _scores.Score -= 1;
             }
+        }
+
+        private void ShowResult()
+        {
+            Result.Content = "Результат игры:\n" + _scores;
+            Result.FontSize = 32 * (ClientSize.Width / 1920);
+            Result.Height = ClientSize.Height / 3 - 25;
+            Result.Width = ClientSize.Width / 2 - 25;
+            Log.Height = ClientSize.Height / 3;
+            Log.Width = ClientSize.Width / 2;
+            Log.CornerRadius = new CornerRadius(15);
+            Log.Opacity = 1;
+            Canvas.SetTop(Log, ClientSize.Height / 2 - Log.Height / 2);
+            Canvas.SetLeft(Log, ClientSize.Width / 2 - Log.Width / 2);
+        }
+
+        private void CloseGameAfterShowResult(object? sender, EventArgs e)
+        {
+            CloseGameTimer.Stop();
+            Close();
         }
     }
 }
