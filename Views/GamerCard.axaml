@@ -9,7 +9,7 @@
   <Border Background="#1372B7"
           Opacity="0.25"
           >
-    <Grid ColumnDefinitions="*" RowDefinitions="*, 10*, 2*" Opacity="4">
+    <Grid ShowGridLines="True" ColumnDefinitions="*" RowDefinitions="*, 10*, 2*" Opacity="4">
       <TextBlock Name="GamerHeader" Grid.Column="0" Grid.Row="0" Background="White" FontSize="48" TextAlignment="Center" Margin="0 50 0 0" Width="1820">
         ---------------- Карта игрока № ----------------
       </TextBlock>
@@ -42,8 +42,6 @@
           <TextBox Name="Sex" Grid.Column="3" Grid.Row="4"/>
 
           <TextBox Grid.Column="0" Grid.Row="6" Grid.ColumnSpan="4" Grid.RowSpan="1" AcceptsReturn="True" TextWrapping="Wrap" Height="500"/>
-          <DataGrid Grid.Column="0" Grid.Row="7" Grid.ColumnSpan="4" Grid.RowSpan="1" Name="Results" FontSize="48">
-          </DataGrid>
           <Grid.Styles>
             <Style Selector="TextBox">
               <Setter Property="BorderBrush" Value="#1372B7"></Setter>
@@ -54,31 +52,35 @@
           </Grid.Styles>
         </Grid>
       </ScrollViewer>
-      <DockPanel Grid.Column="0" Grid.Row="2" Background="#1372B7" Opacity="0.01">
-        <Button Name="Save" DockPanel.Dock="Right">
+      <Grid ShowGridLines="True" Grid.Column="0" Grid.Row="2" ColumnDefinitions="*, *, *" Background="#1372B7" Opacity="0.01">
+        <Button Name="Save" Grid.Column="2">
           Сохранить
         </Button>
-        <Button Name="Back" DockPanel.Dock="Left">
+        <Button Name="Back"  Grid.Column="0">
           Назад
         </Button>
-        <DockPanel.Styles>
+        <Button Name="Stat" Grid.Column="1">
+          Статистика
+        </Button>
+        <Grid.Styles>
           <Style Selector="Button">
-            <Setter Property="Background" Value="#E1FFFD"></Setter>
+            <Setter Property="BorderBrush" Value="#00B1A7"></Setter>
+            <Setter Property="Background" Value="#CFE0F2"></Setter>
+            <Setter Property="BorderThickness" Value="2.5"></Setter>
             <Setter Property="CornerRadius" Value="15"></Setter>
-            <Setter Property="Margin" Value="50 25 50 0"></Setter>
+            <Setter Property="Margin" Value="100 0 50 0"></Setter>
             <Setter Property="Padding" Value="0 15 0 15"></Setter>
             <Setter Property="TextBlock.FontSize" Value="32"></Setter>
-            <Setter Property="TextBlock.Foreground" Value="Black"></Setter>
             <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
-            <Setter Property="Opacity" Value="200"></Setter>
+            <Setter Property="Opacity" Value="100"></Setter>
           </Style>
           <Style Selector="Button:pointerover /template/ ContentPresenter">
             <Setter Property="BorderBrush" Value="Red"></Setter>
-            <Setter Property="Background" Value="#E1FFFD"></Setter>
+            <Setter Property="Background" Value="#CFE0F2"></Setter>
             <Setter Property="TextBlock.Foreground" Value="Red"></Setter>
           </Style>
-        </DockPanel.Styles>
-      </DockPanel>
+        </Grid.Styles>
+      </Grid>
     </Grid>
     
   </Border>

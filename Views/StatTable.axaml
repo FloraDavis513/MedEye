@@ -1,0 +1,80 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
+        x:Class="MedEye.Views.StatTable"
+        Title="StatTable"
+        WindowState="FullScreen">
+  <Grid RowDefinitions="*, *, 6*, *" ColumnDefinitions="*, *, *, *" Background="#1372B7" Opacity="0.25">
+    <TextBlock Name="Header" Opacity="4" Grid.Row="0" Grid.ColumnSpan="4" FontSize="48" VerticalAlignment="Center" HorizontalAlignment="Center">
+      Результат игрока № xx по игре "Тир"
+    </TextBlock>
+    <Button Name="GetTyr" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center">
+      Игра "Тир"
+    </Button>
+    <Button Name="GetFollowing" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center">
+      Игра "Погоня"
+    </Button>
+    <Button Name="GetCombination" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Center">
+      Игра "Совмещение"
+    </Button>
+    <Button Name="GetMerger" Grid.Row="1" Grid.Column="3" HorizontalAlignment="Center">
+      Игра "Слияние"
+    </Button>
+    <DataGrid Name="Results" Opacity="4" Grid.Row="2" Grid.ColumnSpan="4" Background="White" Margin="25 0 25 0" FontSize="32" ColumnWidth="*">
+      <DataGrid.Styles>
+        <Style Selector="DataGridCell">
+          <Setter Property="HorizontalAlignment" Value="Center" />
+        </Style>
+        <Style Selector="DataGridColumnHeader">
+          <Setter Property="HorizontalContentAlignment" Value="Center" />
+        </Style>
+      </DataGrid.Styles>
+    </DataGrid>
+    <DockPanel Grid.Row="3" Grid.ColumnSpan="4" Opacity="16">
+      <Button Name="ToRegistry" DockPanel.Dock="Right">
+        Регистратура
+      </Button>
+      <Button Name="Load" DockPanel.Dock="Left">
+        Выгрузить
+      </Button>
+      <DockPanel.Styles>
+        <Style Selector="Button">
+          <Setter Property="BorderBrush" Value="#00B1A7"></Setter>
+          <Setter Property="Background" Value="#CFE0F2"></Setter>
+          <Setter Property="BorderThickness" Value="2.5"></Setter>
+          <Setter Property="CornerRadius" Value="15"></Setter>
+          <Setter Property="Margin" Value="50 0 50 0"></Setter>
+          <Setter Property="Padding" Value="0 15 0 15"></Setter>
+          <Setter Property="TextBlock.FontSize" Value="32"></Setter>
+          <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
+          <Setter Property="Opacity" Value="1"></Setter>
+        </Style>
+        <Style Selector="Button:pointerover /template/ ContentPresenter">
+          <Setter Property="BorderBrush" Value="Red"></Setter>
+          <Setter Property="Background" Value="#CFE0F2"></Setter>
+          <Setter Property="TextBlock.Foreground" Value="Red"></Setter>
+        </Style>
+      </DockPanel.Styles>
+    </DockPanel>
+    <Grid.Styles>
+      <Style Selector="Button">
+        <Setter Property="BorderBrush" Value="#00B1A7"></Setter>
+        <Setter Property="Background" Value="#CFE0F2"></Setter>
+        <Setter Property="BorderThickness" Value="2.5"></Setter>
+        <Setter Property="CornerRadius" Value="15"></Setter>
+        <Setter Property="Margin" Value="50 0 50 0"></Setter>
+        <Setter Property="Padding" Value="0 15 0 15"></Setter>
+        <Setter Property="TextBlock.FontSize" Value="32"></Setter>
+        <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
+        <Setter Property="Opacity" Value="100"></Setter>
+      </Style>
+      <Style Selector="Button:pointerover /template/ ContentPresenter">
+        <Setter Property="BorderBrush" Value="Red"></Setter>
+        <Setter Property="Background" Value="#CFE0F2"></Setter>
+        <Setter Property="TextBlock.Foreground" Value="Red"></Setter>
+      </Style>
+    </Grid.Styles>
+  </Grid>
+</Window>

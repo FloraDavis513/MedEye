@@ -27,7 +27,6 @@ namespace MedEye.Views
 
             close_timer.Tick += CloseAfterRoute;
             close_timer.Interval = new TimeSpan(1000000);
-            ExcelGenerator.GenerateExcelByUserId(1);
         }
 
         protected override void OnOpened(EventArgs e)
