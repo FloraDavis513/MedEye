@@ -4,6 +4,7 @@ using Avalonia.Input;
 using Avalonia.Media;
 using Avalonia.Threading;
 using MedEye.Consts;
+using MedEye.Tracker;
 using System;
 using MedEye.DB;
 
@@ -159,6 +160,7 @@ namespace MedEye.Views
                     after_move_reset_timer.Stop();
                 if (flash_timer.IsEnabled)
                     flash_timer.Stop();
+                var tmp = Tracker.Tracker.GetResult();
                 this.Close();
             }
 
