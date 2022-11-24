@@ -35,6 +35,7 @@ namespace MedEye.Views
             this.AttachDevTools();
 #endif
 
+            Tracker.Tracker.StartTracking();
 
             after_move_reset_timer.Tick += ResetColor;
             after_move_reset_timer.Interval = new TimeSpan(500000);
@@ -68,6 +69,7 @@ namespace MedEye.Views
             this.AttachDevTools();
 #endif
 
+            Tracker.Tracker.StartTracking();
 
             after_move_reset_timer.Tick += ResetColor;
             after_move_reset_timer.Interval = new TimeSpan(500000);
@@ -217,7 +219,19 @@ namespace MedEye.Views
             SecondBlinkTimer.Stop();
             CloseGameTimer.Stop();
 
-            _scores.DateCompletion = DateTime.Now;
+            var trackerResult = Tracker.Tracker.GetResult();
+            try
+            {
+                _scores.Involvement = Math.Round(double.Parse(trackerResult.Replace(".", ","))
+                                                 / CloseGameTimer.Interval.TotalSeconds, 2);
+            }
+            catch (Exception exception)
+            {
+                _scores.Involvement = Math.Round(double.Parse(trackerResult.Replace(",", "."))
+                                                 / CloseGameTimer.Interval.TotalSeconds, 2);
+            }
+
+            _scores.DateCompletion = DateTime.Now.ToString("dd.MM.yyyy");
             ScoresWrap.AddScores(_scores);
 
             ShowResult();

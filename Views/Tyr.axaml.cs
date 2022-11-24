@@ -49,6 +49,8 @@ namespace MedEye.Views
 #if DEBUG
             this.AttachDevTools();
 #endif
+            
+            Tracker.Tracker.StartTracking();
 
             after_move_reset_timer.Tick += ResetColor;
             after_move_reset_timer.Interval = new TimeSpan(500000);
@@ -79,6 +81,8 @@ namespace MedEye.Views
 #if DEBUG
             this.AttachDevTools();
 #endif
+            
+            Tracker.Tracker.StartTracking();
 
             after_move_reset_timer.Tick += ResetColor;
             after_move_reset_timer.Interval = new TimeSpan(500000);
@@ -160,8 +164,7 @@ namespace MedEye.Views
                     after_move_reset_timer.Stop();
                 if (flash_timer.IsEnabled)
                     flash_timer.Stop();
-                var tmp = Tracker.Tracker.GetResult();
-                this.Close();
+                Close();
             }
 
             base.OnKeyDown(e);
@@ -262,8 +265,20 @@ namespace MedEye.Views
             TargetBlinkTimer.Stop();
             ScopeBlinkTimer.Stop();
             CloseGameTimer.Stop();
+            
+            var trackerResult = Tracker.Tracker.GetResult();
+            try
+            {
+                _scores.Involvement = Math.Round(double.Parse(trackerResult.Replace(".", ","))
+                                                 / CloseGameTimer.Interval.TotalSeconds, 2);
+            }
+            catch (Exception exception)
+            {
+                _scores.Involvement = Math.Round(double.Parse(trackerResult.Replace(",", "."))
+                                                 / CloseGameTimer.Interval.TotalSeconds, 2);
+            }
 
-            _scores.DateCompletion = DateTime.Now;
+            _scores.DateCompletion = DateTime.Now.ToString("dd.MM.yyyy");
             ScoresWrap.AddScores(_scores);
 
             ShowResult();
