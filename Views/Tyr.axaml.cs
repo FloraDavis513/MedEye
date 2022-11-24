@@ -4,6 +4,7 @@ using Avalonia.Input;
 using Avalonia.Media;
 using Avalonia.Threading;
 using MedEye.Consts;
+using MedEye.Tracker;
 using System;
 
 namespace MedEye.Views
@@ -49,6 +50,7 @@ namespace MedEye.Views
             double width = target.Width;
             Canvas.SetTop(target, rnd.Next(0, Convert.ToInt32(this.ClientSize.Height - height)));
             Canvas.SetLeft(target, rnd.Next(0, Convert.ToInt32(this.ClientSize.Width - width)));
+            Tracker.Tracker.StartTracking();
         }
 
         public void SetDifficultLevel(int level)
@@ -111,6 +113,7 @@ namespace MedEye.Views
                     after_move_reset_timer.Stop();
                 if (flash_timer.IsEnabled)
                     flash_timer.Stop();
+                var tmp = Tracker.Tracker.GetResult();
                 this.Close();
             }
             base.OnKeyDown(e);
