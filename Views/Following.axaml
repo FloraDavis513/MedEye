@@ -28,5 +28,22 @@
             Name="Target"
             ZIndex="2">
         </Border>
+        <Border
+            Background="White"
+            Height="150"
+            Width="500"
+            CornerRadius="15"
+            Name="Log"
+            Opacity="0">
+            <Label
+                Name="Result"
+                Background="White"
+                Height="140"
+                Width="450"
+                ZIndex="-1"
+                FontSize="30">
+                Результат игры:
+            </Label>
+        </Border>
     </Canvas>
 </Window>
