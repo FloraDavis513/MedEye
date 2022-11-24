@@ -217,7 +217,7 @@ public partial class Following : Window
         _scores.Involvement = Math.Round(double.Parse(trackerResult.Replace(",", "."),
             CultureInfo.InvariantCulture) / CloseGameTimer.Interval.TotalSeconds, 2);
 
-        _scores.DateCompletion = DateTime.Now.ToString("dd.MM.yyyy");
+        _scores.DateCompletion = DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss");
         ScoresWrap.AddScores(_scores);
 
         ShowResult();

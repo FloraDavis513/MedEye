@@ -155,6 +155,9 @@ public partial class SetupMenu : Window
 
         _games = SettingsWrap.GetSettings(0);
         _currentGame = 0;
+        
+        if (_games.Count == 0) return;
+        
         var game = _games[_currentGame];
         switch (game.GameId)
         {

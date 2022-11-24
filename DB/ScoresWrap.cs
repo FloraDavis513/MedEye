@@ -29,7 +29,8 @@ namespace MedEye.DB
                    "Среднее отклонение по горизонтали: " + Math.Round(MeanDeviationsX, 1) + "\n" +
                    "Среднее отклонение по вертикали: " + Math.Round(MeanDeviationsY, 1) + "\n" +
                    "Максимальное отклонение по горизонтали: " + Math.Round(MaxDeviationsX, 1) + "\n" +
-                   "Максимальное отклонение по вертикали: " + Math.Round(MaxDeviationsY, 1);
+                   "Максимальное отклонение по вертикали: " + Math.Round(MaxDeviationsY, 1) + "\n" +
+                   "Процент вовлеченности: " + Math.Round(Involvement) + "%";
         }
     }
 
