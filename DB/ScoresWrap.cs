@@ -19,6 +19,18 @@ namespace MedEye.DB
         public double MinDeviationsY;
         public double MaxDeviationsX;
         public double MaxDeviationsY;
+        public double Involvement;
+
+        public override string ToString()
+        {
+            return "Всего очков: " + Math.Abs(Score) + "\n" +
+                   "Минимальное отклонение по горизонтали: " + Math.Round(MinDeviationsX, 1) + "\n" +
+                   "Минимальное отклонение по вертикали: " + Math.Round(MinDeviationsY, 1) + "\n" +
+                   "Среднее отклонение по горизонтали: " + Math.Round(MeanDeviationsX, 1) + "\n" +
+                   "Среднее отклонение по вертикали: " + Math.Round(MeanDeviationsY, 1) + "\n" +
+                   "Максимальное отклонение по горизонтали: " + Math.Round(MaxDeviationsX, 1) + "\n" +
+                   "Максимальное отклонение по вертикали: " + Math.Round(MaxDeviationsY, 1);
+        }
     }
 
     public class ScoresWrap
@@ -31,8 +43,8 @@ namespace MedEye.DB
                 {
                     const string strSql = $"INSERT INTO [Scores] ([user_id], [game_id], [date], [level], [score], " +
                                           $"[mean_deviation_x], [mean_deviation_y], [min_deviation_x], " +
-                                          $"[min_deviation_y], [max_deviation_x], [max_deviation_y])" +
-                                          $"VALUES (@p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11)";
+                                          $"[min_deviation_y], [max_deviation_x], [max_deviation_y], [involvement])" +
+                                          $"VALUES (@p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12)";
                     cmd.CommandText = strSql;
                     cmd.Connection = conn;
                     cmd.Parameters.Add(new SQLiteParameter("@p1", scores.UserId));
@@ -48,6 +60,7 @@ namespace MedEye.DB
                     cmd.Parameters.Add(new SQLiteParameter("@p9", scores.MinDeviationsY));
                     cmd.Parameters.Add(new SQLiteParameter("@p10", scores.MaxDeviationsX));
                     cmd.Parameters.Add(new SQLiteParameter("@p11", scores.MaxDeviationsY));
+                    cmd.Parameters.Add(new SQLiteParameter("@p12", scores.Involvement));
                     conn.Open();
                     cmd.ExecuteNonQuery();
                     conn.Close();
@@ -64,7 +77,7 @@ namespace MedEye.DB
                     const string strSql =
                         $"UPDATE [Scores] SET [level] = @p4, [score] = @p5, [mean_deviation_x] = @p6, " +
                         $"[mean_deviation_y] = @p7, [min_deviation_x] = @p8, [min_deviation_y] = @p9, " +
-                        $"[max_deviation_x] = @p10, [max_deviation_y] = @p11 " +
+                        $"[max_deviation_x] = @p10, [max_deviation_y] = @p11, [involvement] = @p12 " +
                         $"WHERE [user_id] = @p1 AND [game_id] = @p2 AND [date] = @p3";
                     cmd.CommandText = strSql;
                     cmd.Connection = conn;
@@ -79,6 +92,7 @@ namespace MedEye.DB
                     cmd.Parameters.Add(new SQLiteParameter("@p9", scores.MinDeviationsY));
                     cmd.Parameters.Add(new SQLiteParameter("@p10", scores.MaxDeviationsX));
                     cmd.Parameters.Add(new SQLiteParameter("@p11", scores.MaxDeviationsY));
+                    cmd.Parameters.Add(new SQLiteParameter("@p12", scores.Involvement));
                     conn.Open();
                     cmd.ExecuteNonQuery();
                     conn.Close();
@@ -115,11 +129,13 @@ namespace MedEye.DB
                 {
                     const string strSqlWithGameId = $"SELECT [user_id], [game_id], [date], [level], [score], " +
                                                     $"[mean_deviation_x], [mean_deviation_y], [min_deviation_x], " +
-                                                    $"[min_deviation_y], [max_deviation_x], [max_deviation_y] " +
+                                                    $"[min_deviation_y], [max_deviation_x], [max_deviation_y], " +
+                                                    $"[involvement] " +
                                                     $"FROM [Scores] WHERE [user_id] = @p1 AND [game_id] = @p2";
                     const string strSqlWithoutGameId = $"SELECT [user_id], [game_id], [date], [level], [score], " +
                                                        $"[mean_deviation_x], [mean_deviation_y], [min_deviation_x], " +
-                                                       $"[min_deviation_y], [max_deviation_x], [max_deviation_y] " +
+                                                       $"[min_deviation_y], [max_deviation_x], [max_deviation_y], " +
+                                                       $"[involvement] " +
                                                        $"FROM [Scores] WHERE [user_id] = @p1";
                     cmd.Connection = conn;
                     if (gameId == -1)
@@ -141,17 +157,18 @@ namespace MedEye.DB
                     {
                         var scores = new Scores
                         {
-                            UserId = sqliteDataReader.GetInt32("user_id"),
-                            GameId = sqliteDataReader.GetInt32("game_id"),
-                            DateCompletion = sqliteDataReader.GetString("date"),
-                            Level = sqliteDataReader.GetInt32("level"),
-                            Score = sqliteDataReader.GetDouble("score"),
-                            MeanDeviationsX = sqliteDataReader.GetDouble("mean_deviation_x"),
-                            MeanDeviationsY = sqliteDataReader.GetDouble("mean_deviation_y"),
-                            MinDeviationsX = sqliteDataReader.GetDouble("min_deviation_x"),
-                            MinDeviationsY = sqliteDataReader.GetDouble("min_deviation_y"),
-                            MaxDeviationsX = sqliteDataReader.GetDouble("max_deviation_x"),
-                            MaxDeviationsY = sqliteDataReader.GetDouble("max_deviation_y")
+                            UserId = sqliteDataReader.GetInt32("[user_id]"),
+                            GameId = sqliteDataReader.GetInt32("[game_id]"),
+                            DateCompletion = sqliteDataReader.GetDateTime("[date]"),
+                            Level = sqliteDataReader.GetInt32("[level]"),
+                            Score = sqliteDataReader.GetDouble("[score]"),
+                            MeanDeviationsX = sqliteDataReader.GetDouble("[mean_deviation_x]"),
+                            MeanDeviationsY = sqliteDataReader.GetDouble("[mean_deviation_y]"),
+                            MinDeviationsX = sqliteDataReader.GetDouble("[min_deviation_x]"),
+                            MinDeviationsY = sqliteDataReader.GetDouble("[min_deviation_y]"),
+                            MaxDeviationsX = sqliteDataReader.GetDouble("[max_deviation_x]"),
+                            MaxDeviationsY = sqliteDataReader.GetDouble("[max_deviation_y]"),
+                            Involvement = sqliteDataReader.GetDouble("[involvement]")
                         };
                         scoresList.Add(scores);
                     }

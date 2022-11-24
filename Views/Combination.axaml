@@ -41,7 +41,9 @@
       Height="140"
       Width="450"
       ZIndex="3"
-      FontSize="30">Отклонение:
+      Name="Result"
+      FontSize="30">
+        Результат игры:
       </Label>
     </Border>
     

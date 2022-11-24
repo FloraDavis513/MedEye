@@ -1,7 +1,6 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:vm="using:MedEye.ViewModels"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="MedEye.Views.Tyr"
@@ -10,21 +9,38 @@
         Background="Black">
 
     <Canvas>
-      <Border
-           Background="Red"
-           HorizontalAlignment="Left"
-           CornerRadius="150"
-           Height="300"
-           Width="300"
-           Name="Scope"
-           ZIndex="2">
-      </Border>
-      <Rectangle 
-        Name="Target" 
-        Height="300" 
-        Width="300" 
-        Classes="red"
-        Fill="Red"/>
+        <Border
+            Background="Red"
+            HorizontalAlignment="Left"
+            CornerRadius="150"
+            Height="300"
+            Width="300"
+            Name="Scope"
+            ZIndex="2">
+        </Border>
+        <Rectangle
+            Name="Target"
+            Height="300"
+            Width="300"
+            Classes="red"
+            Fill="Red" />
+        <Border
+            Background="White"
+            Height="150"
+            Width="500"
+            CornerRadius="15"
+            Name="Log"
+            Opacity="0">
+            <Label
+                Background="White"
+                Height="140"
+                Width="450"
+                ZIndex="3"
+                Name="Result"
+                FontSize="30">
+                Результат игры:
+            </Label>
+        </Border>
     </Canvas>
 
 </Window>

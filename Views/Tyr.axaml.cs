@@ -5,6 +5,7 @@ using Avalonia.Media;
 using Avalonia.Threading;
 using MedEye.Consts;
 using System;
+using MedEye.DB;
 
 namespace MedEye.Views
 {
@@ -29,13 +30,24 @@ namespace MedEye.Views
 
         private int success_counter = 0;
 
+        // Blink
+        private static readonly DispatcherTimer TargetBlinkTimer = new DispatcherTimer();
+        private static readonly DispatcherTimer ScopeBlinkTimer = new DispatcherTimer();
+
+        // Close game
+        private static readonly DispatcherTimer CloseGameTimer = new DispatcherTimer();
+
+        // Scores
+        private long _countScores = 0;
+        private Scores _scores = new Scores();
+
         public Tyr()
         {
             InitializeComponent();
 
-            #if DEBUG
-                this.AttachDevTools();
-            #endif
+#if DEBUG
+            this.AttachDevTools();
+#endif
 
             after_move_reset_timer.Tick += ResetColor;
             after_move_reset_timer.Interval = new TimeSpan(500000);
@@ -49,6 +61,40 @@ namespace MedEye.Views
             double width = target.Width;
             Canvas.SetTop(target, rnd.Next(0, Convert.ToInt32(this.ClientSize.Height - height)));
             Canvas.SetLeft(target, rnd.Next(0, Convert.ToInt32(this.ClientSize.Width - width)));
+
+            CloseGameTimer.Tick += CloseGame;
+            CloseGameTimer.Interval = new TimeSpan(0, 5, 0);
+
+            SetDefaultScores(0, 1, 1);
+
+            StartBlink(4);
+            CloseGameTimer.Start();
+        }
+
+        public Tyr(Settings settings)
+        {
+            InitializeComponent();
+
+#if DEBUG
+            this.AttachDevTools();
+#endif
+
+            after_move_reset_timer.Tick += ResetColor;
+            after_move_reset_timer.Interval = new TimeSpan(500000);
+
+            flash_timer.Tick += WinFlash;
+            flash_timer.Interval = new TimeSpan(300000);
+
+            Canvas.SetTop(Target, rnd.Next(0, Convert.ToInt32(ClientSize.Height - Target.Height)));
+            Canvas.SetLeft(Target, rnd.Next(0, Convert.ToInt32(ClientSize.Width - Target.Width)));
+
+            CloseGameTimer.Tick += CloseGame;
+            CloseGameTimer.Interval = new TimeSpan(0, 0, settings.ExerciseDuration);
+
+            SetDefaultScores(settings.UserId, settings.GameId, settings.Level);
+
+            StartBlink(settings.FlickerMode, settings.Frequency);
+            CloseGameTimer.Start();
         }
 
         public void SetDifficultLevel(int level)
@@ -56,12 +102,12 @@ namespace MedEye.Views
             this.level = level;
             Avalonia.Controls.Shapes.Rectangle target = this.Get<Avalonia.Controls.Shapes.Rectangle>("Target");
             Border scope = this.Get<Border>("Scope");
-            
+
             target.Height = DifficultConst.TYR_SIZES[level];
             target.Width = DifficultConst.TYR_SIZES[level];
             scope.Height = DifficultConst.TYR_SIZES[level];
             scope.Width = DifficultConst.TYR_SIZES[level];
-            scope.CornerRadius = CornerRadius.Parse((DifficultConst.TYR_SIZES[level]/2).ToString());
+            scope.CornerRadius = CornerRadius.Parse((DifficultConst.TYR_SIZES[level] / 2).ToString());
         }
 
         protected override void OnPointerPressed(PointerPressedEventArgs e)
@@ -87,12 +133,14 @@ namespace MedEye.Views
                 if (flash_timer.IsEnabled)
                     flash_timer.Stop();
                 flash_timer.Start();
-                if(++success_counter >= 5 && level < DifficultConst.TYR_SIZES.Length - 1)
+                if (++success_counter >= 5 && level < DifficultConst.TYR_SIZES.Length - 1)
                 {
                     success_counter = 0;
                     SetDifficultLevel(++level);
                 }
             }
+
+            CalculateScore();
 
             base.OnPointerPressed(e);
         }
@@ -113,6 +161,7 @@ namespace MedEye.Views
                     flash_timer.Stop();
                 this.Close();
             }
+
             base.OnKeyDown(e);
         }
 
@@ -147,18 +196,159 @@ namespace MedEye.Views
         private void WinFlash(object? sender, EventArgs e)
         {
             ++flash_count;
-            if(flash_count == 6)
+            if (flash_count == 6)
             {
                 this.Background = Avalonia.Media.Brushes.Black;
                 flash_count = 0;
                 flash_timer.Stop();
                 return;
             }
+
             if (this.Background == Avalonia.Media.Brushes.Black)
                 this.Background = Avalonia.Media.Brushes.Red;
             else
                 this.Background = Avalonia.Media.Brushes.Black;
         }
 
+        private void StartBlink(int mode = 2, int frequency = 10)
+        {
+            TargetBlinkTimer.Tick += TargetBlink;
+            TargetBlinkTimer.Interval = new TimeSpan(0, 0, 0, (int)(1.0 / frequency));
+
+            ScopeBlinkTimer.Tick += ScopeBlink;
+            ScopeBlinkTimer.Interval = new TimeSpan(0, 0, 0, (int)(1.0 / frequency));
+
+            switch (mode)
+            {
+                case 0:
+                    TargetBlinkTimer.Start();
+                    break;
+                case 1:
+                    ScopeBlinkTimer.Start();
+                    break;
+                case 2:
+                    TargetBlinkTimer.Start();
+                    ScopeBlinkTimer.Start();
+                    break;
+                case 4:
+                    TargetBlinkTimer.Stop();
+                    ScopeBlinkTimer.Stop();
+                    break;
+            }
+        }
+
+        private void TargetBlink(object? sender, EventArgs e)
+        {
+            Target.Stroke = Equals(Target.Stroke, colors[currentColor])
+                ? ColorConst.AMBLYOPIA_MOVE_COLOR
+                : colors[currentColor];
+
+            Target.Fill = Equals(Target.Fill, colors[currentColor])
+                ? ColorConst.AMBLYOPIA_MOVE_COLOR
+                : colors[currentColor];
+        }
+
+        private void ScopeBlink(object? sender, EventArgs e)
+        {
+            Scope.Background = Equals(Scope.Background, colors[currentColor])
+                ? ColorConst.AMBLYOPIA_MOVE_COLOR
+                : colors[currentColor];
+        }
+
+        private void CloseGame(object? sender, EventArgs e)
+        {
+            TargetBlinkTimer.Stop();
+            ScopeBlinkTimer.Stop();
+            CloseGameTimer.Stop();
+
+            _scores.DateCompletion = DateTime.Now;
+            ScoresWrap.AddScores(_scores);
+
+            ShowResult();
+
+            CloseGameTimer.Tick -= CloseGame;
+            CloseGameTimer.Tick += CloseGameAfterShowResult;
+            CloseGameTimer.Interval = new TimeSpan(0, 0, 5);
+            CloseGameTimer.Start();
+        }
+
+        private void SetDefaultScores(int userId, int gameId, int level)
+        {
+            _scores.UserId = userId;
+            _scores.GameId = gameId;
+            _scores.Level = level;
+            _scores.MaxDeviationsX = 0;
+            _scores.MaxDeviationsY = 0;
+            _scores.MinDeviationsX = double.MaxValue;
+            _scores.MinDeviationsY = double.MaxValue;
+        }
+
+        private void CalculateScore()
+        {
+            var targetCenterX = Canvas.GetLeft(Scope) + Scope.Width / 2;
+            var targetCenterY = Canvas.GetTop(Scope) + Scope.Height / 2;
+
+            var stalkerCenterX = Canvas.GetLeft(Target) + Target.Width / 2;
+            var stalkerCenterY = Canvas.GetTop(Target) + Target.Height / 2;
+
+            var offsetX = targetCenterX - stalkerCenterX;
+            var offsetY = targetCenterY - stalkerCenterY;
+
+            if (Math.Abs(offsetX) <= Math.Abs(_scores.MinDeviationsX))
+            {
+                _scores.MinDeviationsX = offsetX;
+            }
+
+            if (Math.Abs(offsetY) <= Math.Abs(_scores.MinDeviationsY))
+            {
+                _scores.MinDeviationsY = offsetY;
+            }
+
+            if (Math.Abs(offsetX) >= Math.Abs(_scores.MaxDeviationsX))
+            {
+                _scores.MaxDeviationsX = offsetX;
+            }
+
+            if (Math.Abs(offsetY) >= Math.Abs(_scores.MaxDeviationsY))
+            {
+                _scores.MaxDeviationsY = offsetY;
+            }
+
+            _scores.MeanDeviationsX = (_scores.MeanDeviationsX * _countScores + offsetX) / (_countScores + 1);
+            _scores.MeanDeviationsY = (_scores.MeanDeviationsY * _countScores + offsetY) / (_countScores + 1);
+            _countScores++;
+
+            if (targetCenterX >= Canvas.GetLeft(Target)
+                && targetCenterX <= Canvas.GetLeft(Target) + Target.Width
+                && targetCenterY >= Canvas.GetTop(Target)
+                && targetCenterY <= Canvas.GetTop(Target) + Target.Height)
+            {
+                _scores.Score += 1;
+            }
+            else
+            {
+                _scores.Score -= 1;
+            }
+        }
+
+        private void ShowResult()
+        {
+            Result.Content = "Результат игры:\n" + _scores;
+            Result.FontSize = 32 * (ClientSize.Width / 1920);
+            Result.Height = ClientSize.Height / 3 - 25;
+            Result.Width = ClientSize.Width / 2 - 25;
+            Log.Height = ClientSize.Height / 3;
+            Log.Width = ClientSize.Width / 2;
+            Log.CornerRadius = new CornerRadius(15);
+            Log.Opacity = 1;
+            Canvas.SetTop(Log, ClientSize.Height / 2 - Log.Height / 2);
+            Canvas.SetLeft(Log, ClientSize.Width / 2 - Log.Width / 2);
+        }
+
+        private void CloseGameAfterShowResult(object? sender, EventArgs e)
+        {
+            CloseGameTimer.Stop();
+            Close();
+        }
     }
 }
