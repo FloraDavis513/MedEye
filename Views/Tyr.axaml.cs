@@ -6,6 +6,7 @@ using Avalonia.Threading;
 using MedEye.Consts;
 using MedEye.Tracker;
 using System;
+using System.Globalization;
 using MedEye.DB;
 
 namespace MedEye.Views
@@ -267,16 +268,8 @@ namespace MedEye.Views
             CloseGameTimer.Stop();
             
             var trackerResult = Tracker.Tracker.GetResult();
-            try
-            {
-                _scores.Involvement = Math.Round(double.Parse(trackerResult.Replace(".", ","))
-                                                 / CloseGameTimer.Interval.TotalSeconds, 2);
-            }
-            catch (Exception exception)
-            {
-                _scores.Involvement = Math.Round(double.Parse(trackerResult.Replace(",", "."))
-                                                 / CloseGameTimer.Interval.TotalSeconds, 2);
-            }
+            _scores.Involvement = Math.Round(double.Parse(trackerResult.Replace(",", "."),
+                CultureInfo.InvariantCulture) / CloseGameTimer.Interval.TotalSeconds, 2);
 
             _scores.DateCompletion = DateTime.Now.ToString("dd.MM.yyyy");
             ScoresWrap.AddScores(_scores);
