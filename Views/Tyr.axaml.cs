@@ -85,11 +85,11 @@ namespace MedEye.Views
             flash_timer.Tick += WinFlash;
             flash_timer.Interval = new TimeSpan(300000);
 
-            Canvas.SetTop(Target, rnd.Next(0, Convert.ToInt32(this.ClientSize.Height - Target.Height)));
-            Canvas.SetLeft(Target, rnd.Next(0, Convert.ToInt32(this.ClientSize.Width - Target.Width)));
+            Canvas.SetTop(Target, rnd.Next(0, Convert.ToInt32(ClientSize.Height - Target.Height)));
+            Canvas.SetLeft(Target, rnd.Next(0, Convert.ToInt32(ClientSize.Width - Target.Width)));
 
             CloseGameTimer.Tick += CloseGame;
-            CloseGameTimer.Interval = new TimeSpan(0, settings.ExerciseDuration, 0);
+            CloseGameTimer.Interval = new TimeSpan(0, 0, settings.ExerciseDuration);
 
             SetDefaultScores(settings.UserId, settings.GameId, settings.Level);
 

@@ -79,7 +79,7 @@ namespace MedEye.Views
             Canvas.SetLeft(SecondObject, rnd.Next(0, Convert.ToInt32(this.ClientSize.Width - SecondObject.Width)));
 
             CloseGameTimer.Tick += CloseGame;
-            CloseGameTimer.Interval = new TimeSpan(0, settings.ExerciseDuration, 0);
+            CloseGameTimer.Interval = new TimeSpan(0, 0, settings.ExerciseDuration);
 
             SetDefaultScores(settings.UserId, settings.GameId, settings.Level);
 

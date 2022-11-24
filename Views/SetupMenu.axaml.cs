@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
@@ -79,7 +78,15 @@ public partial class SetupMenu : Window
         var redBrightness = (int)BrightRedColorSlider.Value;
         var blueBrightness = (int)BrightBlueColorSlider.Value;
         var level = (int)LevelSlider.Value;
-        var exerciseDuration = int.Parse(TimerTextBox.Text ?? "5");
+        int exerciseDuration;
+        try
+        {
+            exerciseDuration = (int)(double.Parse(TimerTextBox.Text.Replace(".", ",") ?? "5") * 60);
+        }
+        catch (Exception e)
+        {
+            exerciseDuration = (int)(double.Parse(TimerTextBox.Text.Replace(",", ".") ?? "5") * 60);
+        }
 
         var settings = new Settings
         {
@@ -123,10 +130,10 @@ public partial class SetupMenu : Window
     {
         NextGameTimer.Stop();
 
-        _currentGame++; 
-        
+        _currentGame++;
+
         if (_currentGame >= _games.Count) return;
-        
+
         var game = _games[_currentGame];
         switch (game.GameId)
         {
@@ -144,7 +151,7 @@ public partial class SetupMenu : Window
                 break;
         }
 
-        NextGameTimer.Interval = new TimeSpan(0, game.ExerciseDuration, 5);
+        NextGameTimer.Interval = new TimeSpan(0, 0, game.ExerciseDuration + 5);
         NextGameTimer.Start();
     }
 
@@ -172,7 +179,7 @@ public partial class SetupMenu : Window
         }
 
         NextGameTimer.Tick += NextGame;
-        NextGameTimer.Interval = new TimeSpan(0, game.ExerciseDuration, 5);
+        NextGameTimer.Interval = new TimeSpan(0, 0, game.ExerciseDuration + 5);
         NextGameTimer.Start();
     }
 
@@ -189,13 +196,13 @@ public partial class SetupMenu : Window
             PlaceholderText = Game1.PlaceholderText,
             Items = new ComboBoxItem[]
             {
-                new ComboBoxItem { Content = "Тир" },
-                new ComboBoxItem { Content = "Погоня" },
-                new ComboBoxItem { Content = "Совмещение" },
-                new ComboBoxItem { Content = "Слияние" }
+                new() { Content = "Тир" },
+                new() { Content = "Погоня" },
+                new() { Content = "Совмещение" },
+                new() { Content = "Слияние" }
             },
-            Width = 2 * this.ClientSize.Width / 9,
-            FontSize = 32 * (this.ClientSize.Width / 1920)
+            Width = 2 * ClientSize.Width / 9,
+            FontSize = 32 * (ClientSize.Width / 1920)
         };
 
         game.SelectionChanged += SelectGame;

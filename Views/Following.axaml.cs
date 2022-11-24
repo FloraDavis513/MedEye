@@ -85,7 +85,7 @@ public partial class Following : Window
         _dy = _lenD * Math.Sin(_direct);
 
         CloseGameTimer.Tick += CloseGame;
-        CloseGameTimer.Interval = new TimeSpan(0, settings.ExerciseDuration, 0);
+        CloseGameTimer.Interval = new TimeSpan(0, 0, settings.ExerciseDuration);
 
         SetDefaultScores(settings.UserId, settings.GameId, settings.Level);
 
