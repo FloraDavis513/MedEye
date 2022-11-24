@@ -54,6 +54,8 @@ public partial class Following : Window
         this.AttachDevTools();
 #endif
 
+        Tracker.Tracker.StartTracking();
+
         Canvas.SetTop(Target, Rnd.Next(0, Convert.ToInt32(this.ClientSize.Height - Target.Height)));
         Canvas.SetLeft(Target, Rnd.Next(0, Convert.ToInt32(this.ClientSize.Width - Target.Width)));
 
@@ -76,6 +78,8 @@ public partial class Following : Window
 #if DEBUG
         this.AttachDevTools();
 #endif
+
+        Tracker.Tracker.StartTracking();
 
         Canvas.SetTop(Target, Rnd.Next(0, Convert.ToInt32(this.ClientSize.Height - Target.Height)));
         Canvas.SetLeft(Target, Rnd.Next(0, Convert.ToInt32(this.ClientSize.Width - Target.Width)));
@@ -208,7 +212,19 @@ public partial class Following : Window
     {
         StopTimer();
 
-        _scores.DateCompletion = DateTime.Now;
+        var trackerResult = Tracker.Tracker.GetResult();
+        try
+        {
+            _scores.Involvement = Math.Round(double.Parse(trackerResult.Replace(".", ","))
+                                             / CloseGameTimer.Interval.TotalSeconds, 2);
+        }
+        catch (Exception exception)
+        {
+            _scores.Involvement = Math.Round(double.Parse(trackerResult.Replace(",", "."))
+                                             / CloseGameTimer.Interval.TotalSeconds, 2);
+        }
+
+        _scores.DateCompletion = DateTime.Now.ToString("dd.MM.yyyy");
         ScoresWrap.AddScores(_scores);
 
         ShowResult();
@@ -232,7 +248,7 @@ public partial class Following : Window
         Canvas.SetTop(Log, ClientSize.Height / 2 - Log.Height / 2);
         Canvas.SetLeft(Log, ClientSize.Width / 2 - Log.Width / 2);
     }
-    
+
     private void CloseGameAfterShowResult(object? sender, EventArgs e)
     {
         CloseGameTimer.Stop();
