@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
@@ -78,15 +79,8 @@ public partial class SetupMenu : Window
         var redBrightness = (int)BrightRedColorSlider.Value;
         var blueBrightness = (int)BrightBlueColorSlider.Value;
         var level = (int)LevelSlider.Value;
-        int exerciseDuration;
-        try
-        {
-            exerciseDuration = (int)(double.Parse(TimerTextBox.Text.Replace(".", ",") ?? "5") * 60);
-        }
-        catch (Exception e)
-        {
-            exerciseDuration = (int)(double.Parse(TimerTextBox.Text.Replace(",", ".") ?? "5") * 60);
-        }
+        var exerciseDuration = (int)(double.Parse(TimerTextBox.Text.Replace(",", ".") ?? "5",
+            CultureInfo.InvariantCulture) * 60);
 
         var settings = new Settings
         {
