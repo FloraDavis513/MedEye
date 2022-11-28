@@ -12,13 +12,13 @@
         ColumnDefinitions="*, 5*, *, 10*, *">
         <Panel Grid.Row="0" Grid.Column="0">
         </Panel>
-        <StackPanel Background="White" Opacity="100" Grid.Row="0" Grid.Column="1" Name="GroupComboBox">
+        <StackPanel Background="White" Opacity="100" Grid.Row="0" Grid.Column="1" Name="LeftPartSetupMenu">
             <TextBlock Name="Header1" FontSize="36" TextAlignment="Center" TextWrapping="Wrap">
                 Игры
             </TextBlock>
             <Grid RowDefinitions="*, *, *, *" HorizontalAlignment="Center"
-                  Margin="0 75 0 0">
-                <ScrollViewer Grid.Row="0">
+                  Margin="0 0 0 0">
+                <ScrollViewer Name="GamesScroll" Grid.Row="0">
                     <Grid Name="Games" RowDefinitions="*" HorizontalAlignment="Center"
                           Margin="0 75 0 0">
                         <ComboBox Grid.Row="0" Name="Game1" PlaceholderText="Выбрать игру">
