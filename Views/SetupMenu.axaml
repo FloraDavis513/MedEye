@@ -16,15 +16,22 @@
             <TextBlock Name="Header1" FontSize="36" TextAlignment="Center" TextWrapping="Wrap">
                 Игры
             </TextBlock>
-            <Grid Name="Games" RowDefinitions="2*, *" HorizontalAlignment="Center"
+            <Grid RowDefinitions="*, *, *, *" HorizontalAlignment="Center"
                   Margin="0 75 0 0">
-                <Button Name="MainMenu" Grid.Row="1">Главное меню</Button>
-                <ComboBox Name="Game1" Grid.Row="0" PlaceholderText="Выбрать игру">
-                    <ComboBoxItem>Тир</ComboBoxItem>
-                    <ComboBoxItem>Погоня</ComboBoxItem>
-                    <ComboBoxItem>Совмещение</ComboBoxItem>
-                    <ComboBoxItem>Слияние</ComboBoxItem>
-                </ComboBox>
+                <ScrollViewer Grid.Row="0">
+                    <Grid Name="Games" RowDefinitions="*" HorizontalAlignment="Center"
+                          Margin="0 75 0 0">
+                        <ComboBox Grid.Row="0" Name="Game1" PlaceholderText="Выбрать игру">
+                            <ComboBoxItem>Тир</ComboBoxItem>
+                            <ComboBoxItem>Погоня</ComboBoxItem>
+                            <ComboBoxItem>Совмещение</ComboBoxItem>
+                            <ComboBoxItem>Слияние</ComboBoxItem>
+                        </ComboBox>
+                    </Grid>
+                </ScrollViewer>
+                <Button Grid.Row="1" Name="AddGame">Добавить игру</Button>
+                <Button Grid.Row="2" Name="StartGame">Запустить</Button>
+                <Button Name="MainMenu" Grid.Row="3">Главное меню</Button>
                 <Grid.Styles>
                     <Style Selector="Button">
                         <Setter Property="BorderBrush" Value="#00B1A7"></Setter>
@@ -56,7 +63,7 @@
         </StackPanel>
         <StackPanel Background="White" Opacity="100" Grid.Row="0" Grid.Column="3" Name="Settings">
             <TextBlock Name="Header2" FontSize="36" TextAlignment="Center" TextWrapping="Wrap">
-                Настройки игры
+                Настройки игры 1
             </TextBlock>
             <Grid Name="SettingControls" RowDefinitions="*, *, *, *, *, *, *, *, *" HorizontalAlignment="Center"
                   Margin="0 75 0 0">
@@ -128,7 +135,7 @@
                 </Grid>
                 <Grid Grid.Row="8" ColumnDefinitions="*, *">
                     <Button Name="DeleteGame" Grid.Column="0">Удалить</Button>
-                    <Button Name="StartGame" Grid.Column="1">Запустить</Button>
+                    <Button Name="SaveGame" Grid.Column="1">Сохранить</Button>
                 </Grid>
                 <Grid.Styles>
                     <Style Selector="Button">

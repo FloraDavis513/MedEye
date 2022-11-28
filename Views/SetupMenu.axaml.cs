@@ -225,6 +225,8 @@ public partial class SetupMenu : Window
         StartGame.Width = buttonWidth;
         FrequencyFlickerBox.Width = buttonWidth;
         TypeFlickerBox.Width = buttonWidth;
+        AddGame.Width = buttonWidth;
+        SaveGame.Width = buttonWidth;
 
         Game1.FontSize = 32 * (this.ClientSize.Width / 1920);
         MainMenu.FontSize = 32 * (this.ClientSize.Width / 1920);
@@ -240,6 +242,8 @@ public partial class SetupMenu : Window
         BrightBlueColor.FontSize = 32 * (this.ClientSize.Width / 1920);
         Level.FontSize = 32 * (this.ClientSize.Width / 1920);
         Timer.FontSize = 32 * (this.ClientSize.Width / 1920);
+        AddGame.FontSize = 32 * (this.ClientSize.Width / 1920);
+        SaveGame.FontSize = 32 * (this.ClientSize.Width / 1920);
 
         Header1.FontSize = 48 * (this.ClientSize.Width / 1920);
         Header2.FontSize = 48 * (this.ClientSize.Width / 1920);
