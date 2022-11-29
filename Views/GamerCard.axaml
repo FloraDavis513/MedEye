@@ -31,7 +31,7 @@
             Отчество
           </TextBlock>
           
-          <TextBlock Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="4" FontSize="48" VerticalAlignment="Center" HorizontalAlignment="Center" MaxLines="2" TextWrapping="Wrap">
+          <TextBlock Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="4" FontSize="48" VerticalAlignment="Center" HorizontalAlignment="Center" MaxLines="2" TextWrapping="Wrap" Margin="0 0 0 0">
             ---------------- Примечания ----------------
           </TextBlock>
           
@@ -52,15 +52,12 @@
           </Grid.Styles>
         </Grid>
       </ScrollViewer>
-      <Grid ShowGridLines="True" Grid.Column="0" Grid.Row="2" ColumnDefinitions="*, *, *" Background="#1372B7" Opacity="0.01">
-        <Button Name="Save" Grid.Column="2">
+      <Grid ShowGridLines="True" Grid.Column="0" Grid.Row="2" ColumnDefinitions="*, *" Background="#1372B7" Opacity="0.01">
+        <Button Name="Save" Grid.Column="1" HorizontalAlignment="Right">
           Сохранить
         </Button>
         <Button Name="Back"  Grid.Column="0">
           Назад
-        </Button>
-        <Button Name="Stat" Grid.Column="1">
-          Статистика
         </Button>
         <Grid.Styles>
           <Style Selector="Button">
@@ -68,7 +65,7 @@
             <Setter Property="Background" Value="#CFE0F2"></Setter>
             <Setter Property="BorderThickness" Value="2.5"></Setter>
             <Setter Property="CornerRadius" Value="15"></Setter>
-            <Setter Property="Margin" Value="100 0 50 0"></Setter>
+            <Setter Property="Margin" Value="100 0 100 0"></Setter>
             <Setter Property="Padding" Value="0 15 0 15"></Setter>
             <Setter Property="TextBlock.FontSize" Value="32"></Setter>
             <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
