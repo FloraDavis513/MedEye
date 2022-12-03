@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
+﻿using System.Globalization;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
@@ -28,8 +25,12 @@ public partial class SetupMenu : Window
 
         MainMenu.Click += MainMenuClick;
         StartGame.Click += StartGameClick;
+        AddGame.Click += AddGameHandle;
+        SaveGame.Click += SaveGameHandle;
+        DeleteGame.Click += DeleteGameHandle;
 
-        Game1.SelectionChanged += SelectGame;
+        GamesScroll.Height = ClientSize.Height / 1.2;
+        GamesScroll.MaxHeight = ClientSize.Height / 1.2;
 
 
         CloseTimer.Tick += CloseAfterRoute;
@@ -180,14 +181,24 @@ public partial class SetupMenu : Window
         NextGameTimer.Start();
     }
 
-    private void SelectGame(object? sender, SelectionChangedEventArgs e)
+    private void SaveGameHandle(object? sender, EventArgs e)
     {
-        if (e.RemovedItems.Count > 0) return;
-
         var settings = GetCurrentSettings();
 
         SettingsWrap.AddSettings(settings);
+    }
+    
+    private void DeleteGameHandle(object? sender, EventArgs e)
+    {
+        if (Games.Children.Count == 0) return;
+        
+        var game = Games.Children[^1];
 
+        Games.Children.Remove(game);
+    }
+
+    private void AddGameHandle(object? sender, RoutedEventArgs e)
+    {
         var game = new ComboBox
         {
             PlaceholderText = Game1.PlaceholderText,
@@ -202,13 +213,9 @@ public partial class SetupMenu : Window
             FontSize = 32 * (ClientSize.Width / 1920)
         };
 
-        game.SelectionChanged += SelectGame;
-
         Games.RowDefinitions.Add(new RowDefinition());
 
-        Grid.SetRow(MainMenu, Games.Children.Count);
-
-        Grid.SetRow(game, Games.Children.Count - 1);
+        Grid.SetRow(game, Games.Children.Count);
         Games.Children.Add(game);
 
         ResetSettings();
@@ -225,6 +232,8 @@ public partial class SetupMenu : Window
         StartGame.Width = buttonWidth;
         FrequencyFlickerBox.Width = buttonWidth;
         TypeFlickerBox.Width = buttonWidth;
+        AddGame.Width = buttonWidth;
+        SaveGame.Width = buttonWidth;
 
         Game1.FontSize = 32 * (this.ClientSize.Width / 1920);
         MainMenu.FontSize = 32 * (this.ClientSize.Width / 1920);
@@ -240,6 +249,8 @@ public partial class SetupMenu : Window
         BrightBlueColor.FontSize = 32 * (this.ClientSize.Width / 1920);
         Level.FontSize = 32 * (this.ClientSize.Width / 1920);
         Timer.FontSize = 32 * (this.ClientSize.Width / 1920);
+        AddGame.FontSize = 32 * (this.ClientSize.Width / 1920);
+        SaveGame.FontSize = 32 * (this.ClientSize.Width / 1920);
 
         Header1.FontSize = 48 * (this.ClientSize.Width / 1920);
         Header2.FontSize = 48 * (this.ClientSize.Width / 1920);
