@@ -27,8 +27,6 @@ namespace MedEye.Views
             var button2 = this.FindControl<Button>("Save");
             button2.Click += SaveClick;
 
-            Stat.Click += StatClick;
-
             current_gamer = Users.GetUserById(user_id);
             FirstName.Text = current_gamer.first_name;
             SecondName.Text = current_gamer.second_name;
@@ -119,15 +117,12 @@ namespace MedEye.Views
 
             var reg = this.Get<Button>("Save");
             var cab = this.Get<Button>("Back");
-            var stat = this.Get<Button>("Stat");
 
             reg.Width = buttonWidth;
             cab.Width = buttonWidth;
-            stat.Width = buttonWidth;
 
             reg.FontSize = 32 * (this.ClientSize.Width / 1920);
             cab.FontSize = 32 * (this.ClientSize.Width / 1920);
-            stat.FontSize = 32 * (this.ClientSize.Width / 1920);
             GamerHeader.Width = 1920 * (this.ClientSize.Width / 1920);
             
             foreach (var textBlock in GamerData.Children.OfType<TextBlock>())

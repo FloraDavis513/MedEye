@@ -345,9 +345,9 @@ namespace MedEye.Views
         {
             Result.Content = "Результат игры:\n" + _scores;
             Result.FontSize = 32 * (ClientSize.Width / 1920);
-            Result.Height = ClientSize.Height / 3 - 25;
+            Result.Height = ClientSize.Height / 2.5 - 25;
             Result.Width = ClientSize.Width / 2 - 25;
-            Log.Height = ClientSize.Height / 3;
+            Log.Height = ClientSize.Height / 2.5;
             Log.Width = ClientSize.Width / 2;
             Log.CornerRadius = new CornerRadius(15);
             Log.Opacity = 1;

@@ -17,11 +17,17 @@
         Регистратура
       </TextBlock>
       <StackPanel Grid.Row="1">
+        <Button Name="Add" HorizontalAlignment="Center" Margin="0 30 0 0">
+          Добавить игрока
+        </Button>
         <Button Name="Change" HorizontalAlignment="Center" Margin="0 30 0 0">
-          Изменить
+          Изменить данные
         </Button>
         <Button Name="Delete" HorizontalAlignment="Center" Margin="0 30 0 0">
           Удалить
+        </Button>
+        <Button Name="Results" HorizontalAlignment="Center" Margin="0 30 0 0">
+          Результаты игрока
         </Button>
       </StackPanel>
       <Button Grid.Row="2" Name="MainMenu" HorizontalAlignment="Center" Margin="0 30 0 0">
@@ -47,25 +53,17 @@
     </Grid>
     <Panel Grid.Row="0" Grid.Column="2">
     </Panel>
-    <Grid RowDefinitions="*, 7*, *" Background="White" Opacity="100" Grid.Row="0" Grid.Column="3">
+    <Grid RowDefinitions="*, 8*" Background="White" Opacity="100" Grid.Row="0" Grid.Column="3">
       <TextBlock Grid.Row="0" Name="PlayersHeader" FontSize="48" TextAlignment="Center" TextWrapping="Wrap" Margin="0 30 0 0">
         ----------------Игроки----------------
       </TextBlock>
       <ListBox Grid.Row="1" Name="UserList">
         <ListBox.DataTemplates>
           <DataTemplate>
-            <TextBlock Text="{Binding}" Name="Test" FontSize="48"/>
+            <TextBlock Text="{Binding}" FontSize="48"/>
           </DataTemplate>
         </ListBox.DataTemplates>
       </ListBox>
-      <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
-        <TextBlock Name="AddMessage" FontSize="32" TextAlignment="Center" TextWrapping="Wrap" Margin="0 30 15 0">
-          Нажмите, чтобы добавить игрока
-        </TextBlock>
-        <Button Name="Add" FontSize="48" HorizontalAlignment="Right" Padding="0 0 0 0" Margin="0 -20 30 0" Width="75" Height="75" CornerRadius="37.5">
-          +
-        </Button>
-      </StackPanel>
       <Grid.Styles>
         <Style Selector="Button">
           <Setter Property="BorderBrush" Value="#00B1A7"></Setter>

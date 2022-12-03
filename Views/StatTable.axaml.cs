@@ -48,7 +48,7 @@ namespace MedEye.Views
             close_timer.Tick += CloseAfterRoute;
             close_timer.Interval = new TimeSpan(1000000);
 
-            var current_scores = ScoresWrap.GetScores(gamer_id);
+            var current_scores = ScoresWrap.GetScores(gamer_id, 1);
             if (current_scores.Count == 0)
                 return;
             var dataSource = new ObservableCollection<string[]>();
@@ -57,12 +57,13 @@ namespace MedEye.Views
                 dataSource.Add(new[]{ score.DateCompletion.ToString(), score.MeanDeviationsX.ToString(),
                                        score.MeanDeviationsY.ToString(), score.MinDeviationsX.ToString(),
                                        score.MinDeviationsY.ToString(), score.MaxDeviationsX.ToString(),
-                                       score.MaxDeviationsY.ToString(), score.Level.ToString(), score.Score.ToString() + "0"});
+                                       score.MaxDeviationsY.ToString(), score.Level.ToString(), score.Score.ToString(),
+                                       score.Involvement.ToString()});
             }
             string[] headers = { "Дата", "Среднее\nотклонение\nпо X", "Среднее\nотклонение\nпо Y",
                                  "Мин.\nотклонение\nпо X", "Мин.\nотклонение\nпо Y",
                                  "Макс.\nотклонение\nпо X", "Макс.\nотклонение\nпо Y",
-                                 "Уровень\nсложности", "Очки" };
+                                 "Уровень\nсложности", "Очки", "Вовлечённость" };
 
             foreach (var idx in dataSource[0].Select((value, index) => index))
             {
@@ -123,7 +124,7 @@ namespace MedEye.Views
         {
             try
             {
-                ExcelGenerator.GenerateExcelByUserId(1);
+                ExcelGenerator.GenerateExcelByUserId(0);
             }
             catch(Exception ex)
             {
@@ -136,25 +137,25 @@ namespace MedEye.Views
         private void TyrStatClick(object? sender, RoutedEventArgs e)
         {
             Header.Text = $"Результат игрока № xx по игре \"Тир\"";
-            UpdateTable(0);
+            UpdateTable(1);
         }
 
         private void FollowingStatClick(object? sender, RoutedEventArgs e)
         {
             Header.Text = $"Результат игрока № xx по игре \"Погоня\"";
-            UpdateTable(1);
+            UpdateTable(2);
         }
 
         private void CombinationStatClick(object? sender, RoutedEventArgs e)
         {
             Header.Text = $"Результат игрока № xx по игре \"Совмещение\"";
-            UpdateTable(2);
+            UpdateTable(3);
         }
 
         private void MergerStatClick(object? sender, RoutedEventArgs e)
         {
             Header.Text = $"Результат игрока № xx по игре \"Слияние\"";
-            UpdateTable(3);
+            UpdateTable(4);
         }
 
         private void AdaptToScreen()
@@ -180,7 +181,7 @@ namespace MedEye.Views
         private void UpdateTable(int game_id)
         {
             Results.Columns.Clear();
-            var current_scores = ScoresWrap.GetScores(currentId);
+            var current_scores = ScoresWrap.GetScores(currentId, game_id);
             if (current_scores.Count == 0)
                 return;
             var dataSource = new ObservableCollection<string[]>();
@@ -189,12 +190,13 @@ namespace MedEye.Views
                 dataSource.Add(new[]{ score.DateCompletion.ToString(), score.MeanDeviationsX.ToString(),
                                        score.MeanDeviationsY.ToString(), score.MinDeviationsX.ToString(),
                                        score.MinDeviationsY.ToString(), score.MaxDeviationsX.ToString(),
-                                       score.MaxDeviationsY.ToString(), score.Level.ToString(), score.Score.ToString() + $"{game_id}"});
+                                       score.MaxDeviationsY.ToString(), score.Level.ToString(), 
+                                       score.Score.ToString(), score.Involvement.ToString()});
             }
             string[] headers = { "Дата", "Среднее\nотклонение\nпо X", "Среднее\nотклонение\nпо Y",
                                  "Мин.\nотклонение\nпо X", "Мин.\nотклонение\nпо Y",
                                  "Макс.\nотклонение\nпо X", "Макс.\nотклонение\nпо Y",
-                                 "Уровень\nсложности", "Очки" };
+                                 "Уровень\nсложности", "Очки", "Вовлечённость" };
 
             foreach (var idx in dataSource[0].Select((value, index) => index))
             {
