@@ -22,7 +22,7 @@ namespace MedEye.DB
         public static void AddUser(string first_name, string second_name, string last_name, string birth_date, 
             string sex)
         {
-            using (SQLiteConnection conn = new SQLiteConnection("data source = ..\\..\\..\\DB\\medeye.db"))
+            using (SQLiteConnection conn = new SQLiteConnection(DBConst.DB_PATH))
             {
                 using (SQLiteCommand cmd = new SQLiteCommand())
                 {
@@ -45,7 +45,7 @@ namespace MedEye.DB
         public static void UpdateUser(int user_id, string first_name, string second_name, string last_name, 
             string birth_date, string sex)
         {
-            using (SQLiteConnection conn = new SQLiteConnection("data source = ..\\..\\..\\DB\\medeye.db"))
+            using (SQLiteConnection conn = new SQLiteConnection(DBConst.DB_PATH))
             {
                 using (SQLiteCommand cmd = new SQLiteCommand())
                 {
@@ -68,7 +68,7 @@ namespace MedEye.DB
 
         public static void DeleteUserById(int user_id)
         {
-            using (SQLiteConnection conn = new SQLiteConnection("data source = ..\\..\\..\\DB\\medeye.db"))
+            using (SQLiteConnection conn = new SQLiteConnection(DBConst.DB_PATH))
             {
                 using (SQLiteCommand cmd = new SQLiteCommand())
                 {
@@ -86,7 +86,7 @@ namespace MedEye.DB
         public static SortedDictionary<string, int> GetUserList()
         {
             users.Clear();
-            using (SQLiteConnection conn = new SQLiteConnection("data source = ..\\..\\..\\DB\\medeye.db"))
+            using (SQLiteConnection conn = new SQLiteConnection(DBConst.DB_PATH))
             {
                 using (SQLiteCommand cmd = new SQLiteCommand())
                 {
@@ -115,7 +115,7 @@ namespace MedEye.DB
         public static Gamer GetUserById(int user_id)
         {
             var gamer = new Gamer();
-            using (SQLiteConnection conn = new SQLiteConnection("data source = ..\\..\\..\\DB\\medeye.db"))
+            using (SQLiteConnection conn = new SQLiteConnection(DBConst.DB_PATH))
             {
                 using (SQLiteCommand cmd = new SQLiteCommand())
                 {

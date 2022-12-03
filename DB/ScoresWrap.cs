@@ -38,7 +38,7 @@ namespace MedEye.DB
     {
         public static void AddScores(Scores scores)
         {
-            using (SQLiteConnection conn = new SQLiteConnection("data source = ..\\..\\..\\DB\\medeye.db"))
+            using (SQLiteConnection conn = new SQLiteConnection(DBConst.DB_PATH))
             {
                 using (SQLiteCommand cmd = new SQLiteCommand())
                 {
@@ -71,7 +71,7 @@ namespace MedEye.DB
 
         public static void UpdateScores(Scores scores)
         {
-            using (SQLiteConnection conn = new SQLiteConnection("data source = ..\\..\\..\\DB\\medeye.db"))
+            using (SQLiteConnection conn = new SQLiteConnection(DBConst.DB_PATH))
             {
                 using (SQLiteCommand cmd = new SQLiteCommand())
                 {
@@ -103,7 +103,7 @@ namespace MedEye.DB
 
         public static void DeleteScores(Scores scores)
         {
-            using (SQLiteConnection conn = new SQLiteConnection("data source = ..\\..\\..\\DB\\medeye.db"))
+            using (SQLiteConnection conn = new SQLiteConnection(DBConst.DB_PATH))
             {
                 using (SQLiteCommand cmd = new SQLiteCommand())
                 {
@@ -124,7 +124,7 @@ namespace MedEye.DB
         public static List<Scores> GetScores(int userId, int gameId = -1)
         {
             var scoresList = new List<Scores>();
-            using (SQLiteConnection conn = new SQLiteConnection("data source = ..\\..\\..\\DB\\medeye.db"))
+            using (SQLiteConnection conn = new SQLiteConnection(DBConst.DB_PATH))
             {
                 using (SQLiteCommand cmd = new SQLiteCommand())
                 {

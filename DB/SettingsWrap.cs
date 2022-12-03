@@ -23,7 +23,7 @@ namespace MedEye.DB
     {
         public static void AddSettings(Settings settings)
         {
-            using (SQLiteConnection conn = new SQLiteConnection("data source = ..\\..\\..\\DB\\medeye.db"))
+            using (SQLiteConnection conn = new SQLiteConnection(DBConst.DB_PATH))
             {
                 using (SQLiteCommand cmd = new SQLiteCommand())
                 {
@@ -53,7 +53,7 @@ namespace MedEye.DB
 
         public static void UpdateSettings(Settings settings)
         {
-            using (SQLiteConnection conn = new SQLiteConnection("data source = ..\\..\\..\\DB\\medeye.db"))
+            using (SQLiteConnection conn = new SQLiteConnection(DBConst.DB_PATH))
             {
                 using (SQLiteCommand cmd = new SQLiteCommand())
                 {
@@ -83,7 +83,7 @@ namespace MedEye.DB
 
         public static void DeleteSettings(Settings settings)
         {
-            using (SQLiteConnection conn = new SQLiteConnection("data source = ..\\..\\..\\DB\\medeye.db"))
+            using (SQLiteConnection conn = new SQLiteConnection(DBConst.DB_PATH))
             {
                 using (SQLiteCommand cmd = new SQLiteCommand())
                 {
@@ -104,7 +104,7 @@ namespace MedEye.DB
         public static List<Settings> GetSettings(int userId)
         {
             var settingsList = new List<Settings>();
-            using (SQLiteConnection conn = new SQLiteConnection("data source = ..\\..\\..\\DB\\medeye.db"))
+            using (SQLiteConnection conn = new SQLiteConnection(DBConst.DB_PATH))
             {
                 using (SQLiteCommand cmd = new SQLiteCommand())
                 {

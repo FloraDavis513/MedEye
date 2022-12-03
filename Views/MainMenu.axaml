@@ -12,42 +12,43 @@
     ColumnDefinitions="*, 5*, 12*">
     <Panel Grid.Row="0" Grid.Column="0">
     </Panel>
-    <StackPanel Background="White" Opacity="100" Grid.Row="0" Grid.Column="1"  Name="GroupButton">
-      <TextBlock Name="MainHeader" FontSize="96" TextAlignment="Center" TextWrapping="Wrap">
+    <Grid ColumnDefinitions="*" RowDefinitions="*, *, *, *, *, 4*" Background="White" Opacity="100" Grid.Row="0" Grid.Column="1" Name="GroupButton">
+      <TextBlock Grid.Row="0" Name="MainHeader" FontSize="96" TextAlignment="Center" TextWrapping="Wrap">
         MedEye
       </TextBlock>
-      <TextBlock Name="SubHeader" FontSize="48" TextAlignment="Center" TextWrapping="Wrap">
-        Лечение косоглазия и амблиопии
+      <TextBlock Grid.Row="1" Name="SubHeader" FontSize="48" TextAlignment="Center" TextWrapping="Wrap">
+        Главное меню
       </TextBlock>
-      <Grid Name="Buttons" RowDefinitions="2*,  *, *" HorizontalAlignment="Center" Margin="0 75 0 0">
-        <Button Name="Registry" Grid.Row="0">
-          Регистратура
-        </Button>
-        <Button Name="Cabinet" Grid.Row="1">
-          Кабинет
-        </Button>
-        <Button Name="Exit" Grid.Row="2">
-          Выход
-        </Button>
-        <Grid.Styles>
-          <Style Selector="Button">
-            <Setter Property="BorderBrush" Value="#00B1A7"></Setter>
-            <Setter Property="Background" Value="#CFE0F2"></Setter>
-            <Setter Property="BorderThickness" Value="2.5"></Setter>
-            <Setter Property="CornerRadius" Value="15"></Setter>
-            <Setter Property="Margin" Value="0 25 0 0"></Setter>
-            <Setter Property="Padding" Value="0 15 0 15"></Setter>
-            <Setter Property="TextBlock.FontSize" Value="32"></Setter>
-            <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
-          </Style>
-          <Style Selector="Button:pointerover /template/ ContentPresenter">
-            <Setter Property="BorderBrush" Value="Red"></Setter>
-            <Setter Property="Background" Value="#CFE0F2"></Setter>
-            <Setter Property="TextBlock.Foreground" Value="Red"></Setter>
-          </Style>
-        </Grid.Styles>
-      </Grid>
-    </StackPanel>
+      <Button Name="Registry" Grid.Row="2" HorizontalAlignment="Center">
+        Регистратура
+      </Button>
+      <Button Name="Cabinet" Grid.Row="3" HorizontalAlignment="Center">
+        Кабинет
+      </Button>
+      <Button Name="Exit" Grid.Row="4" HorizontalAlignment="Center">
+        Выход
+      </Button>
+      <Button Name="Info" Grid.Row="5" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0 0 0 50">
+        Справка
+      </Button>
+      <Grid.Styles>
+        <Style Selector="Button">
+          <Setter Property="BorderBrush" Value="#00B1A7"></Setter>
+          <Setter Property="Background" Value="#CFE0F2"></Setter>
+          <Setter Property="BorderThickness" Value="2.5"></Setter>
+          <Setter Property="CornerRadius" Value="15"></Setter>
+          <Setter Property="Margin" Value="0 25 0 0"></Setter>
+          <Setter Property="Padding" Value="0 15 0 15"></Setter>
+          <Setter Property="TextBlock.FontSize" Value="32"></Setter>
+          <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
+        </Style>
+        <Style Selector="Button:pointerover /template/ ContentPresenter">
+          <Setter Property="BorderBrush" Value="Red"></Setter>
+          <Setter Property="Background" Value="#CFE0F2"></Setter>
+          <Setter Property="TextBlock.Foreground" Value="Red"></Setter>
+        </Style>
+      </Grid.Styles>
+    </Grid>
     <Image Name="Logo" Grid.Row="0" Grid.Column="3" Opacity="100">
     </Image>
   </Grid>

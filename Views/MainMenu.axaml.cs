@@ -5,6 +5,7 @@ using Avalonia.Media.Imaging;
 using Avalonia.Threading;
 using System;
 using MedEye.ExcelLoader;
+using DocumentFormat.OpenXml.EMMA;
 
 namespace MedEye.Views
 {
@@ -25,6 +26,8 @@ namespace MedEye.Views
             var button3 = this.FindControl<Button>("Registry");
             button3.Click += RegistryClick;
 
+            Info.Click += InfoClick;
+
             close_timer.Tick += CloseAfterRoute;
             close_timer.Interval = new TimeSpan(1000000);
         }
@@ -36,6 +39,7 @@ namespace MedEye.Views
             var logo = this.Get<Image>("Logo");
 
             logo.Source = new Bitmap("..\\..\\..\\Assets\\logo.png");
+            // logo.Source = new Bitmap(".\\logo.png");
 
             base.OnOpened(e);
         }
@@ -75,6 +79,11 @@ namespace MedEye.Views
             close_timer.Start();
         }
 
+        private void InfoClick(object? sender, RoutedEventArgs e)
+        {
+            new ConfirmAction().Show();
+        }
+
         private void CloseAfterRoute(object? sender, EventArgs e)
         {
             this.Close();
@@ -92,10 +101,12 @@ namespace MedEye.Views
             reg.Width = buttonWidth;
             cab.Width = buttonWidth;
             exit.Width = buttonWidth;
+            Info.Width = buttonWidth;
 
             reg.FontSize = 32 * (this.ClientSize.Width / 1920);
             cab.FontSize = 32 * (this.ClientSize.Width / 1920);
             exit.FontSize = 32 * (this.ClientSize.Width / 1920);
+            Info.FontSize = 32 * (this.ClientSize.Width / 1920);
 
             var h1 = this.Get<TextBlock>("MainHeader");
             var h2 = this.Get<TextBlock>("SubHeader");

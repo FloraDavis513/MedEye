@@ -4,14 +4,9 @@ using Avalonia.Data;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
 using MedEye.DB;
-using System;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Collections.Generic;
-using Avalonia.Media;
 using DynamicData;
 using MedEye.ExcelLoader;
-using Avalonia.Logging;
 
 namespace MedEye.Views
 {
