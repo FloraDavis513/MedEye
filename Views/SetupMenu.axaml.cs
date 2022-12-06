@@ -42,6 +42,32 @@ public partial class SetupMenu : Window
         }
     }
 
+    public SetupMenu(int user_id)
+    {
+        InitializeComponent();
+#if DEBUG
+        this.AttachDevTools();
+#endif
+
+        MainMenu.Click += MainMenuClick;
+        StartGame.Click += StartGameClick;
+        AddGame.Click += AddGameHandle;
+        SaveGame.Click += SaveGameHandle;
+        DeleteGame.Click += DeleteGameHandle;
+
+        GamesScroll.Height = ClientSize.Height / 1.2;
+        GamesScroll.MaxHeight = ClientSize.Height / 1.2;
+
+
+        CloseTimer.Tick += CloseAfterRoute;
+        CloseTimer.Interval = new TimeSpan(1000000);
+
+        foreach (var settings in SettingsWrap.GetSettings(0))
+        {
+            SettingsWrap.DeleteSettings(settings);
+        }
+    }
+
     protected override void OnOpened(EventArgs e)
     {
         AdaptToScreen();

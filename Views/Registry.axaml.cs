@@ -105,7 +105,8 @@ namespace MedEye.Views
             if (UserList.SelectedIndex == -1)
                 return;
             string selected_user = (string)UserList.SelectedItem;
-            new ConfirmAction("Вы уверены, что хотите удалить игрока: " + selected_user + "?", DoDelete).Show();
+            new ConfirmAction(this.ClientSize.Width, this.ClientSize.Height, 
+                "Вы уверены, что хотите удалить игрока: " + selected_user + "?", DoDelete).Show();
         }
 
         private void DoDelete(object? sender, RoutedEventArgs e)

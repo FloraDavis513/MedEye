@@ -67,10 +67,14 @@ namespace MedEye.Views
             this.Close();
         }
 
+        private void LongExitClick(object? sender, RoutedEventArgs e)
+        {
+            close_timer.Start();
+        }
+
         private void CabinetClick(object? sender, RoutedEventArgs e)
         {
-            new SetupMenu().Show();
-            close_timer.Start();
+            new ModalWindow(this.ClientSize.Width, this.ClientSize.Height, LongExitClick).Show();
         }
 
         private void RegistryClick(object? sender, RoutedEventArgs e)
@@ -81,7 +85,7 @@ namespace MedEye.Views
 
         private void InfoClick(object? sender, RoutedEventArgs e)
         {
-            new ConfirmAction().Show();
+            // new GamerSelector(this.ClientSize.Width, this.ClientSize.Height).Show();
         }
 
         private void CloseAfterRoute(object? sender, EventArgs e)
