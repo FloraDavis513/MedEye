@@ -12,17 +12,17 @@ namespace MedEye.Tracker
         static private Process tracker;
         static public void StartTracking()
         {
-
-
             string startupPath = Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(System.IO.Directory.GetCurrentDirectory()))));
 
             // 1) Create Process Info
             var psi = new ProcessStartInfo();
-            
+
             psi.FileName = startupPath + @"\Python\Python310\python.exe";
+            // psi.FileName = ".\\Python\\Python310\\python.exe";
 
             // 2) Provide script and arguments
             var script = startupPath + @"\MedEye\GazeTracking\example.py";
+            // var script = ".\\GazeTracking\\example.py";
 
 
             psi.Arguments = $"\"{script}\" \"\" \"\"";
