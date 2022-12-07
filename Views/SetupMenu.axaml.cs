@@ -33,6 +33,8 @@ public partial class SetupMenu : Window
                 MainMenuClick).Show();
         };
         StartGame.Click += StartGameClick;
+        MainMenu.Click += MainMenuClick;
+        StartGame.Click += PreStartGameClick;
         AddGame.Click += AddGameHandle;
         SaveGame.Click += SaveGameHandle;
         DeleteGame.Click += (s, e) =>
@@ -72,6 +74,8 @@ public partial class SetupMenu : Window
                 MainMenuClick).Show();
         };
         StartGame.Click += StartGameClick;
+        MainMenu.Click += MainMenuClick;
+        StartGame.Click += PreStartGameClick;
         AddGame.Click += AddGameHandle;
         SaveGame.Click += SaveGameHandle;
         DeleteGame.Click += (s, e) =>
@@ -285,9 +289,23 @@ public partial class SetupMenu : Window
                 return;
         }
 
-        NextGameTimer.Tick += NextGame;
+        NextGameTimer.Tick += PreNextGame;
         NextGameTimer.Interval = new TimeSpan(0, 0, game.ExerciseDuration + 5);
         NextGameTimer.Start();
+    }
+
+    private void PreStartGameClick(object? sender, RoutedEventArgs e)
+    {
+        _currentGame = 0;
+
+        if (_gamesSettings.Count == 0) return;
+        new ContentDisplay(_currentGame % 5 + 1, StartGameClick).Show();
+    }
+
+    private void PreNextGame(object? sender, EventArgs e)
+    {
+        if (_currentGame >= _gamesSettings.Count) return;
+        new ContentDisplay((_currentGame + 1) % 5 + 1, NextGame).Show();
     }
 
     private void SaveGameHandle(object? sender, EventArgs e)

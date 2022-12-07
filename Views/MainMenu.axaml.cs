@@ -1,4 +1,4 @@
-using Avalonia;
+﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Media.Imaging;
@@ -6,6 +6,7 @@ using Avalonia.Threading;
 using System;
 using MedEye.ExcelLoader;
 using DocumentFormat.OpenXml.EMMA;
+using System.Diagnostics;
 
 namespace MedEye.Views
 {
@@ -85,7 +86,12 @@ namespace MedEye.Views
 
         private void InfoClick(object? sender, RoutedEventArgs e)
         {
-            // new GamerSelector(this.ClientSize.Width, this.ClientSize.Height).Show();
+            var p = new Process();
+            p.StartInfo = new ProcessStartInfo("..\\..\\..\\Docs\\Справка.docx")
+            {
+                UseShellExecute = true
+            };
+            p.Start();
         }
 
         private void CloseAfterRoute(object? sender, EventArgs e)

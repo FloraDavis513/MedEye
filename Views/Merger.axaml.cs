@@ -32,8 +32,6 @@ namespace MedEye.Views
         {
             InitializeComponent();
 
-            Tracker.Tracker.StartTracking();
-
             after_move_reset_timer.Tick += ResetColor;
             after_move_reset_timer.Interval = new TimeSpan(500000);
 
@@ -61,8 +59,6 @@ namespace MedEye.Views
         public Merger(Settings settings)
         {
             InitializeComponent();
-
-            Tracker.Tracker.StartTracking();
 
             after_move_reset_timer.Tick += ResetColor;
             after_move_reset_timer.Interval = new TimeSpan(500000);
