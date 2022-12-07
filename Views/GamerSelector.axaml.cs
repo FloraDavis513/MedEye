@@ -74,11 +74,11 @@ namespace MedEye.Views
         {
             this.Width = windowWidth;
             this.Height = windowHeight;
-            var buttonWidth = this.ClientSize.Width / 3;
+            var buttonWidth = this.Width / 3;
 
             Next.Width = buttonWidth;
-            Next.FontSize = 32 * (this.ClientSize.Width / windowWidth);
-            Header.FontSize = 48 * (this.ClientSize.Width / windowWidth);
+            Next.FontSize = 32 * (windowWidth / 1920);
+            Header.FontSize = 48 * (windowWidth / 1920);
         }
     }
 }

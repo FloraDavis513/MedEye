@@ -19,9 +19,9 @@
             <Grid RowDefinitions="*, *, *, *" HorizontalAlignment="Center"
                   Margin="0 0 0 0">
                 <ScrollViewer Name="GamesScroll" Grid.Row="0">
-                    <Grid Name="Games" RowDefinitions="*" HorizontalAlignment="Center"
+                    <Grid Name="Games" RowDefinitions="*, *, *" HorizontalAlignment="Center"
                           Margin="0 75 0 0">
-                        <ComboBox Grid.Row="0" Name="Game1" PlaceholderText="Выбрать игру">
+                        <ComboBox Grid.Row="0" Name="DefaultGame" PlaceholderText="Выбрать игру">
                             <ComboBoxItem>Тир</ComboBoxItem>
                             <ComboBoxItem>Погоня</ComboBoxItem>
                             <ComboBoxItem>Совмещение</ComboBoxItem>
@@ -32,38 +32,11 @@
                 <Button Grid.Row="1" Name="AddGame">Добавить игру</Button>
                 <Button Grid.Row="2" Name="StartGame">Запустить</Button>
                 <Button Name="MainMenu" Grid.Row="3">Главное меню</Button>
-                <Grid.Styles>
-                    <Style Selector="Button">
-                        <Setter Property="BorderBrush" Value="#00B1A7"></Setter>
-                        <Setter Property="Background" Value="#CFE0F2"></Setter>
-                        <Setter Property="BorderThickness" Value="2.5"></Setter>
-                        <Setter Property="CornerRadius" Value="15"></Setter>
-                        <Setter Property="Margin" Value="0 25 0 0"></Setter>
-                        <Setter Property="Padding" Value="0 15 0 15"></Setter>
-                        <Setter Property="TextBlock.FontSize" Value="32"></Setter>
-                        <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
-                    </Style>
-                    <Style Selector="ComboBox">
-                        <Setter Property="BorderBrush" Value="#00B1A7"></Setter>
-                        <Setter Property="Background" Value="#CFE0F2"></Setter>
-                        <Setter Property="BorderThickness" Value="2.5"></Setter>
-                        <Setter Property="CornerRadius" Value="15"></Setter>
-                        <Setter Property="Margin" Value="0 25 0 0"></Setter>
-                        <Setter Property="Padding" Value="0 15 0 15"></Setter>
-                        <Setter Property="TextBlock.FontSize" Value="32"></Setter>
-                        <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
-                    </Style>
-                    <Style Selector="Button:pointerover /template/ ContentPresenter">
-                        <Setter Property="BorderBrush" Value="Red"></Setter>
-                        <Setter Property="Background" Value="#CFE0F2"></Setter>
-                        <Setter Property="TextBlock.Foreground" Value="Red"></Setter>
-                    </Style>
-                </Grid.Styles>
             </Grid>
         </StackPanel>
         <StackPanel Background="White" Opacity="100" Grid.Row="0" Grid.Column="3" Name="Settings">
             <TextBlock Name="Header2" FontSize="36" TextAlignment="Center" TextWrapping="Wrap">
-                Настройки игры 1
+                Настройки игры
             </TextBlock>
             <Grid Name="SettingControls" RowDefinitions="*, *, *, *, *, *, *, *, *" HorizontalAlignment="Center"
                   Margin="0 75 0 0">
@@ -98,13 +71,13 @@
                 <Grid Grid.Row="3" ColumnDefinitions="*, *">
                     <TextBlock Name="TypeFlickerText" Grid.Column="0" FontSize="36" VerticalAlignment="Center"
                                TextAlignment="Center" TextWrapping="Wrap">
-                        Цвет мерцания
+                        Тип мерцания
                     </TextBlock>
                     <ComboBox Name="TypeFlickerBox" Grid.Column="1" SelectedIndex="2">
                         <ComboBoxItem>Красный</ComboBoxItem>
                         <ComboBoxItem>Синий</ComboBoxItem>
                         <ComboBoxItem>Одновременно</ComboBoxItem>
-                        <ComboBoxItem>Попеременно</ComboBoxItem>
+                        <ComboBoxItem>Без мерцания</ComboBoxItem>
                     </ComboBox>
                 </Grid>
                 <Grid Grid.Row="4" ColumnDefinitions="*, *">
@@ -166,5 +139,37 @@
                 </Grid.Styles>
             </Grid>
         </StackPanel>
+        <Grid.Styles>
+            <Style Selector="Button">
+                <Setter Property="BorderBrush" Value="#00B1A7"></Setter>
+                <Setter Property="Background" Value="#CFE0F2"></Setter>
+                <Setter Property="BorderThickness" Value="2.5"></Setter>
+                <Setter Property="CornerRadius" Value="15"></Setter>
+                <Setter Property="Margin" Value="0 25 0 0"></Setter>
+                <Setter Property="Padding" Value="0 15 0 15"></Setter>
+                <Setter Property="TextBlock.FontSize" Value="32"></Setter>
+                <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
+            </Style>
+            <Style Selector="ComboBox">
+                <Setter Property="BorderBrush" Value="#00B1A7"></Setter>
+                <Setter Property="Background" Value="#CFE0F2"></Setter>
+                <Setter Property="BorderThickness" Value="2.5"></Setter>
+                <Setter Property="CornerRadius" Value="15"></Setter>
+                <Setter Property="Margin" Value="0 25 0 0"></Setter>
+                <Setter Property="Padding" Value="0 15 0 15"></Setter>
+                <Setter Property="TextBlock.FontSize" Value="32"></Setter>
+                <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
+            </Style>
+            <Style Selector="Button:pointerover /template/ ContentPresenter">
+                <Setter Property="BorderBrush" Value="Red"></Setter>
+                <Setter Property="Background" Value="#CFE0F2"></Setter>
+                <Setter Property="TextBlock.Foreground" Value="Red"></Setter>
+            </Style>
+            <Style Selector="ComboBox:pointerover /template/ ContentPresenter">
+                <Setter Property="BorderBrush" Value="Red"></Setter>
+                <Setter Property="Background" Value="#CFE0F2"></Setter>
+                <Setter Property="TextBlock.Foreground" Value="Red"></Setter>
+            </Style>
+        </Grid.Styles>
     </Grid>
 </Window>

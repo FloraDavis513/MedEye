@@ -17,6 +17,11 @@ namespace MedEye.DB
         public int BlueBrightness;
         public int Level;
         public int ExerciseDuration;
+
+        public Settings SetPriority(int priority)
+        {
+            return this with { Priority = priority };
+        }
     }
 
     public static class SettingsWrap
