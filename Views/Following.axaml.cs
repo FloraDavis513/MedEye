@@ -190,20 +190,6 @@ public partial class Following : Window
             : _colors[_currentColor];
     }
 
-    // private void ChangeBlink(object? sender, EventArgs e)
-    // {
-    //     if (TargetBlinkTimer.IsEnabled)
-    //     {
-    //         TargetBlinkTimer.Stop();
-    //         StalkerBlinkTimer.Start();
-    //     }
-    //     else
-    //     {
-    //         TargetBlinkTimer.Start();
-    //         StalkerBlinkTimer.Stop();
-    //     }
-    // }
-
     private void CloseGame(object? sender, EventArgs e)
     {
         StopTimer();

@@ -28,12 +28,10 @@ public partial class SetupMenu : Window
 
         MainMenu.Click += (s, e) =>
         {
-            new ConfirmAction(this.ClientSize.Width, this.ClientSize.Height,
+            new ConfirmAction(ClientSize.Width, ClientSize.Height,
                 "Вы уверены что хотите выйти в главное меню? Настройки приложения не будут сохранены!",
                 MainMenuClick).Show();
         };
-        StartGame.Click += StartGameClick;
-        MainMenu.Click += MainMenuClick;
         StartGame.Click += PreStartGameClick;
         AddGame.Click += AddGameHandle;
         SaveGame.Click += SaveGameHandle;
@@ -73,8 +71,6 @@ public partial class SetupMenu : Window
                 "Вы уверены, что хотите перейти в главное меню? Все несохраненные измения будут потеряны!",
                 MainMenuClick).Show();
         };
-        StartGame.Click += StartGameClick;
-        MainMenu.Click += MainMenuClick;
         StartGame.Click += PreStartGameClick;
         AddGame.Click += AddGameHandle;
         SaveGame.Click += SaveGameHandle;
