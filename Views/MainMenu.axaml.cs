@@ -1,4 +1,4 @@
-using Avalonia;
+﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Media.Imaging;
@@ -87,7 +87,7 @@ namespace MedEye.Views
         private void InfoClick(object? sender, RoutedEventArgs e)
         {
             var p = new Process();
-            p.StartInfo = new ProcessStartInfo(".\\Справка.docx")
+            p.StartInfo = new ProcessStartInfo("..\\..\\..\\Docs\\Справка.docx")
             {
                 UseShellExecute = true
             };
