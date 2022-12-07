@@ -50,8 +50,6 @@ namespace MedEye.Views
 #if DEBUG
             this.AttachDevTools();
 #endif
-            
-            Tracker.Tracker.StartTracking();
 
             after_move_reset_timer.Tick += ResetColor;
             after_move_reset_timer.Interval = new TimeSpan(500000);
@@ -82,8 +80,6 @@ namespace MedEye.Views
 #if DEBUG
             this.AttachDevTools();
 #endif
-            
-            Tracker.Tracker.StartTracking();
 
             after_move_reset_timer.Tick += ResetColor;
             after_move_reset_timer.Interval = new TimeSpan(500000);

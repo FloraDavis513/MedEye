@@ -24,7 +24,7 @@ public partial class SetupMenu : Window
 #endif
 
         MainMenu.Click += MainMenuClick;
-        StartGame.Click += StartGameClick;
+        StartGame.Click += PreStartGameClick;
         AddGame.Click += AddGameHandle;
         SaveGame.Click += SaveGameHandle;
         DeleteGame.Click += DeleteGameHandle;
@@ -50,7 +50,7 @@ public partial class SetupMenu : Window
 #endif
 
         MainMenu.Click += MainMenuClick;
-        StartGame.Click += StartGameClick;
+        StartGame.Click += PreStartGameClick;
         AddGame.Click += AddGameHandle;
         SaveGame.Click += SaveGameHandle;
         DeleteGame.Click += DeleteGameHandle;
@@ -151,10 +151,6 @@ public partial class SetupMenu : Window
     {
         NextGameTimer.Stop();
 
-        _currentGame++;
-
-        if (_currentGame >= _games.Count) return;
-
         var game = _games[_currentGame];
         switch (game.GameId)
         {
@@ -179,11 +175,6 @@ public partial class SetupMenu : Window
     private void StartGameClick(object? sender, RoutedEventArgs e)
     {
         NextGameTimer.Stop();
-
-        _games = SettingsWrap.GetSettings(0);
-        _currentGame = 0;
-        
-        if (_games.Count == 0) return;
         
         var game = _games[_currentGame];
         switch (game.GameId)
@@ -202,9 +193,25 @@ public partial class SetupMenu : Window
                 break;
         }
 
-        NextGameTimer.Tick += NextGame;
+        NextGameTimer.Tick += PreNextGame;
         NextGameTimer.Interval = new TimeSpan(0, 0, game.ExerciseDuration + 5);
         NextGameTimer.Start();
+    }
+
+    private void PreStartGameClick(object? sender, RoutedEventArgs e)
+    {
+        _games = SettingsWrap.GetSettings(0);
+        _currentGame = 0;
+
+        if (_games.Count == 0) return;
+        new ContentDisplay(_currentGame % 5 + 1, StartGameClick).Show();
+    }
+
+    private void PreNextGame(object? sender, EventArgs e)
+    {
+        _currentGame++;
+        if (_currentGame >= _games.Count) return;
+        new ContentDisplay(_currentGame % 5 + 1, NextGame).Show();
     }
 
     private void SaveGameHandle(object? sender, EventArgs e)

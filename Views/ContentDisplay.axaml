@@ -1,0 +1,34 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
+        x:Class="MedEye.Views.ContentDisplay"
+        Title="ContentDisplay"
+        WindowState="FullScreen">
+  <Border>
+    <Grid RowDefinitions="10*, *" ShowGridLines="False">
+      <Image Name="Comics" Grid.Row="0" Grid.RowSpan="2"/>
+      <Button Name="Next" Grid.Row="1" HorizontalAlignment="Right">
+        Далее
+      </Button>
+      <Grid.Styles>
+        <Style Selector="Button">
+          <Setter Property="BorderBrush" Value="#00B1A7"></Setter>
+          <Setter Property="Background" Value="#CFE0F2"></Setter>
+          <Setter Property="BorderThickness" Value="2.5"></Setter>
+          <Setter Property="CornerRadius" Value="15"></Setter>
+          <Setter Property="Margin" Value="0 0 25 0"></Setter>
+          <Setter Property="Padding" Value="0 15 0 15"></Setter>
+          <Setter Property="TextBlock.FontSize" Value="32"></Setter>
+          <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
+        </Style>
+        <Style Selector="Button:pointerover /template/ ContentPresenter">
+          <Setter Property="BorderBrush" Value="Red"></Setter>
+          <Setter Property="Background" Value="#CFE0F2"></Setter>
+          <Setter Property="TextBlock.Foreground" Value="Red"></Setter>
+        </Style>
+      </Grid.Styles>
+    </Grid>
+  </Border>
+</Window>

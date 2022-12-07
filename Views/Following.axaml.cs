@@ -55,8 +55,6 @@ public partial class Following : Window
         this.AttachDevTools();
 #endif
 
-        Tracker.Tracker.StartTracking();
-
         Canvas.SetTop(Target, Rnd.Next(0, Convert.ToInt32(this.ClientSize.Height - Target.Height)));
         Canvas.SetLeft(Target, Rnd.Next(0, Convert.ToInt32(this.ClientSize.Width - Target.Width)));
 
@@ -79,9 +77,6 @@ public partial class Following : Window
 #if DEBUG
         this.AttachDevTools();
 #endif
-
-        Tracker.Tracker.StartTracking();
-
         Canvas.SetTop(Target, Rnd.Next(0, Convert.ToInt32(this.ClientSize.Height - Target.Height)));
         Canvas.SetLeft(Target, Rnd.Next(0, Convert.ToInt32(this.ClientSize.Width - Target.Width)));
 
