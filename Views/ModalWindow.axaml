@@ -5,8 +5,6 @@
         mc:Ignorable="d" d:DesignWidth="1000" d:DesignHeight="600"
         x:Class="MedEye.Views.ModalWindow"
         Title="ModalWindow"
-        Width="1000"
-        Height="600"
         HasSystemDecorations="False"
         WindowStartupLocation="CenterScreen"
         TransparencyLevelHint="Transparent"
@@ -20,12 +18,12 @@
       <TextBlock Name="Header" FontSize="96" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center">
         Режим работы
       </TextBlock>
-      <Button Name="With" Width="350" Height="250" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center">
+      <Button Name="With" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center">
         <TextBlock FontSize="48" TextWrapping="Wrap" Background="Transparent" HorizontalAlignment="Center" VerticalAlignment="Center">
           Работа &#x0a;с карточкой &#x0a;игрока
         </TextBlock>
       </Button>
-      <Button Name="Without" Width="350" Height="250" Grid.Column="1" Grid.Row="1" FontSize="36" HorizontalAlignment="Center">
+      <Button Name="Without" Grid.Column="1" Grid.Row="1" FontSize="36" HorizontalAlignment="Center">
         <TextBlock FontSize="48" TextWrapping="Wrap" Background="Transparent" HorizontalAlignment="Center" VerticalAlignment="Center" >
           Работа &#x0a;без карточки &#x0a;игрока
         </TextBlock>

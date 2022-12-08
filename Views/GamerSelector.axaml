@@ -9,15 +9,13 @@
         SystemDecorations="None"
         WindowStartupLocation="CenterScreen"
         TransparencyLevelHint="Transparent"
-        Background="Transparent"
-        Width="1000"
-        Height="600">
+        Background="Transparent">
   <Border Background="#CFE0F2"
           BorderBrush="#00B1A7"
           BorderThickness="4"
           CornerRadius="25">
     <Grid RowDefinitions="*, 3*, *" ColumnDefinitions="*, *">
-      <TextBlock Name="Header" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" FontSize="48" TextAlignment="Center" Margin="0 50 0 0" Width="900" TextWrapping="Wrap">
+      <TextBlock Name="Header" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" FontSize="48" TextAlignment="Center" Margin="0 50 0 0" TextWrapping="Wrap">
         ----------- Игроки -----------
       </TextBlock>
       <ListBox Grid.Row="1" Grid.ColumnSpan="2" Name="UserList" Margin="25 0 25 0">
@@ -27,7 +25,7 @@
           </DataTemplate>
         </ListBox.DataTemplates>
       </ListBox>
-      <Button Name="Next" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" FontSize="36" Width="400">
+      <Button Name="Next" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" FontSize="36">
         Далее
       </Button>
       <Grid.Styles>
