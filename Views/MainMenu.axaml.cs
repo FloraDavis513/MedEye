@@ -3,9 +3,6 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Media.Imaging;
 using Avalonia.Threading;
-using System;
-using MedEye.ExcelLoader;
-using DocumentFormat.OpenXml.EMMA;
 using System.Diagnostics;
 
 namespace MedEye.Views
