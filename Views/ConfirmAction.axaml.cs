@@ -1,5 +1,6 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Interactivity;
 
 namespace MedEye.Views
@@ -48,6 +49,16 @@ namespace MedEye.Views
         private void ExitClick(object? sender, RoutedEventArgs e)
         {
             this.Close();
+        }
+        
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                Close();
+            }
+
+            base.OnKeyDown(e);
         }
 
         protected override void OnOpened(EventArgs e)
