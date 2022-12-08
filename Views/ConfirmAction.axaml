@@ -9,19 +9,17 @@
         SystemDecorations="None"
         WindowStartupLocation="CenterScreen"
         TransparencyLevelHint="Transparent"
-        Background="Transparent"
-        Width="1000"
-        Height="600">
+        Background="Transparent">
   <Border Background="#CFE0F2"
           BorderBrush="#00B1A7"
           BorderThickness="4"
           CornerRadius="25">
     <Grid RowDefinitions="3*, *" ColumnDefinitions="*, *" Background="White" Margin="20 20 20 20">
-      <TextBlock Name="ConfirmText" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" FontSize="48" TextAlignment="Center" Margin="0 50 0 0" Width="900" TextWrapping="Wrap"/>
-      <Button Name="Yes" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" FontSize="36" Width="320">
+      <TextBlock Name="ConfirmText" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" FontSize="48" TextAlignment="Center" Margin="0 50 0 0" TextWrapping="Wrap"/>
+      <Button Name="Yes" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" FontSize="36">
         Да
       </Button>
-      <Button Name="No" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" FontSize="36" Width="320">
+      <Button Name="No" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" FontSize="36">
         Нет
       </Button>
       <Grid.Styles>

@@ -64,6 +64,7 @@ namespace MedEye.Views
 
             No.Width = buttonWidth;
             Yes.Width = buttonWidth;
+            ConfirmText.Width = 0.9 * windowWidth;
             Yes.FontSize = 36 * (mainWindowWidth / 1920);
             No.FontSize = 36 * (mainWindowWidth / 1920);
             ConfirmText.FontSize = 48 * (mainWindowWidth / 1920);
