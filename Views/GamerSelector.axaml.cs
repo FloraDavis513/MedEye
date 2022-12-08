@@ -11,6 +11,8 @@ namespace MedEye.Views
         private static readonly DispatcherTimer close_timer = new DispatcherTimer();
         private double windowWidth;
         private double windowHeight;
+        private double mainWindowWidth;
+        private double mainWindowHeight;
 
         public GamerSelector()
         {
@@ -28,6 +30,8 @@ namespace MedEye.Views
             InitializeComponent();
             ActualizeUserList();
 
+            mainWindowWidth = main_window_width;
+            mainWindowHeight = main_window_height;
             windowWidth = 1285 * (main_window_width / 1920);
             windowHeight = 690 * (main_window_height / 1080);
 
@@ -77,8 +81,8 @@ namespace MedEye.Views
             var buttonWidth = this.Width / 3;
 
             Next.Width = buttonWidth;
-            Next.FontSize = 32 * (windowWidth / 1920);
-            Header.FontSize = 48 * (windowWidth / 1920);
+            Next.FontSize = 32 * (mainWindowWidth / 1920);
+            Header.FontSize = 48 * (mainWindowWidth / 1920);
         }
     }
 }

@@ -8,6 +8,8 @@ namespace MedEye.Views
     {
         private double windowWidth;
         private double windowHeight;
+        private double mainWindowWidth;
+        private double mainWindowHeight;
 
         public ConfirmAction()
         {
@@ -31,6 +33,8 @@ namespace MedEye.Views
         {
             InitializeComponent();
 
+            mainWindowWidth = main_window_width;
+            mainWindowHeight = main_window_height;
             windowWidth = 1055 * (main_window_width / 1920);
             windowHeight = 600 * (main_window_height / 1080);
 
@@ -60,9 +64,9 @@ namespace MedEye.Views
 
             No.Width = buttonWidth;
             Yes.Width = buttonWidth;
-            Yes.FontSize = 36 * (windowWidth / 1920);
-            No.FontSize = 36 * (windowWidth / 1920);
-            ConfirmText.FontSize = 48 * (windowWidth / 1920);
+            Yes.FontSize = 36 * (mainWindowWidth / 1920);
+            No.FontSize = 36 * (mainWindowWidth / 1920);
+            ConfirmText.FontSize = 48 * (mainWindowWidth / 1920);
         }
     }
 }
