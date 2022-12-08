@@ -94,8 +94,8 @@ public partial class SetupMenu : Window
             foreach (var settings in _gamesSettings)
             {
                 SettingsWrap.DeleteSettings(settings);
-                _gamesSettings.Remove(settings);
             }
+            _gamesSettings.Clear();
         }
         else
         {
