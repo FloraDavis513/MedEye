@@ -89,6 +89,9 @@ public partial class SetupMenu : Window
         CloseTimer.Interval = new TimeSpan(1000000);
 
         _gamesSettings = SettingsWrap.GetSettings(_userId);
+        
+        if (_gamesSettings.Count == 0) return;
+        
         if (_userId == -1)
         {
             foreach (var settings in _gamesSettings)
@@ -324,13 +327,31 @@ public partial class SetupMenu : Window
         if (Games.Children.Count == 0) return;
 
         var game = Games.Children[_gameNumber];
-        _gamesSettings.RemoveAt(_gameNumber);
+        
+        if (_gameNumber > -1 && _gameNumber < _gamesSettings.Count)
+        {
+            _gamesSettings.RemoveAt(_gameNumber);
+        }
 
-        _gameNumber -= 1;
+        _gameNumber += _gameNumber == 0 && Games.Children.Count > 1 ? 1 : -1;
+        
         if (_gameNumber > -1)
         {
             ((ComboBox)Games.Children[_gameNumber]).FontWeight = FontWeight.Bold;
+            Header2.Text = "Настройки игры №" + (_gameNumber + 1);
+        }
+        else
+        {
+            Header2.Text = "Настройки игры";
+        }
+        
+        if (_gameNumber > -1 && _gameNumber < _gamesSettings.Count)
+        {
             SetSettings(_gamesSettings[_gameNumber]);
+        }
+        else
+        {
+            ResetSettings();
         }
 
         Games.Children.Remove(game);
@@ -373,6 +394,8 @@ public partial class SetupMenu : Window
         AddGameToGrid();
         ((ComboBox)Games.Children[_gameNumber]).FontWeight = FontWeight.Bold;
         ResetSettings();
+        
+        Header2.Text = "Настройки игры №" + (_gameNumber + 1);
     }
 
     private void ClickGame(object? sender, RoutedEventArgs e)
@@ -395,6 +418,8 @@ public partial class SetupMenu : Window
         {
             ResetSettings();
         }
+
+        Header2.Text = "Настройки игры №" + (_gameNumber + 1);
     }
 
     private void AdaptToScreen()
@@ -406,6 +431,16 @@ public partial class SetupMenu : Window
         {
             comboBox.Width = buttonWidth;
             comboBox.FontSize = fontSize;
+        }
+        
+        foreach (var radioButton in DistanceRadioButtons.Children.OfType<RadioButton>())
+        {
+            radioButton.FontSize = fontSize;
+        }
+        
+        foreach (var radioButton in IsRedRadioButtons.Children.OfType<RadioButton>())
+        {
+            radioButton.FontSize = fontSize;
         }
 
         DefaultGame.Width = buttonWidth;
@@ -431,6 +466,7 @@ public partial class SetupMenu : Window
         BrightBlueColor.FontSize = fontSize;
         Level.FontSize = fontSize;
         Timer.FontSize = fontSize;
+        TimerTextBox.FontSize = fontSize;
         AddGame.FontSize = fontSize;
         SaveGame.FontSize = fontSize;
 
