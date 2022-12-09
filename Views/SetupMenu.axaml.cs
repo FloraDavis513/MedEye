@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Threading;
@@ -17,6 +18,12 @@ public partial class SetupMenu : Window
     private int _gameNumber = -1;
     private List<Settings> _gamesSettings;
     private DispatcherTimer NextGameTimer = new DispatcherTimer();
+
+    private readonly Thickness _unselectedThickness = new(2.5);
+    private readonly SolidColorBrush _unselectedBackground = new(Color.Parse("#CFE0F2"));
+    
+    private readonly Thickness _selectedThickness = new(5);
+    private readonly SolidColorBrush _selectedBackground = new(Color.Parse("#93B9E2"));
 
 
     public SetupMenu()
@@ -37,6 +44,7 @@ public partial class SetupMenu : Window
         SaveGame.Click += SaveGameHandle;
         DeleteGame.Click += (s, e) =>
         {
+            if (Games.Children.Count == 0) return;
             new ConfirmAction(this.ClientSize.Width, this.ClientSize.Height,
                 "Вы уверены, что хотите удалить игру из списка?", DeleteGameHandle).Show();
         };
@@ -54,6 +62,8 @@ public partial class SetupMenu : Window
             SettingsWrap.DeleteSettings(settings);
             _gamesSettings.Remove(settings);
         }
+
+        ResetSettings();
     }
 
     public SetupMenu(int userId)
@@ -76,6 +86,7 @@ public partial class SetupMenu : Window
         SaveGame.Click += SaveGameHandle;
         DeleteGame.Click += (s, e) =>
         {
+            if (Games.Children.Count == 0) return;
             new ConfirmAction(this.ClientSize.Width, this.ClientSize.Height,
                 "Вы уверены, что хотите удалить игру?", DeleteGameHandle).Show();
         };
@@ -89,13 +100,22 @@ public partial class SetupMenu : Window
         CloseTimer.Interval = new TimeSpan(1000000);
 
         _gamesSettings = SettingsWrap.GetSettings(_userId);
+
+        if (_gamesSettings.Count == 0)
+        {
+            ResetSettings();
+            return;
+        }
+
         if (_userId == -1)
         {
             foreach (var settings in _gamesSettings)
             {
                 SettingsWrap.DeleteSettings(settings);
-                _gamesSettings.Remove(settings);
             }
+
+            _gamesSettings.Clear();
+            ResetSettings();
         }
         else
         {
@@ -107,8 +127,10 @@ public partial class SetupMenu : Window
                 game.SelectedIndex = settings.GameId - 1;
             }
 
-            ((ComboBox)Games.Children[_gameNumber]).FontWeight = FontWeight.Bold;
+            SelectGame((ComboBox)Games.Children[_gameNumber]);
+
             SetSettings(_gamesSettings[_gameNumber]);
+            Header2.Text = "Настройки игры №" + (_gameNumber + 1);
         }
     }
 
@@ -132,7 +154,7 @@ public partial class SetupMenu : Window
         }
 
         var priority = 1;
-        foreach (var setting in _gamesSettings)
+        foreach (var setting in _gamesSettings.Where(setting => setting.GameId != 0))
         {
             SettingsWrap.AddSettings(setting.SetPriority(priority++));
         }
@@ -152,7 +174,7 @@ public partial class SetupMenu : Window
             .FirstOrDefault(r => r.IsChecked ?? false);
 
         var gameId = ((ComboBox)Games.Children[_gameNumber]).SelectedIndex + 1;
-        var priority = Games.Children.Count;
+        var priority = _gameNumber + 1;
         var distanceValue = distance is null ? 0 : int.Parse((string)distance.Content);
         var isRedValue = isRed is not null && (isRed.IsChecked ?? false);
         var frequency = (FrequencyFlickerBox.SelectedIndex + 1) * 10;
@@ -160,7 +182,7 @@ public partial class SetupMenu : Window
         var redBrightness = (int)BrightRedColorSlider.Value;
         var blueBrightness = (int)BrightBlueColorSlider.Value;
         var level = (int)LevelSlider.Value;
-        var exerciseDuration = (int)(double.Parse(TimerTextBox.Text.Replace(",", ".") ?? "5",
+        var exerciseDuration = (int)(double.Parse(TimerTextBox.Text.Replace(",", "."),
             CultureInfo.InvariantCulture) * 60);
 
         var settings = new Settings
@@ -193,12 +215,12 @@ public partial class SetupMenu : Window
             radioButton.IsChecked = false;
         }
 
-        FrequencyFlickerBox.SelectedIndex = 3;
-        TypeFlickerBox.SelectedIndex = 2;
+        FrequencyFlickerBox.SelectedIndex = 0;
+        TypeFlickerBox.SelectedIndex = 0;
         BrightRedColorSlider.Value = 0;
         BrightBlueColorSlider.Value = 0;
         LevelSlider.Value = 0;
-        TimerTextBox.Text = "5";
+        TimerTextBox.Text = "0";
     }
 
     private void SetSettings(Settings settings)
@@ -250,8 +272,6 @@ public partial class SetupMenu : Window
             case 4:
                 new Merger(game).Show();
                 break;
-            default:
-                return;
         }
 
         NextGameTimer.Interval = new TimeSpan(0, 0, game.ExerciseDuration + 5);
@@ -281,8 +301,6 @@ public partial class SetupMenu : Window
             case 4:
                 new Merger(game).Show();
                 break;
-            default:
-                return;
         }
 
         NextGameTimer.Tick += PreNextGame;
@@ -292,6 +310,8 @@ public partial class SetupMenu : Window
 
     private void PreStartGameClick(object? sender, RoutedEventArgs e)
     {
+        _gamesSettings = _gamesSettings.Where(setting => setting.GameId != 0).ToList();
+
         _currentGame = 0;
 
         if (_gamesSettings.Count == 0) return;
@@ -315,25 +335,52 @@ public partial class SetupMenu : Window
         }
         else
         {
-            _gamesSettings.Insert(_gameNumber, settings);
+            var count = _gameNumber - _gamesSettings.Count;
+            for (var i = 0; i < count; i++)
+            {
+                _gamesSettings.Add(new Settings());
+            }
+
+            _gamesSettings.Add(settings);
         }
     }
 
     private void DeleteGameHandle(object? sender, EventArgs e)
     {
         if (Games.Children.Count == 0) return;
-
         var game = Games.Children[_gameNumber];
-        _gamesSettings.RemoveAt(_gameNumber);
-
-        _gameNumber -= 1;
-        if (_gameNumber > -1)
+        if (_gameNumber > -1 && _gameNumber < _gamesSettings.Count)
         {
-            ((ComboBox)Games.Children[_gameNumber]).FontWeight = FontWeight.Bold;
-            SetSettings(_gamesSettings[_gameNumber]);
+            _gamesSettings.RemoveAt(_gameNumber);
         }
 
+        _gameNumber -= 1;
         Games.Children.Remove(game);
+        if (Games.Children.Count > 0)
+        {
+            for (var i = 0; i < Games.Children.Count; i++)
+            {
+                Grid.SetRow((Control)Games.Children[i], i);
+            }
+
+            if (_gameNumber == -1)
+            {
+                _gameNumber = 0;
+            }
+
+            if (_gameNumber < _gamesSettings.Count)
+            {
+                SetSettings(_gamesSettings[_gameNumber]);
+            }
+
+            SelectGame((ComboBox)Games.Children[_gameNumber]);
+            Header2.Text = "Настройки игры №" + (_gameNumber + 1);
+        }
+        else
+        {
+            Header2.Text = "Настройки игры";
+            ResetSettings();
+        }
     }
 
     private void AddGameToGrid()
@@ -366,13 +413,14 @@ public partial class SetupMenu : Window
     {
         if (_gameNumber > -1)
         {
-            ((ComboBox)Games.Children[_gameNumber]).FontWeight = FontWeight.Normal;
+            UnselectGame((ComboBox)Games.Children[_gameNumber]);
         }
 
         _gameNumber = Games.Children.Count;
         AddGameToGrid();
-        ((ComboBox)Games.Children[_gameNumber]).FontWeight = FontWeight.Bold;
+        SelectGame((ComboBox)Games.Children[_gameNumber]);
         ResetSettings();
+        Header2.Text = "Настройки игры №" + (_gameNumber + 1);
     }
 
     private void ClickGame(object? sender, RoutedEventArgs e)
@@ -383,8 +431,8 @@ public partial class SetupMenu : Window
 
         if (newGame.Equals(oldGame)) return;
 
-        newGame.FontWeight = FontWeight.Bold;
-        oldGame.FontWeight = FontWeight.Normal;
+        SelectGame(newGame);
+        UnselectGame(oldGame);
 
         _gameNumber = Games.Children.IndexOf(newGame);
         if (_gameNumber < _gamesSettings.Count)
@@ -395,6 +443,20 @@ public partial class SetupMenu : Window
         {
             ResetSettings();
         }
+
+        Header2.Text = "Настройки игры №" + (_gameNumber + 1);
+    }
+    
+    private void SelectGame(TemplatedControl game)
+    {
+        game.BorderThickness = _selectedThickness;
+        game.Background = _selectedBackground;
+    }
+    
+    private void UnselectGame(TemplatedControl game)
+    {
+        game.BorderThickness = _unselectedThickness;
+        game.Background = _unselectedBackground;
     }
 
     private void AdaptToScreen()
@@ -406,6 +468,16 @@ public partial class SetupMenu : Window
         {
             comboBox.Width = buttonWidth;
             comboBox.FontSize = fontSize;
+        }
+
+        foreach (var radioButton in DistanceRadioButtons.Children.OfType<RadioButton>())
+        {
+            radioButton.FontSize = fontSize;
+        }
+
+        foreach (var radioButton in IsRedRadioButtons.Children.OfType<RadioButton>())
+        {
+            radioButton.FontSize = fontSize;
         }
 
         DefaultGame.Width = buttonWidth;
@@ -431,6 +503,7 @@ public partial class SetupMenu : Window
         BrightBlueColor.FontSize = fontSize;
         Level.FontSize = fontSize;
         Timer.FontSize = fontSize;
+        TimerTextBox.FontSize = fontSize;
         AddGame.FontSize = fontSize;
         SaveGame.FontSize = fontSize;
 

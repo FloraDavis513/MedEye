@@ -5,7 +5,7 @@ using System.Data.SQLite;
 
 namespace MedEye.DB
 {
-    struct Gamer 
+    struct Gamer
     {
         public int id { get; set; }
         public string first_name { get; set; }
@@ -19,15 +19,56 @@ namespace MedEye.DB
     static class Users
     {
         private static SortedDictionary<string, int> users = new SortedDictionary<string, int>();
-        public static void AddUser(string first_name, string second_name, string last_name, string birth_date, 
+
+        static Users()
+        {
+            var gamer = GetUserById(-1);
+            if (gamer.id != -1)
+            {
+                AddUser(new Gamer
+                {
+                    id = -1,
+                    first_name = "default",
+                    second_name = "default",
+                    last_name = "default",
+                    birth_date = "01.01.0001",
+                    sex = "default"
+                });
+            }
+        }
+
+        public static void AddUser(Gamer gamer)
+        {
+            using (SQLiteConnection conn = new SQLiteConnection(DBConst.DB_PATH))
+            {
+                using (SQLiteCommand cmd = new SQLiteCommand())
+                {
+                    string strSql = "INSERT INTO [Users] ([id], [first_name], [second_name], [last_name], " +
+                                    "[birth_date], [sex]) VALUES(@param6, @param1, @param2, @param3, @param4, @param5)";
+                    cmd.CommandText = strSql;
+                    cmd.Connection = conn;
+                    cmd.Parameters.Add(new SQLiteParameter("@param1", gamer.first_name));
+                    cmd.Parameters.Add(new SQLiteParameter("@param2", gamer.second_name));
+                    cmd.Parameters.Add(new SQLiteParameter("@param3", gamer.last_name));
+                    cmd.Parameters.Add(new SQLiteParameter("@param4", gamer.birth_date));
+                    cmd.Parameters.Add(new SQLiteParameter("@param5", gamer.sex));
+                    cmd.Parameters.Add(new SQLiteParameter("@param6", gamer.id));
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                    conn.Close();
+                }
+            }
+        }
+
+        public static void AddUser(string first_name, string second_name, string last_name, string birth_date,
             string sex)
         {
             using (SQLiteConnection conn = new SQLiteConnection(DBConst.DB_PATH))
             {
                 using (SQLiteCommand cmd = new SQLiteCommand())
                 {
-                    string strSql = "INSERT INTO[Users] ([first_name], [second_name], [last_name], [birth_date], " +
-                        "[sex]) VALUES(@param1, @param2, @param3, @param4, @param5)";
+                    string strSql = "INSERT INTO [Users] ([first_name], [second_name], [last_name], [birth_date], " +
+                                    "[sex]) VALUES(@param1, @param2, @param3, @param4, @param5)";
                     cmd.CommandText = strSql;
                     cmd.Connection = conn;
                     cmd.Parameters.Add(new SQLiteParameter("@param1", first_name));
@@ -42,7 +83,7 @@ namespace MedEye.DB
             }
         }
 
-        public static void UpdateUser(int user_id, string first_name, string second_name, string last_name, 
+        public static void UpdateUser(int user_id, string first_name, string second_name, string last_name,
             string birth_date, string sex)
         {
             using (SQLiteConnection conn = new SQLiteConnection(DBConst.DB_PATH))
@@ -50,7 +91,7 @@ namespace MedEye.DB
                 using (SQLiteCommand cmd = new SQLiteCommand())
                 {
                     string strSql = "UPDATE [Users] SET [first_name] = @param1, [second_name] = @param2, " +
-                        "[last_name] = @param3, [birth_date] = @param4, [sex] = @param5 WHERE [id] = @param6";
+                                    "[last_name] = @param3, [birth_date] = @param4, [sex] = @param5 WHERE [id] = @param6";
                     cmd.CommandText = strSql;
                     cmd.Connection = conn;
                     cmd.Parameters.Add(new SQLiteParameter("@param1", first_name));
@@ -104,11 +145,16 @@ namespace MedEye.DB
                         var second_name = sqlite_datareader.GetValue("second_name");
                         var last_name = sqlite_datareader.GetValue("last_name");
                         var name = $"{first_name} {second_name} {last_name}";
+
+                        if (user_id == -1) continue;
+
                         users.Add(name, user_id);
                     }
+
                     conn.Close();
                 }
             }
+
             return users;
         }
 
@@ -136,9 +182,11 @@ namespace MedEye.DB
                         gamer.sex = sqlite_datareader.GetString("sex");
                         gamer.birth_date = sqlite_datareader.GetString("birth_date");
                     }
+
                     conn.Close();
                 }
             }
+
             return gamer;
         }
     }

@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
 using MedEye.DB;
@@ -66,6 +67,16 @@ namespace MedEye.Views
                 users.Add(item.Key);
 
             UserList.Items = users;
+        }
+
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                Close();
+            }
+
+            base.OnKeyDown(e);
         }
 
         protected override void OnOpened(EventArgs e)

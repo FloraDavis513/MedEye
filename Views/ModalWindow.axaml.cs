@@ -1,6 +1,8 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using System;
+using Avalonia.Input;
+using MedEye.DB;
 
 namespace MedEye.Views
 {
@@ -47,8 +49,19 @@ namespace MedEye.Views
 
         private void WithoutClick(object? sender, RoutedEventArgs e)
         {
-            new SetupMenu(-1).Show();
+            var defaultGamer = Users.GetUserById(-1);
+            new SetupMenu(defaultGamer.id).Show();
             this.Close();
+        }
+
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                Close();
+            }
+
+            base.OnKeyDown(e);
         }
 
         protected override void OnOpened(EventArgs e)
