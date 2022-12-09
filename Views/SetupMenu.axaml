@@ -16,7 +16,7 @@
             <TextBlock Name="Header1" FontSize="36" Margin="0 5 0 0" TextAlignment="Center" TextWrapping="Wrap">
                 Игры
             </TextBlock>
-            <Grid RowDefinitions="*, *, *, *" HorizontalAlignment="Center"
+            <Grid RowDefinitions="*, *, *, *" HorizontalAlignment="Center" VerticalAlignment="Center"
                   Margin="0 0 0 0">
                 <ScrollViewer Name="GamesScroll" Grid.Row="0">
                     <Grid Name="Games" RowDefinitions="*, *, *" HorizontalAlignment="Center"
@@ -38,79 +38,64 @@
             <TextBlock Name="Header2" Margin="0 5 0 0" FontSize="36" TextAlignment="Center" TextWrapping="Wrap">
                 Настройки игры
             </TextBlock>
-            <Grid Name="SettingControls" RowDefinitions="*, *, *, *, *, *, *, *, *" HorizontalAlignment="Center"
-                  VerticalAlignment="Center" Margin="0 75 0 0">
-                <Grid Name="DistanceRadioButtons" Grid.Row="0" ColumnDefinitions="3*, *, *, *" VerticalAlignment="Center">
-                    <TextBlock Name="Distance" Grid.Column="0" FontSize="36" TextAlignment="Left" TextWrapping="Wrap">
-                        Расстояние до экрана
-                    </TextBlock>
-                    <RadioButton Grid.Column="1" IsChecked="False" GroupName="Distance" Content="55" Margin="10" />
-                    <RadioButton Grid.Column="2" IsChecked="False" GroupName="Distance" Content="60" Margin="10" />
-                    <RadioButton Grid.Column="3" IsChecked="False" GroupName="Distance" Content="65" Margin="10" />
+            <Grid Name="SettingControls" RowDefinitions="*, *, *, *, *, *, *, *, *" ColumnDefinitions="*, *"
+                  HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 75 0 0">
+                <TextBlock Name="Distance" Grid.Row="0" Grid.Column="0" TextAlignment="Left" TextWrapping="Wrap">
+                    Расстояние до экрана
+                </TextBlock>
+                <Grid Name="DistanceRadioButtons" Grid.Row="0" Grid.Column="1" ColumnDefinitions="*, *, *">
+                    <RadioButton Grid.Column="0" IsChecked="False" GroupName="Distance" Content="55" Margin="10" />
+                    <RadioButton Grid.Column="1" IsChecked="False" GroupName="Distance" Content="60" Margin="10" />
+                    <RadioButton Grid.Column="2" IsChecked="False" GroupName="Distance" Content="65" Margin="10" />
                 </Grid>
-                <Grid Name="IsRedRadioButtons" Grid.Row="1" ColumnDefinitions="2*, *, *" VerticalAlignment="Center">
-                    <TextBlock Name="LeftFilterColor" Grid.Column="0" FontSize="36" TextAlignment="Left"
-                               TextWrapping="Wrap">
-                        Цвет левого фильтра
-                    </TextBlock>
-                    <RadioButton Grid.Column="1" IsChecked="False" GroupName="LeftColor" Content="Красный" Margin="10" />
-                    <RadioButton Grid.Column="2" IsChecked="False" GroupName="LeftColor" Content="Синий" Margin="10" />
+                <TextBlock Name="LeftFilterColor" Grid.Row="1" Grid.Column="0" TextAlignment="Left" TextWrapping="Wrap">
+                    Цвет левого фильтра
+                </TextBlock>
+                <Grid Name="IsRedRadioButtons" Grid.Row="1" Grid.Column="1" ColumnDefinitions="*, *">
+                    <RadioButton Grid.Column="0" IsChecked="False" GroupName="LeftColor" Content="Красный" Margin="10" />
+                    <RadioButton Grid.Column="1" IsChecked="False" GroupName="LeftColor" Content="Синий" Margin="10" />
                 </Grid>
-                <Grid Grid.Row="2" ColumnDefinitions="*, *" VerticalAlignment="Center">
-                    <TextBlock Name="FrequencyFlickerText" Grid.Column="0" FontSize="36" VerticalAlignment="Center"
-                               TextAlignment="Left" TextWrapping="Wrap">
-                        Частота мерцания, Гц
-                    </TextBlock>
-                    <ComboBox Name="FrequencyFlickerBox" Grid.Column="1" SelectedIndex="3">
-                        <ComboBoxItem>10</ComboBoxItem>
-                        <ComboBoxItem>20</ComboBoxItem>
-                        <ComboBoxItem>30</ComboBoxItem>
-                        <ComboBoxItem>40</ComboBoxItem>
-                    </ComboBox>
-                </Grid>
-                <Grid Grid.Row="3" ColumnDefinitions="*, *" VerticalAlignment="Center">
-                    <TextBlock Name="TypeFlickerText" Grid.Column="0" FontSize="36" VerticalAlignment="Center"
-                               TextAlignment="Left" TextWrapping="Wrap">
-                        Тип мерцания
-                    </TextBlock>
-                    <ComboBox Name="TypeFlickerBox" Grid.Column="1" SelectedIndex="2">
-                        <ComboBoxItem>Красный</ComboBoxItem>
-                        <ComboBoxItem>Синий</ComboBoxItem>
-                        <ComboBoxItem>Одновременно</ComboBoxItem>
-                        <ComboBoxItem>Без мерцания</ComboBoxItem>
-                    </ComboBox>
-                </Grid>
-                <Grid Grid.Row="4" ColumnDefinitions="*, *" VerticalAlignment="Center">
-                    <TextBlock Name="BrightRedColor" Grid.Column="0" FontSize="36" TextAlignment="Left"
-                               TextWrapping="Wrap">
-                        Яркость красного цвета
-                    </TextBlock>
-                    <Slider Name="BrightRedColorSlider" Grid.Column="1" Maximum="100" Minimum="0"></Slider>
-                </Grid>
-                <Grid Grid.Row="5" ColumnDefinitions="*, *" VerticalAlignment="Center">
-                    <TextBlock Name="BrightBlueColor" Grid.Column="0" FontSize="36" TextAlignment="Left"
-                               TextWrapping="Wrap">
-                        Яркость синего цвета
-                    </TextBlock>
-                    <Slider Name="BrightBlueColorSlider" Grid.Column="1" Maximum="100" Minimum="0"></Slider>
-                </Grid>
-                <Grid Grid.Row="6" ColumnDefinitions="*, *" VerticalAlignment="Center">
-                    <TextBlock Name="Level" Grid.Column="0" FontSize="36" TextAlignment="Left" TextWrapping="Wrap">
-                        Уровень сложности
-                    </TextBlock>
-                    <Slider Name="LevelSlider" Grid.Column="1" Maximum="10" Minimum="0"></Slider>
-                </Grid>
-                <Grid Grid.Row="7" ColumnDefinitions="*, *" VerticalAlignment="Center">
-                    <TextBlock Name="Timer" Grid.Column="0" FontSize="36" TextAlignment="Left" TextWrapping="Wrap">
-                        Таймер (в минутах)
-                    </TextBlock>
-                    <TextBox Name="TimerTextBox" Text="5" Grid.Column="1"></TextBox>
-                </Grid>
-                <Grid Grid.Row="8" ColumnDefinitions="*, *" VerticalAlignment="Center">
-                    <Button Name="DeleteGame" Grid.Column="0" Margin="10">Удалить</Button>
-                    <Button Name="SaveGame" Grid.Column="1" Margin="10">Сохранить</Button>
-                </Grid>
+                <TextBlock Name="FrequencyFlickerText" Grid.Row="2" Grid.Column="0" TextAlignment="Left" TextWrapping="Wrap">
+                    Частота мерцания, Гц
+                </TextBlock>
+                <ComboBox Name="FrequencyFlickerBox" Grid.Row="2" Grid.Column="1" SelectedIndex="3">
+                    <ComboBoxItem>10</ComboBoxItem>
+                    <ComboBoxItem>20</ComboBoxItem>
+                    <ComboBoxItem>30</ComboBoxItem>
+                    <ComboBoxItem>40</ComboBoxItem>
+                </ComboBox>
+                <TextBlock Name="TypeFlickerText" Grid.Row="3" Grid.Column="0" TextAlignment="Left" TextWrapping="Wrap">
+                    Тип мерцания
+                </TextBlock>
+                <ComboBox Name="TypeFlickerBox" Grid.Row="3" Grid.Column="1" SelectedIndex="2">
+                    <ComboBoxItem>Красный</ComboBoxItem>
+                    <ComboBoxItem>Синий</ComboBoxItem>
+                    <ComboBoxItem>Одновременно</ComboBoxItem>
+                    <ComboBoxItem>Без мерцания</ComboBoxItem>
+                </ComboBox>
+                <TextBlock Name="BrightRedColor" Grid.Row="4" Grid.Column="0" TextAlignment="Left"
+                           TextWrapping="Wrap">
+                    Яркость красного цвета
+                </TextBlock>
+                <Slider Name="BrightRedColorSlider" Grid.Row="4" Grid.Column="1" Maximum="100" Minimum="0"></Slider>
+                <TextBlock Name="BrightBlueColor" Grid.Row="5" Grid.Column="0" TextAlignment="Left" TextWrapping="Wrap">
+                    Яркость синего цвета
+                </TextBlock>
+                <Slider Name="BrightBlueColorSlider" Grid.Row="5" Grid.Column="1" Maximum="100" Minimum="0"></Slider>
+                <TextBlock Name="Level" Grid.Row="6" Grid.Column="0" TextAlignment="Left" TextWrapping="Wrap">
+                    Уровень сложности
+                </TextBlock>
+                <Slider Name="LevelSlider" Grid.Row="6" Grid.Column="1" Maximum="10" Minimum="0"></Slider>
+                <TextBlock Name="Timer" Grid.Row="7" Grid.Column="0" TextAlignment="Left" TextWrapping="Wrap">
+                    Таймер (в минутах)
+                </TextBlock>
+                <TextBox Name="TimerTextBox" Text="0" Grid.Row="7" Grid.Column="1"></TextBox>
+                <Button Name="DeleteGame" Grid.Row="8" Grid.Column="0" Margin="10">Удалить</Button>
+                <Button Name="SaveGame" Grid.Row="8" Grid.Column="1" Margin="10">Сохранить</Button>
                 <Grid.Styles>
+                    <Style Selector="TextBlock">
+                        <Setter Property="VerticalAlignment" Value="Center"></Setter>
+                    </Style>
                     <Style Selector="Button">
                         <Setter Property="BorderBrush" Value="#00B1A7"></Setter>
                         <Setter Property="Background" Value="#CFE0F2"></Setter>
@@ -132,6 +117,11 @@
                         <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
                     </Style>
                     <Style Selector="Button:pointerover /template/ ContentPresenter">
+                        <Setter Property="BorderBrush" Value="Red"></Setter>
+                        <Setter Property="Background" Value="#CFE0F2"></Setter>
+                        <Setter Property="TextBlock.Foreground" Value="Red"></Setter>
+                    </Style>
+                    <Style Selector="ComboBox:pointerover /template/ ContentPresenter">
                         <Setter Property="BorderBrush" Value="Red"></Setter>
                         <Setter Property="Background" Value="#CFE0F2"></Setter>
                         <Setter Property="TextBlock.Foreground" Value="Red"></Setter>

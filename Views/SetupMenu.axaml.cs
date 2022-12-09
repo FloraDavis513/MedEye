@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Threading;
@@ -17,6 +18,12 @@ public partial class SetupMenu : Window
     private int _gameNumber = -1;
     private List<Settings> _gamesSettings;
     private DispatcherTimer NextGameTimer = new DispatcherTimer();
+
+    private readonly Thickness _unselectedThickness = new(2.5);
+    private readonly SolidColorBrush _unselectedBackground = new(Color.Parse("#CFE0F2"));
+    
+    private readonly Thickness _selectedThickness = new(5);
+    private readonly SolidColorBrush _selectedBackground = new(Color.Parse("#93B9E2"));
 
 
     public SetupMenu()
@@ -120,8 +127,10 @@ public partial class SetupMenu : Window
                 game.SelectedIndex = settings.GameId - 1;
             }
 
-            ((ComboBox)Games.Children[_gameNumber]).FontWeight = FontWeight.Bold;
+            SelectGame((ComboBox)Games.Children[_gameNumber]);
+
             SetSettings(_gamesSettings[_gameNumber]);
+            Header2.Text = "Настройки игры №" + (_gameNumber + 1);
         }
     }
 
@@ -364,7 +373,7 @@ public partial class SetupMenu : Window
                 SetSettings(_gamesSettings[_gameNumber]);
             }
 
-            ((ComboBox)Games.Children[_gameNumber]).FontWeight = FontWeight.Bold;
+            SelectGame((ComboBox)Games.Children[_gameNumber]);
             Header2.Text = "Настройки игры №" + (_gameNumber + 1);
         }
         else
@@ -404,12 +413,12 @@ public partial class SetupMenu : Window
     {
         if (_gameNumber > -1)
         {
-            ((ComboBox)Games.Children[_gameNumber]).FontWeight = FontWeight.Normal;
+            UnselectGame((ComboBox)Games.Children[_gameNumber]);
         }
 
         _gameNumber = Games.Children.Count;
         AddGameToGrid();
-        ((ComboBox)Games.Children[_gameNumber]).FontWeight = FontWeight.Bold;
+        SelectGame((ComboBox)Games.Children[_gameNumber]);
         ResetSettings();
         Header2.Text = "Настройки игры №" + (_gameNumber + 1);
     }
@@ -422,8 +431,8 @@ public partial class SetupMenu : Window
 
         if (newGame.Equals(oldGame)) return;
 
-        newGame.FontWeight = FontWeight.Bold;
-        oldGame.FontWeight = FontWeight.Normal;
+        SelectGame(newGame);
+        UnselectGame(oldGame);
 
         _gameNumber = Games.Children.IndexOf(newGame);
         if (_gameNumber < _gamesSettings.Count)
@@ -436,6 +445,18 @@ public partial class SetupMenu : Window
         }
 
         Header2.Text = "Настройки игры №" + (_gameNumber + 1);
+    }
+    
+    private void SelectGame(TemplatedControl game)
+    {
+        game.BorderThickness = _selectedThickness;
+        game.Background = _selectedBackground;
+    }
+    
+    private void UnselectGame(TemplatedControl game)
+    {
+        game.BorderThickness = _unselectedThickness;
+        game.Background = _unselectedBackground;
     }
 
     private void AdaptToScreen()
