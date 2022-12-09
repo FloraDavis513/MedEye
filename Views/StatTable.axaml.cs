@@ -36,6 +36,7 @@ namespace MedEye.Views
             InitializeComponent();
 
             currentId = gamer_id;
+            Header.Text = $"Результат игрока № {currentId} по игре \"Тир\"";
 
             ToRegistry.Click += RegistryClick;
             Load.Click += ResultsClick;
@@ -47,19 +48,20 @@ namespace MedEye.Views
 
             close_timer.Tick += CloseAfterRoute;
             close_timer.Interval = new TimeSpan(1000000);
-
+            
             var current_scores = ScoresWrap.GetScores(gamer_id, 1);
-            if (current_scores.Count == 0)
-                return;
             var dataSource = new ObservableCollection<string[]>();
             foreach (var score in current_scores)
             {
-                dataSource.Add(new[]{ score.DateCompletion.ToString(), score.MeanDeviationsX.ToString(),
-                                       score.MeanDeviationsY.ToString(), score.MinDeviationsX.ToString(),
-                                       score.MinDeviationsY.ToString(), score.MaxDeviationsX.ToString(),
-                                       score.MaxDeviationsY.ToString(), score.Level.ToString(), score.Score.ToString(),
+                dataSource.Add(new[]{ score.DateCompletion.Substring(0, score.DateCompletion.IndexOf(" ")), Math.Round(score.MeanDeviationsX, 1).ToString(),
+                                       Math.Round(score.MeanDeviationsY, 1).ToString(), Math.Round(score.MinDeviationsX, 1).ToString(),
+                                       Math.Round(score.MinDeviationsY, 1).ToString(), Math.Round(score.MaxDeviationsX, 1).ToString(),
+                                       Math.Round(score.MaxDeviationsY, 1).ToString(), score.Level.ToString(), score.Score.ToString(),
                                        score.Involvement.ToString()});
             }
+            // Fake row for empty table.
+            if(dataSource.Count == 0)
+                dataSource.Add(new[]{ "", "", "", "", "", "", "", "", "", ""});
             string[] headers = { "Дата", "Среднее\nотклонение\nпо X", "Среднее\nотклонение\nпо Y",
                                  "Мин.\nотклонение\nпо X", "Мин.\nотклонение\nпо Y",
                                  "Макс.\nотклонение\nпо X", "Макс.\nотклонение\nпо Y",
@@ -70,19 +72,6 @@ namespace MedEye.Views
                 Results.Columns.Add(new DataGridTextColumn { Header = $"{headers[idx]}", Binding = new Binding($"[{idx}]") });
             }
             Results.Items = dataSource;
-        }
-
-        public StatTable(string game_name)
-        {
-            InitializeComponent();
-
-            Header.Text = $"Результат игрока № xx по игре \"{game_name}\"";
-
-            ToRegistry.Click += RegistryClick;
-            Load.Click += ResultsClick;
-
-            close_timer.Tick += CloseAfterRoute;
-            close_timer.Interval = new TimeSpan(1000000);
         }
 
         protected override void OnOpened(EventArgs e)
@@ -136,25 +125,25 @@ namespace MedEye.Views
 
         private void TyrStatClick(object? sender, RoutedEventArgs e)
         {
-            Header.Text = $"Результат игрока № xx по игре \"Тир\"";
+            Header.Text = $"Результат игрока № {currentId} по игре \"Тир\"";
             UpdateTable(1);
         }
 
         private void FollowingStatClick(object? sender, RoutedEventArgs e)
         {
-            Header.Text = $"Результат игрока № xx по игре \"Погоня\"";
+            Header.Text = $"Результат игрока № {currentId} по игре \"Погоня\"";
             UpdateTable(2);
         }
 
         private void CombinationStatClick(object? sender, RoutedEventArgs e)
         {
-            Header.Text = $"Результат игрока № xx по игре \"Совмещение\"";
+            Header.Text = $"Результат игрока № {currentId} по игре \"Совмещение\"";
             UpdateTable(3);
         }
 
         private void MergerStatClick(object? sender, RoutedEventArgs e)
         {
-            Header.Text = $"Результат игрока № xx по игре \"Слияние\"";
+            Header.Text = $"Результат игрока № {currentId} по игре \"Слияние\"";
             UpdateTable(4);
         }
 
@@ -176,23 +165,25 @@ namespace MedEye.Views
             GetCombination.FontSize = 32 * (this.ClientSize.Width / 1920);
             GetMerger.FontSize = 32 * (this.ClientSize.Width / 1920);
             Header.FontSize = 32 * (this.ClientSize.Width / 1920);
+            Results.FontSize = 24 * (this.ClientSize.Width / 1920);
         }
 
         private void UpdateTable(int game_id)
         {
             Results.Columns.Clear();
             var current_scores = ScoresWrap.GetScores(currentId, game_id);
-            if (current_scores.Count == 0)
-                return;
             var dataSource = new ObservableCollection<string[]>();
             foreach (var score in current_scores)
             {
-                dataSource.Add(new[]{ score.DateCompletion.ToString(), score.MeanDeviationsX.ToString(),
-                                       score.MeanDeviationsY.ToString(), score.MinDeviationsX.ToString(),
-                                       score.MinDeviationsY.ToString(), score.MaxDeviationsX.ToString(),
-                                       score.MaxDeviationsY.ToString(), score.Level.ToString(), 
-                                       score.Score.ToString(), score.Involvement.ToString()});
+                dataSource.Add(new[]{ score.DateCompletion.Substring(0, score.DateCompletion.IndexOf(" ")), Math.Round(score.MeanDeviationsX, 1).ToString(),
+                                       Math.Round(score.MeanDeviationsY, 1).ToString(), Math.Round(score.MinDeviationsX, 1).ToString(),
+                                       Math.Round(score.MinDeviationsY, 1).ToString(), Math.Round(score.MaxDeviationsX, 1).ToString(),
+                                       Math.Round(score.MaxDeviationsY, 1).ToString(), score.Level.ToString(), score.Score.ToString(),
+                                       score.Involvement.ToString()});
             }
+            // Fake row for empty table.
+            if (dataSource.Count == 0)
+                dataSource.Add(new[] { "", "", "", "", "", "", "", "", "", "" });
             string[] headers = { "Дата", "Среднее\nотклонение\nпо X", "Среднее\nотклонение\nпо Y",
                                  "Мин.\nотклонение\nпо X", "Мин.\nотклонение\nпо Y",
                                  "Макс.\nотклонение\nпо X", "Макс.\nотклонение\nпо Y",

@@ -41,24 +41,24 @@ namespace MedEye.ExcelLoader
                 var scores = ScoresWrap.GetScores(user_id, i + 1);
                 for (int j = 2; j < scores.Count() + 2; ++j)
                 {
-                    sheet.Cell("A" + j.ToString()).Value = scores[j - 2].DateCompletion;
+                    sheet.Cell("A" + j.ToString()).Value = scores[j - 2].DateCompletion.Substring(0, scores[j - 2].DateCompletion.IndexOf(" "));
                     sheet.Cell("A" + j.ToString()).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-                    sheet.Cell("B" + j.ToString()).Value = scores[j - 2].MeanDeviationsX;
+                    sheet.Cell("B" + j.ToString()).Value = Math.Round(scores[j - 2].MeanDeviationsX, 1);
                     sheet.Cell("B" + j.ToString()).DataType = XLDataType.Text;
                     sheet.Cell("B" + j.ToString()).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-                    sheet.Cell("C" + j.ToString()).Value = scores[j - 2].MeanDeviationsY;
+                    sheet.Cell("C" + j.ToString()).Value = Math.Round(scores[j - 2].MeanDeviationsY, 1);
                     sheet.Cell("C" + j.ToString()).DataType = XLDataType.Text;
                     sheet.Cell("C" + j.ToString()).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-                    sheet.Cell("D" + j.ToString()).Value = scores[j - 2].MaxDeviationsX;
+                    sheet.Cell("D" + j.ToString()).Value = Math.Round(scores[j - 2].MaxDeviationsX, 1);
                     sheet.Cell("D" + j.ToString()).DataType = XLDataType.Text;
                     sheet.Cell("D" + j.ToString()).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-                    sheet.Cell("E" + j.ToString()).Value = scores[j - 2].MaxDeviationsY;
+                    sheet.Cell("E" + j.ToString()).Value = Math.Round(scores[j - 2].MaxDeviationsY, 1);
                     sheet.Cell("E" + j.ToString()).DataType = XLDataType.Text;
                     sheet.Cell("E" + j.ToString()).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-                    sheet.Cell("F" + j.ToString()).Value = scores[j - 2].MinDeviationsX;
+                    sheet.Cell("F" + j.ToString()).Value = Math.Round(scores[j - 2].MinDeviationsX, 1);
                     sheet.Cell("F" + j.ToString()).DataType = XLDataType.Text;
                     sheet.Cell("F" + j.ToString()).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-                    sheet.Cell("G" + j.ToString()).Value = scores[j - 2].MinDeviationsY;
+                    sheet.Cell("G" + j.ToString()).Value = Math.Round(scores[j - 2].MinDeviationsY, 1);
                     sheet.Cell("G" + j.ToString()).DataType = XLDataType.Text;
                     sheet.Cell("G" + j.ToString()).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
                     sheet.Cell("H" + j.ToString()).Value = scores[j - 2].Level;
@@ -72,7 +72,9 @@ namespace MedEye.ExcelLoader
                     sheet.Cell("J" + j.ToString()).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
                 }
             }
-            xlsWorkbook.SaveAs("NewExcelFile.xlsx"); //Save the excel file
+            var current_user = Users.GetUserById(user_id);
+            var fio = current_user.first_name + " " + current_user.second_name + " " + current_user.last_name;
+            xlsWorkbook.SaveAs($"{fio}.xlsx"); //Save the excel file
         }
     }
 }
