@@ -22,7 +22,7 @@
     <Button Name="GetMerger" Grid.Row="1" Grid.Column="3" HorizontalAlignment="Center">
       Игра "Слияние"
     </Button>
-    <DataGrid Name="Results" Opacity="4" Grid.Row="2" Grid.ColumnSpan="4" Background="White" Margin="25 0 25 0" FontSize="32" ColumnWidth="*">
+    <DataGrid Name="Results" Opacity="4" Grid.Row="2" Grid.ColumnSpan="4" Background="White" Margin="25 0 25 0" ColumnWidth="*">
       <DataGrid.Styles>
         <Style Selector="DataGridCell">
           <Setter Property="HorizontalAlignment" Value="Center" />
