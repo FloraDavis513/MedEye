@@ -3,6 +3,7 @@ using Avalonia.Interactivity;
 using System;
 using Avalonia.Input;
 using MedEye.DB;
+using Avalonia;
 
 namespace MedEye.Views
 {
@@ -74,6 +75,8 @@ namespace MedEye.Views
         {
             this.Width = windowWidth;
             this.Height = windowHeight;
+            this.Position = new PixelPoint( (int)(432.5 * (mainWindowWidth / 1920)),
+                                            (int)(240 * (mainWindowHeight / 1080)));
             var buttonWidth = windowWidth / 3;
 
             With.Width = buttonWidth;
