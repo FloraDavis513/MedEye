@@ -7,6 +7,7 @@ using MedEye.DB;
 using System.Collections.ObjectModel;
 using DynamicData;
 using MedEye.ExcelLoader;
+using Avalonia.Styling;
 
 namespace MedEye.Views
 {
@@ -45,6 +46,11 @@ namespace MedEye.Views
             GetFollowing.Click += FollowingStatClick;
             GetCombination.Click += CombinationStatClick;
             GetMerger.Click += MergerStatClick;
+
+            GetTyr.IsEnabled = false;
+            GetFollowing.IsEnabled = true;
+            GetCombination.IsEnabled = true;
+            GetMerger.IsEnabled = true;
 
             close_timer.Tick += CloseAfterRoute;
             close_timer.Interval = new TimeSpan(1000000);
@@ -113,7 +119,7 @@ namespace MedEye.Views
         {
             try
             {
-                ExcelGenerator.GenerateExcelByUserId(0);
+                ExcelGenerator.GenerateExcelByUserId(currentId);
             }
             catch(Exception ex)
             {
@@ -126,24 +132,40 @@ namespace MedEye.Views
         private void TyrStatClick(object? sender, RoutedEventArgs e)
         {
             Header.Text = $"Результат игрока № {currentId} по игре \"Тир\"";
+            GetTyr.IsEnabled = false;
+            GetFollowing.IsEnabled = true;
+            GetCombination.IsEnabled = true;
+            GetMerger.IsEnabled = true;
             UpdateTable(1);
         }
 
         private void FollowingStatClick(object? sender, RoutedEventArgs e)
         {
             Header.Text = $"Результат игрока № {currentId} по игре \"Погоня\"";
+            GetTyr.IsEnabled = true;
+            GetFollowing.IsEnabled = false;
+            GetCombination.IsEnabled = true;
+            GetMerger.IsEnabled = true;
             UpdateTable(2);
         }
 
         private void CombinationStatClick(object? sender, RoutedEventArgs e)
         {
             Header.Text = $"Результат игрока № {currentId} по игре \"Совмещение\"";
+            GetTyr.IsEnabled = true;
+            GetFollowing.IsEnabled = true;
+            GetCombination.IsEnabled = false;
+            GetMerger.IsEnabled = true;
             UpdateTable(3);
         }
 
         private void MergerStatClick(object? sender, RoutedEventArgs e)
         {
             Header.Text = $"Результат игрока № {currentId} по игре \"Слияние\"";
+            GetTyr.IsEnabled = true;
+            GetFollowing.IsEnabled = true;
+            GetCombination.IsEnabled = true;
+            GetMerger.IsEnabled = false;
             UpdateTable(4);
         }
 

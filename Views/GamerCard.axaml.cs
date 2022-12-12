@@ -33,7 +33,7 @@ namespace MedEye.Views
             LastName.Text = current_gamer.last_name;
             Sex.Text = current_gamer.sex;
             BirthDate.Text = current_gamer.birth_date;
-            GamerHeader.Text = $"---------------- Карта игрока № {current_gamer.id} ----------------";
+            GamerHeader.Text = $"―――――――― Карта игрока № {current_gamer.id} ――――――――";
 
             close_timer.Tick += CloseAfterRoute;
             close_timer.Interval = new TimeSpan(1000000);
@@ -94,8 +94,8 @@ namespace MedEye.Views
         private void SaveClick(object? sender, RoutedEventArgs e)
         {
             if (current_gamer.id == -1)
-                Users.AddUser(FirstName.Text, SecondName.Text,
-                    LastName.Text, BirthDate.Text, Sex.Text);
+                Users.AddUser(FirstName.Text != null ? FirstName.Text : "", SecondName.Text != null ? SecondName.Text : "",
+                    LastName.Text != null ? LastName.Text : "", BirthDate.Text != null ? BirthDate.Text : "", Sex.Text != null ? Sex.Text : "");
             else
             {
                 Users.UpdateUser(current_gamer.id, FirstName.Text, SecondName.Text,
