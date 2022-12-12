@@ -85,7 +85,7 @@
                 <TextBlock Name="Level" Grid.Row="6" Grid.Column="0" TextAlignment="Left" TextWrapping="Wrap">
                     Уровень сложности
                 </TextBlock>
-                <Slider Name="LevelSlider" Grid.Row="6" Grid.Column="1" Maximum="10" Minimum="0"></Slider>
+                <Slider Name="LevelSlider" Grid.Row="6" Grid.Column="1" Maximum="5" Minimum="1"></Slider>
                 <TextBlock Name="Timer" Grid.Row="7" Grid.Column="0" TextAlignment="Left" TextWrapping="Wrap">
                     Таймер (в минутах)
                 </TextBlock>

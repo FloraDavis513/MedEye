@@ -29,10 +29,13 @@ public partial class Following : Window
 
     // Close game
     private static readonly DispatcherTimer CloseGameTimer = new DispatcherTimer();
+    private bool _isClosing = false;
 
     // Counter for current color.
     private int _currentColor = 0;
 
+
+    private int _level = 0;
     private int _score = 0;
 
     //For moving target.
@@ -60,6 +63,9 @@ public partial class Following : Window
         Canvas.SetTop(Target, Rnd.Next(0, Convert.ToInt32(this.ClientSize.Height - Target.Height)));
         Canvas.SetLeft(Target, Rnd.Next(0, Convert.ToInt32(this.ClientSize.Width - Target.Width)));
 
+        Canvas.SetTop(Stalker, Rnd.Next(0, Convert.ToInt32(this.ClientSize.Height - Target.Height)));
+        Canvas.SetLeft(Stalker, Rnd.Next(0, Convert.ToInt32(this.ClientSize.Width - Target.Width)));
+
         _direct = Rnd.Next(360);
         _dx = _lenD * Math.Cos(_direct);
         _dy = _lenD * Math.Sin(_direct);
@@ -68,6 +74,7 @@ public partial class Following : Window
         CloseGameTimer.Interval = new TimeSpan(0, 5, 0);
 
         SetDefaultScores(0, 2, 1);
+        SetDifficultLevel(0);
         StartBlink();
         StartMoving();
         CloseGameTimer.Start();
@@ -82,6 +89,9 @@ public partial class Following : Window
         Canvas.SetTop(Target, Rnd.Next(0, Convert.ToInt32(this.ClientSize.Height - Target.Height)));
         Canvas.SetLeft(Target, Rnd.Next(0, Convert.ToInt32(this.ClientSize.Width - Target.Width)));
 
+        Canvas.SetTop(Stalker, Rnd.Next(0, Convert.ToInt32(this.ClientSize.Height - Target.Height)));
+        Canvas.SetLeft(Stalker, Rnd.Next(0, Convert.ToInt32(this.ClientSize.Width - Target.Width)));
+
         _direct = Rnd.Next(360);
         _dx = _lenD * Math.Cos(_direct);
         _dy = _lenD * Math.Sin(_direct);
@@ -90,6 +100,7 @@ public partial class Following : Window
         CloseGameTimer.Interval = new TimeSpan(0, 0, settings.ExerciseDuration);
 
         SetDefaultScores(settings.UserId, settings.GameId, settings.Level);
+        SetDifficultLevel(settings.Level - 1);
 
         StartBlink(settings.FlickerMode, settings.Frequency);
         StartMoving();
@@ -192,6 +203,8 @@ public partial class Following : Window
 
     private void CloseGame(object? sender, EventArgs e)
     {
+        _isClosing = true;
+
         StopTimer();
 
         var trackerResult = Tracker.Tracker.GetResult();
@@ -232,8 +245,9 @@ public partial class Following : Window
 
     protected override void OnKeyDown(KeyEventArgs e)
     {
-        if (e.Key == Key.Escape)
+        if (e.Key == Key.Escape && !_isClosing)
         {
+            _isClosing = true;
             StopTimer();
             CloseGame(this, e);
         }
@@ -270,34 +284,28 @@ public partial class Following : Window
 
     private void CheckTargetInStalker()
     {
-        var targetX = Canvas.GetLeft(Target);
-        var targetY = Canvas.GetTop(Target);
+        var targetCenterX = Canvas.GetLeft(Target) + Target.Width / 2;
+        var targetCenterY = Canvas.GetTop(Target) + Target.Height / 2;
 
-        var stalkerX = Canvas.GetLeft(Stalker);
-        var stalkerY = Canvas.GetTop(Stalker);
-
-        if ((targetX > stalkerX
-             && targetX < stalkerX + Stalker.Width
-             && targetY >= stalkerY
-             && targetY <= stalkerY + Stalker.Height) ||
-            (targetX + Target.Width > stalkerX
-             && targetX + Target.Width < stalkerX + Stalker.Width
-             && targetY + Target.Height >= stalkerY
-             && targetY + Target.Height <= stalkerY + Stalker.Height))
+        if (targetCenterX >= Canvas.GetLeft(Stalker)
+            && targetCenterX <= Canvas.GetLeft(Stalker) + Stalker.Width
+            && targetCenterY >= Canvas.GetTop(Stalker)
+            && targetCenterY <= Canvas.GetTop(Stalker) + Stalker.Height)
         {
             _score += _score < 10 ? 1 : -10;
+            _scores.Score += 1;
+            _scores.Score %= 100;
         }
         else
         {
             _score -= _score > 0 ? 1 : 0;
+            _scores.Score -= 1;
+            _scores.Score %= 100;
         }
 
-        if (_score == 10 && Target.Height > 50 && Stalker.Height > 100)
+        if (_score == 10 && _level < DifficultConst.TYR_SIZES.Length - 1)
         {
-            Target.Height -= 5;
-            Target.Width -= 5;
-            Stalker.Height -= 10;
-            Stalker.Width -= 10;
+            SetDifficultLevel(_level + 1);
             _currentColor = (_currentColor + 1) % ColorConst.AMBLYOPIA_COLORS.Length;
         }
     }
@@ -347,19 +355,15 @@ public partial class Following : Window
         _scores.MeanDeviationsX = (_scores.MeanDeviationsX * _countScores + offsetX) / (_countScores + 1);
         _scores.MeanDeviationsY = (_scores.MeanDeviationsY * _countScores + offsetY) / (_countScores + 1);
         _countScores++;
+    }
 
-        if (targetCenterX >= Canvas.GetLeft(Stalker)
-            && targetCenterX <= Canvas.GetLeft(Stalker) + Stalker.Width
-            && targetCenterY >= Canvas.GetTop(Stalker)
-            && targetCenterY <= Canvas.GetTop(Stalker) + Stalker.Height)
-        {
-            _scores.Score += 1;
-            _scores.Score %= 100;
-        }
-        else
-        {
-            _scores.Score -= 1;
-            _scores.Score %= 100;
-        }
+    public void SetDifficultLevel(int level)
+    {
+        _level = level;
+        Stalker.Height = DifficultConst.TYR_SIZES[level];
+        Stalker.Width = DifficultConst.TYR_SIZES[level];
+        Target.Height = DifficultConst.TYR_SIZES[level] / 2.0;
+        Target.Width = DifficultConst.TYR_SIZES[level] / 2.0;
+        Target.CornerRadius = CornerRadius.Parse((DifficultConst.TYR_SIZES[level] / 2).ToString());
     }
 }

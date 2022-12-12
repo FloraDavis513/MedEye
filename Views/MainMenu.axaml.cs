@@ -16,7 +16,11 @@ namespace MedEye.Views
             InitializeComponent();
 
             var button = this.FindControl<Button>("Exit");
-            button.Click += ExitClick;
+            button.Click += (s, e) =>
+            {
+                new ConfirmAction(ClientSize.Width, ClientSize.Height,
+                    "Вы уверены, что хотите выйти?", ExitClick).Show();
+            };
 
             var button2 = this.FindControl<Button>("Cabinet");
             button2.Click += CabinetClick;

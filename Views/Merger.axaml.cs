@@ -29,6 +29,7 @@ namespace MedEye.Views
         private Scores _scores = new Scores();
 
         private readonly EventHandler<EventArgs> _nextGame = (sender, args) => { };
+        private bool _isClosing = false;
 
         public Merger()
         {
@@ -84,8 +85,9 @@ namespace MedEye.Views
 
         protected override void OnKeyDown(KeyEventArgs e)
         {
-            if (e.Key == Key.Escape)
+            if (e.Key == Key.Escape && !_isClosing)
             {
+                _isClosing = true;
                 if (after_move_reset_timer.IsEnabled)
                     after_move_reset_timer.Stop();
                 CloseGame(this, e);
@@ -212,6 +214,8 @@ namespace MedEye.Views
 
         private void CloseGame(object? sender, EventArgs e)
         {
+            _isClosing = true;
+
             PartOneBlinkTimer.Stop();
             PartTwoBlinkTimer.Stop();
             CloseGameTimer.Stop();

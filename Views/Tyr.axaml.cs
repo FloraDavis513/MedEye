@@ -43,6 +43,7 @@ namespace MedEye.Views
         private Scores _scores = new Scores();
 
         private readonly EventHandler<EventArgs> _nextGame = (sender, args) => { };
+        private bool _isClosing = false;
 
         public Tyr()
         {
@@ -69,6 +70,7 @@ namespace MedEye.Views
             CloseGameTimer.Interval = new TimeSpan(0, 5, 0);
 
             SetDefaultScores(0, 1, 1);
+            SetDifficultLevel(0);
 
             StartBlink(4);
 
@@ -96,6 +98,7 @@ namespace MedEye.Views
             CloseGameTimer.Interval = new TimeSpan(0, 0, settings.ExerciseDuration);
 
             SetDefaultScores(settings.UserId, settings.GameId, settings.Level);
+            SetDifficultLevel(settings.Level - 1);
 
             StartBlink(settings.FlickerMode, settings.Frequency);
 
@@ -159,8 +162,9 @@ namespace MedEye.Views
 
         protected override void OnKeyDown(KeyEventArgs e)
         {
-            if (e.Key == Key.Escape)
+            if (e.Key == Key.Escape && !_isClosing)
             {
+                _isClosing = true;
                 if (after_move_reset_timer.IsEnabled)
                     after_move_reset_timer.Stop();
                 if (flash_timer.IsEnabled)
@@ -263,6 +267,8 @@ namespace MedEye.Views
 
         private void CloseGame(object? sender, EventArgs e)
         {
+            _isClosing = true;
+            
             TargetBlinkTimer.Stop();
             ScopeBlinkTimer.Stop();
             CloseGameTimer.Stop();

@@ -40,7 +40,11 @@ public partial class SetupMenu : Window
         };
         StartGame.Click += PreStartGameClick;
         AddGame.Click += AddGameHandle;
-        SaveGame.Click += SaveGameHandle;
+        SaveGame.Click += (s, e) =>
+        {
+            new ConfirmAction(ClientSize.Width, ClientSize.Height,
+                "Вы уверены, что хотите сохранить изменения?", SaveGameHandle).Show();
+        };
         DeleteGame.Click += (s, e) =>
         {
             if (Games.Children.Count == 0) return;
@@ -82,7 +86,11 @@ public partial class SetupMenu : Window
         };
         StartGame.Click += PreStartGameClick;
         AddGame.Click += AddGameHandle;
-        SaveGame.Click += SaveGameHandle;
+        SaveGame.Click += (s, e) =>
+        {
+            new ConfirmAction(ClientSize.Width, ClientSize.Height,
+                "Вы уверены, что хотите сохранить изменения?", SaveGameHandle).Show();
+        };
         DeleteGame.Click += (s, e) =>
         {
             if (Games.Children.Count == 0) return;
