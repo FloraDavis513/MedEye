@@ -48,6 +48,8 @@ public partial class Following : Window
     private long _countScores = 0;
     private Scores _scores = new Scores();
 
+    private readonly EventHandler<EventArgs> _nextGame = (sender, args) => { };
+
     public Following()
     {
         InitializeComponent();
@@ -71,7 +73,7 @@ public partial class Following : Window
         CloseGameTimer.Start();
     }
 
-    public Following(Settings settings)
+    public Following(Settings settings, EventHandler<EventArgs> nextGame)
     {
         InitializeComponent();
 #if DEBUG
@@ -91,6 +93,8 @@ public partial class Following : Window
 
         StartBlink(settings.FlickerMode, settings.Frequency);
         StartMoving();
+
+        _nextGame = nextGame;
         CloseGameTimer.Start();
     }
 
@@ -101,9 +105,6 @@ public partial class Following : Window
 
         StalkerBlinkTimer.Tick += StalkerBlink;
         StalkerBlinkTimer.Interval = new TimeSpan(0, 0, 0, (int)(1.0 / frequency));
-
-        //ChangeBlinkTimer.Tick += ChangeBlink;
-        //ChangeBlinkTimer.Interval = new TimeSpan(0, 1, 0);
 
         switch (mode)
         {
@@ -142,7 +143,6 @@ public partial class Following : Window
         DirectRotationTimer.Stop();
         TargetBlinkTimer.Stop();
         StalkerBlinkTimer.Stop();
-        //ChangeBlinkTimer.Stop();
         CloseGameTimer.Stop();
     }
 
@@ -205,7 +205,7 @@ public partial class Following : Window
 
         CloseGameTimer.Tick -= CloseGame;
         CloseGameTimer.Tick += CloseGameAfterShowResult;
-        CloseGameTimer.Interval = new TimeSpan(0, 0, 5);
+        CloseGameTimer.Interval = new TimeSpan(0, 0, NumberConst.ResultsDisplayTime);
         CloseGameTimer.Start();
     }
 
@@ -213,9 +213,9 @@ public partial class Following : Window
     {
         Result.Content = "Результат игры:\n" + _scores;
         Result.FontSize = 32 * (ClientSize.Width / 1920);
-        Result.Height = ClientSize.Height / 3 - 25;
+        Result.Height = ClientSize.Height / 2.5 - 25;
         Result.Width = ClientSize.Width / 2 - 25;
-        Log.Height = ClientSize.Height / 3;
+        Log.Height = ClientSize.Height / 2.5;
         Log.Width = ClientSize.Width / 2;
         Log.CornerRadius = new CornerRadius(15);
         Log.Opacity = 1;
@@ -226,6 +226,7 @@ public partial class Following : Window
     private void CloseGameAfterShowResult(object? sender, EventArgs e)
     {
         CloseGameTimer.Stop();
+        _nextGame(sender, e);
         Close();
     }
 
@@ -234,7 +235,7 @@ public partial class Following : Window
         if (e.Key == Key.Escape)
         {
             StopTimer();
-            Close();
+            CloseGame(this, e);
         }
 
         base.OnKeyDown(e);

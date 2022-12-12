@@ -4,9 +4,8 @@ using Avalonia.Input;
 using Avalonia.Media;
 using Avalonia.Threading;
 using MedEye.Consts;
-using MedEye.Tracker;
-using System;
 using System.Globalization;
+using Avalonia.Interactivity;
 using MedEye.DB;
 
 namespace MedEye.Views
@@ -43,6 +42,8 @@ namespace MedEye.Views
         private long _countScores = 0;
         private Scores _scores = new Scores();
 
+        private readonly EventHandler<EventArgs> _nextGame = (sender, args) => { };
+
         public Tyr()
         {
             InitializeComponent();
@@ -70,10 +71,11 @@ namespace MedEye.Views
             SetDefaultScores(0, 1, 1);
 
             StartBlink(4);
+
             CloseGameTimer.Start();
         }
 
-        public Tyr(Settings settings)
+        public Tyr(Settings settings, EventHandler<EventArgs> nextGame)
         {
             InitializeComponent();
 
@@ -96,6 +98,8 @@ namespace MedEye.Views
             SetDefaultScores(settings.UserId, settings.GameId, settings.Level);
 
             StartBlink(settings.FlickerMode, settings.Frequency);
+
+            _nextGame = nextGame;
             CloseGameTimer.Start();
         }
 
@@ -161,7 +165,7 @@ namespace MedEye.Views
                     after_move_reset_timer.Stop();
                 if (flash_timer.IsEnabled)
                     flash_timer.Stop();
-                Close();
+                CloseGame(this, e);
             }
 
             base.OnKeyDown(e);
@@ -262,7 +266,7 @@ namespace MedEye.Views
             TargetBlinkTimer.Stop();
             ScopeBlinkTimer.Stop();
             CloseGameTimer.Stop();
-            
+
             var trackerResult = Tracker.Tracker.GetResult();
             _scores.Involvement = Math.Round(double.Parse(trackerResult.Replace(",", "."),
                 CultureInfo.InvariantCulture) / CloseGameTimer.Interval.TotalSeconds, 2);
@@ -274,7 +278,7 @@ namespace MedEye.Views
 
             CloseGameTimer.Tick -= CloseGame;
             CloseGameTimer.Tick += CloseGameAfterShowResult;
-            CloseGameTimer.Interval = new TimeSpan(0, 0, 5);
+            CloseGameTimer.Interval = new TimeSpan(0, 0, NumberConst.ResultsDisplayTime);
             CloseGameTimer.Start();
         }
 
@@ -354,6 +358,7 @@ namespace MedEye.Views
         private void CloseGameAfterShowResult(object? sender, EventArgs e)
         {
             CloseGameTimer.Stop();
+            _nextGame(sender, e);
             Close();
         }
     }

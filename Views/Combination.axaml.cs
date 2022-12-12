@@ -28,6 +28,8 @@ namespace MedEye.Views
         private long _countScores = 0;
         private Scores _scores = new Scores();
 
+        private readonly EventHandler<EventArgs> _nextGame = (sender, args) => { };
+        
         public Combination()
         {
             InitializeComponent();
@@ -59,7 +61,7 @@ namespace MedEye.Views
             CloseGameTimer.Start();
         }
 
-        public Combination(Settings settings)
+        public Combination(Settings settings, EventHandler<EventArgs> nextGame)
         {
             InitializeComponent();
 
@@ -81,6 +83,8 @@ namespace MedEye.Views
             SetDefaultScores(settings.UserId, settings.GameId, settings.Level);
 
             StartBlink(settings.FlickerMode, settings.Frequency);
+            
+            _nextGame = nextGame;
             CloseGameTimer.Start();
         }
 
@@ -90,7 +94,7 @@ namespace MedEye.Views
             {
                 if (after_move_reset_timer.IsEnabled)
                     after_move_reset_timer.Stop();
-                Close();
+                CloseGame(this, e);
             }
 
             base.OnKeyDown(e);
@@ -225,7 +229,7 @@ namespace MedEye.Views
 
             CloseGameTimer.Tick -= CloseGame;
             CloseGameTimer.Tick += CloseGameAfterShowResult;
-            CloseGameTimer.Interval = new TimeSpan(0, 0, 5);
+            CloseGameTimer.Interval = new TimeSpan(0, 0, NumberConst.ResultsDisplayTime);
             CloseGameTimer.Start();
         }
 
@@ -292,9 +296,9 @@ namespace MedEye.Views
         {
             Result.Content = "Результат игры:\n" + _scores;
             Result.FontSize = 32 * (ClientSize.Width / 1920);
-            Result.Height = ClientSize.Height / 3 - 25;
+            Result.Height = ClientSize.Height / 2.5 - 25;
             Result.Width = ClientSize.Width / 2 - 25;
-            Log.Height = ClientSize.Height / 3;
+            Log.Height = ClientSize.Height / 2.5;
             Log.Width = ClientSize.Width / 2;
             Log.CornerRadius = new CornerRadius(15);
             Log.Opacity = 1;
@@ -305,6 +309,7 @@ namespace MedEye.Views
         private void CloseGameAfterShowResult(object? sender, EventArgs e)
         {
             CloseGameTimer.Stop();
+            _nextGame(sender, e);
             Close();
         }
     }
