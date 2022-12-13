@@ -4,9 +4,8 @@ using Avalonia.Input;
 using Avalonia.Media;
 using Avalonia.Threading;
 using MedEye.Consts;
-using MedEye.Tracker;
-using System;
 using System.Globalization;
+using Avalonia.Interactivity;
 using MedEye.DB;
 
 namespace MedEye.Views
@@ -43,6 +42,9 @@ namespace MedEye.Views
         private long _countScores = 0;
         private Scores _scores = new Scores();
 
+        private readonly EventHandler<EventArgs> _nextGame = (sender, args) => { };
+        private bool _isClosing = false;
+
         public Tyr()
         {
             InitializeComponent();
@@ -68,12 +70,14 @@ namespace MedEye.Views
             CloseGameTimer.Interval = new TimeSpan(0, 5, 0);
 
             SetDefaultScores(0, 1, 1);
+            SetDifficultLevel(0);
 
             StartBlink(4);
+
             CloseGameTimer.Start();
         }
 
-        public Tyr(Settings settings)
+        public Tyr(Settings settings, EventHandler<EventArgs> nextGame)
         {
             InitializeComponent();
 
@@ -94,8 +98,11 @@ namespace MedEye.Views
             CloseGameTimer.Interval = new TimeSpan(0, 0, settings.ExerciseDuration);
 
             SetDefaultScores(settings.UserId, settings.GameId, settings.Level);
+            SetDifficultLevel(settings.Level - 1);
 
             StartBlink(settings.FlickerMode, settings.Frequency);
+
+            _nextGame = nextGame;
             CloseGameTimer.Start();
         }
 
@@ -155,13 +162,14 @@ namespace MedEye.Views
 
         protected override void OnKeyDown(KeyEventArgs e)
         {
-            if (e.Key == Key.Escape)
+            if (e.Key == Key.Escape && !_isClosing)
             {
+                _isClosing = true;
                 if (after_move_reset_timer.IsEnabled)
                     after_move_reset_timer.Stop();
                 if (flash_timer.IsEnabled)
                     flash_timer.Stop();
-                Close();
+                CloseGame(this, e);
             }
 
             base.OnKeyDown(e);
@@ -259,10 +267,12 @@ namespace MedEye.Views
 
         private void CloseGame(object? sender, EventArgs e)
         {
+            _isClosing = true;
+            
             TargetBlinkTimer.Stop();
             ScopeBlinkTimer.Stop();
             CloseGameTimer.Stop();
-            
+
             var trackerResult = Tracker.Tracker.GetResult();
             _scores.Involvement = Math.Round(double.Parse(trackerResult.Replace(",", "."),
                 CultureInfo.InvariantCulture) / CloseGameTimer.Interval.TotalSeconds, 2);
@@ -274,7 +284,7 @@ namespace MedEye.Views
 
             CloseGameTimer.Tick -= CloseGame;
             CloseGameTimer.Tick += CloseGameAfterShowResult;
-            CloseGameTimer.Interval = new TimeSpan(0, 0, 5);
+            CloseGameTimer.Interval = new TimeSpan(0, 0, NumberConst.ResultsDisplayTime);
             CloseGameTimer.Start();
         }
 
@@ -354,6 +364,7 @@ namespace MedEye.Views
         private void CloseGameAfterShowResult(object? sender, EventArgs e)
         {
             CloseGameTimer.Stop();
+            _nextGame(sender, e);
             Close();
         }
     }

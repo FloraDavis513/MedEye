@@ -17,11 +17,10 @@ public partial class SetupMenu : Window
     private int _userId = -1;
     private int _gameNumber = -1;
     private List<Settings> _gamesSettings;
-    private DispatcherTimer NextGameTimer = new DispatcherTimer();
 
     private readonly Thickness _unselectedThickness = new(2.5);
     private readonly SolidColorBrush _unselectedBackground = new(Color.Parse("#CFE0F2"));
-    
+
     private readonly Thickness _selectedThickness = new(5);
     private readonly SolidColorBrush _selectedBackground = new(Color.Parse("#93B9E2"));
 
@@ -41,7 +40,11 @@ public partial class SetupMenu : Window
         };
         StartGame.Click += PreStartGameClick;
         AddGame.Click += AddGameHandle;
-        SaveGame.Click += SaveGameHandle;
+        SaveGame.Click += (s, e) =>
+        {
+            new ConfirmAction(ClientSize.Width, ClientSize.Height,
+                "Вы уверены, что хотите сохранить изменения?", SaveGameHandle).Show();
+        };
         DeleteGame.Click += (s, e) =>
         {
             if (Games.Children.Count == 0) return;
@@ -83,7 +86,11 @@ public partial class SetupMenu : Window
         };
         StartGame.Click += PreStartGameClick;
         AddGame.Click += AddGameHandle;
-        SaveGame.Click += SaveGameHandle;
+        SaveGame.Click += (s, e) =>
+        {
+            new ConfirmAction(ClientSize.Width, ClientSize.Height,
+                "Вы уверены, что хотите сохранить изменения?", SaveGameHandle).Show();
+        };
         DeleteGame.Click += (s, e) =>
         {
             if (Games.Children.Count == 0) return;
@@ -251,8 +258,6 @@ public partial class SetupMenu : Window
 
     private void NextGame(object? sender, EventArgs e)
     {
-        NextGameTimer.Stop();
-
         _currentGame++;
 
         if (_currentGame >= _gamesSettings.Count) return;
@@ -261,27 +266,22 @@ public partial class SetupMenu : Window
         switch (game.GameId)
         {
             case 1:
-                new Tyr(game).Show();
+                new Tyr(game, PreNextGame).Show();
                 break;
             case 2:
-                new Following(game).Show();
+                new Following(game, PreNextGame).Show();
                 break;
             case 3:
-                new Combination(game).Show();
+                new Combination(game, PreNextGame).Show();
                 break;
             case 4:
-                new Merger(game).Show();
+                new Merger(game, PreNextGame).Show();
                 break;
         }
-
-        NextGameTimer.Interval = new TimeSpan(0, 0, game.ExerciseDuration + 5);
-        NextGameTimer.Start();
     }
 
     private void StartGameClick(object? sender, RoutedEventArgs e)
     {
-        NextGameTimer.Stop();
-
         _currentGame = 0;
 
         if (_gamesSettings.Count == 0) return;
@@ -290,22 +290,18 @@ public partial class SetupMenu : Window
         switch (game.GameId)
         {
             case 1:
-                new Tyr(game).Show();
+                new Tyr(game, PreNextGame).Show();
                 break;
             case 2:
-                new Following(game).Show();
+                new Following(game, PreNextGame).Show();
                 break;
             case 3:
-                new Combination(game).Show();
+                new Combination(game, PreNextGame).Show();
                 break;
             case 4:
-                new Merger(game).Show();
+                new Merger(game, PreNextGame).Show();
                 break;
         }
-
-        NextGameTimer.Tick += PreNextGame;
-        NextGameTimer.Interval = new TimeSpan(0, 0, game.ExerciseDuration + 5);
-        NextGameTimer.Start();
     }
 
     private void PreStartGameClick(object? sender, RoutedEventArgs e)
@@ -446,13 +442,13 @@ public partial class SetupMenu : Window
 
         Header2.Text = "Настройки игры №" + (_gameNumber + 1);
     }
-    
+
     private void SelectGame(TemplatedControl game)
     {
         game.BorderThickness = _selectedThickness;
         game.Background = _selectedBackground;
     }
-    
+
     private void UnselectGame(TemplatedControl game)
     {
         game.BorderThickness = _unselectedThickness;
