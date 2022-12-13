@@ -55,7 +55,7 @@
     </Panel>
     <Grid RowDefinitions="*, 8*" Background="White" Opacity="100" Grid.Row="0" Grid.Column="3">
       <TextBlock Grid.Row="0" Name="PlayersHeader" FontSize="48" TextAlignment="Center" TextWrapping="Wrap" Margin="0 30 0 0">
-        ----------------Игроки----------------
+        ―――――――― Игроки ――――――――
       </TextBlock>
       <ListBox Grid.Row="1" Name="UserList">
         <ListBox.DataTemplates>

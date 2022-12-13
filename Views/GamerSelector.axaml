@@ -16,7 +16,7 @@
           CornerRadius="25">
     <Grid RowDefinitions="*, 3*, *" ColumnDefinitions="*, *">
       <TextBlock Name="Header" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" FontSize="48" TextAlignment="Center" Margin="0 50 0 0" TextWrapping="Wrap">
-        ----------- Игроки -----------
+        ―――――――― Игроки ――――――――
       </TextBlock>
       <ListBox Grid.Row="1" Grid.ColumnSpan="2" Name="UserList" Margin="25 0 25 0">
         <ListBox.DataTemplates>

@@ -144,7 +144,7 @@ namespace MedEye.DB
                         var first_name = sqlite_datareader.GetValue("first_name");
                         var second_name = sqlite_datareader.GetValue("second_name");
                         var last_name = sqlite_datareader.GetValue("last_name");
-                        var name = $"{first_name} {second_name} {last_name}";
+                        var name = $"{last_name} {first_name} {second_name}";
 
                         if (user_id == -1) continue;
 

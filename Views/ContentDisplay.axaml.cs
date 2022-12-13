@@ -9,6 +9,7 @@ namespace MedEye.Views
     public partial class ContentDisplay : Window
     {
         private static readonly DispatcherTimer close_timer = new DispatcherTimer();
+        private static readonly DispatcherTimer audio_timer = new DispatcherTimer();
 
         public ContentDisplay()
         {
@@ -30,6 +31,16 @@ namespace MedEye.Views
             Next.Click += ExitClick;
             Tracker.Tracker.StartTracking();
 
+            audio_timer.Tick += EnableButton;
+            audio_timer.Interval = new TimeSpan(0, 0, 30);
+
+            if(comics_number < 3)
+            {
+                Next.IsEnabled = false;
+                System.Media.SoundPlayer player = new System.Media.SoundPlayer($".\\audio_{comics_number}.wav");
+                player.Play();
+                audio_timer.Start();
+            }
             close_timer.Tick += CloseAfterRoute;
             close_timer.Interval = new TimeSpan(1000000);
         }
@@ -38,6 +49,12 @@ namespace MedEye.Views
         {
             this.Close();
             close_timer.Stop();
+        }
+
+        private void EnableButton(object? sender, EventArgs e)
+        {
+            Next.IsEnabled = true;
+            audio_timer.Stop();
         }
 
         private void ExitClick(object? sender, RoutedEventArgs e)
