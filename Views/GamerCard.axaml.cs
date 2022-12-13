@@ -93,6 +93,33 @@ namespace MedEye.Views
 
         private void SaveClick(object? sender, RoutedEventArgs e)
         {
+            var converter = new BrushConverter();
+            var base_color = (Brush)converter.ConvertFrom("#1372B7");
+            FirstName.BorderBrush = base_color;
+            SecondName.BorderBrush = base_color;
+            LastName.BorderBrush = base_color;
+            BirthDate.BorderBrush = base_color;
+            Sex.BorderBrush = base_color;
+            if (FirstName.Text == null || FirstName.Text == "" ||
+                SecondName.Text == null || SecondName.Text == "" ||
+                LastName.Text == null || LastName.Text == "" ||
+                BirthDate.Text == null || BirthDate.Text == "" ||
+                Sex.Text == null || Sex.Text == "")
+            {
+                if (FirstName.Text == null || FirstName.Text == "")
+                    FirstName.BorderBrush = Brushes.Red;
+                if (SecondName.Text == null || SecondName.Text == "")
+                    SecondName.BorderBrush = Brushes.Red;
+                if (LastName.Text == null || LastName.Text == "")
+                    LastName.BorderBrush = Brushes.Red;
+                if (BirthDate.Text == null || BirthDate.Text == "")
+                    BirthDate.BorderBrush = Brushes.Red;
+                if (Sex.Text == null || Sex.Text == "")
+                    Sex.BorderBrush = Brushes.Red;
+                Caption.IsVisible = true;
+                return;
+            }
+
             if (current_gamer.id == -1)
                 Users.AddUser(FirstName.Text != null ? FirstName.Text : "", SecondName.Text != null ? SecondName.Text : "",
                     LastName.Text != null ? LastName.Text : "", BirthDate.Text != null ? BirthDate.Text : "", Sex.Text != null ? Sex.Text : "");
@@ -101,6 +128,13 @@ namespace MedEye.Views
                 Users.UpdateUser(current_gamer.id, FirstName.Text, SecondName.Text,
                     LastName.Text, BirthDate.Text, Sex.Text);
             }
+            Caption.IsVisible = false;
+            
+            FirstName.BorderBrush = base_color;
+            SecondName.BorderBrush = base_color;
+            LastName.BorderBrush = base_color;
+            BirthDate.BorderBrush = base_color;
+            Sex.BorderBrush = base_color;
             new Registry().Show();
             close_timer.Start();
         }
