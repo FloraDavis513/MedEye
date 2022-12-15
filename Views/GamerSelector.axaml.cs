@@ -10,7 +10,7 @@ namespace MedEye.Views
     public partial class GamerSelector : Window
     {
         private SortedDictionary<string, int> actual_users;
-        private static readonly DispatcherTimer close_timer = new DispatcherTimer();
+        private readonly DispatcherTimer close_timer = new DispatcherTimer();
         private double windowWidth;
         private double windowHeight;
         private double mainWindowWidth;

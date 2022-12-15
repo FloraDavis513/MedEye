@@ -13,7 +13,7 @@ namespace MedEye.Views
 {
     public partial class StatTable : Window
     {
-        private static readonly DispatcherTimer close_timer = new DispatcherTimer();
+        private readonly DispatcherTimer close_timer = new DispatcherTimer();
         private int currentId;
 
         public StatTable()

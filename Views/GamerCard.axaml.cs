@@ -16,7 +16,7 @@ namespace MedEye.Views
     public partial class GamerCard : Window
     {
         private Gamer current_gamer;
-        private static readonly DispatcherTimer close_timer = new DispatcherTimer();
+        private readonly DispatcherTimer close_timer = new DispatcherTimer();
 
         public GamerCard(int user_id)
         {

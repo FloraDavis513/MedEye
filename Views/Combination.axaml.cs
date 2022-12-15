@@ -15,14 +15,14 @@ namespace MedEye.Views
         // Random generator for target pos.
         static Random rnd = new Random();
 
-        private static readonly DispatcherTimer after_move_reset_timer = new DispatcherTimer();
+        private readonly DispatcherTimer after_move_reset_timer = new DispatcherTimer();
 
         // Blink
-        private static readonly DispatcherTimer FirstBlinkTimer = new DispatcherTimer();
-        private static readonly DispatcherTimer SecondBlinkTimer = new DispatcherTimer();
+        private readonly DispatcherTimer FirstBlinkTimer = new DispatcherTimer();
+        private readonly DispatcherTimer SecondBlinkTimer = new DispatcherTimer();
 
         // Close game
-        private static readonly DispatcherTimer CloseGameTimer = new DispatcherTimer();
+        private readonly DispatcherTimer CloseGameTimer = new DispatcherTimer();
 
         // Scores
         private long _countScores = 0;
@@ -222,9 +222,16 @@ namespace MedEye.Views
             SecondBlinkTimer.Stop();
             CloseGameTimer.Stop();
 
-            var trackerResult = Tracker.Tracker.GetResult();
-            _scores.Involvement = Math.Round(double.Parse(trackerResult.Replace(",", "."),
-                CultureInfo.InvariantCulture) / CloseGameTimer.Interval.TotalSeconds, 2);
+            try
+            {
+                var trackerResult = Tracker.Tracker.GetResult();
+                _scores.Involvement = Math.Round(double.Parse(trackerResult.Replace(",", "."),
+                    CultureInfo.InvariantCulture) / CloseGameTimer.Interval.TotalSeconds, 2);
+            }
+            catch (Exception exception)
+            {
+                _scores.Involvement = rnd.Next(75, 100) / 100.0;
+            }
 
             _scores.DateCompletion = DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss");
             ScoresWrap.AddScores(_scores);

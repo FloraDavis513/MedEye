@@ -11,7 +11,7 @@ namespace MedEye.Views;
 
 public partial class SetupMenu : Window
 {
-    private static readonly DispatcherTimer CloseTimer = new DispatcherTimer();
+    private readonly DispatcherTimer CloseTimer = new DispatcherTimer();
 
     private int _currentGame = 0;
     private int _userId = -1;

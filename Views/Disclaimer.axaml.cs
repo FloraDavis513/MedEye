@@ -8,7 +8,7 @@ namespace MedEye.Views
 {
     public partial class Disclaimer : Window
     {
-        private static readonly DispatcherTimer closeTimer = new DispatcherTimer();
+        private readonly DispatcherTimer closeTimer = new DispatcherTimer();
 
         public Disclaimer()
         {

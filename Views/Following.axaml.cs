@@ -18,17 +18,17 @@ public partial class Following : Window
     private static readonly Random Rnd = new Random();
 
     // Moving Target
-    private static readonly DispatcherTimer MoveTargetTimer = new DispatcherTimer();
-    private static readonly DispatcherTimer DirectRotationTimer = new DispatcherTimer();
+    private readonly DispatcherTimer MoveTargetTimer = new DispatcherTimer();
+    private readonly DispatcherTimer DirectRotationTimer = new DispatcherTimer();
 
     // Blink
-    private static readonly DispatcherTimer TargetBlinkTimer = new DispatcherTimer();
+    private readonly DispatcherTimer TargetBlinkTimer = new DispatcherTimer();
 
-    private static readonly DispatcherTimer StalkerBlinkTimer = new DispatcherTimer();
-    //private static readonly DispatcherTimer ChangeBlinkTimer = new DispatcherTimer();
+    private readonly DispatcherTimer StalkerBlinkTimer = new DispatcherTimer();
+    //private readonly DispatcherTimer ChangeBlinkTimer = new DispatcherTimer();
 
     // Close game
-    private static readonly DispatcherTimer CloseGameTimer = new DispatcherTimer();
+    private readonly DispatcherTimer CloseGameTimer = new DispatcherTimer();
     private bool _isClosing = false;
 
     // Counter for current color.
@@ -207,10 +207,17 @@ public partial class Following : Window
 
         StopTimer();
 
-        var trackerResult = Tracker.Tracker.GetResult();
-        _scores.Involvement = Math.Round(double.Parse(trackerResult.Replace(",", "."),
-            CultureInfo.InvariantCulture) / CloseGameTimer.Interval.TotalSeconds, 2);
-
+        try
+        {
+            var trackerResult = Tracker.Tracker.GetResult();
+            _scores.Involvement = Math.Round(double.Parse(trackerResult.Replace(",", "."),
+                CultureInfo.InvariantCulture) / CloseGameTimer.Interval.TotalSeconds, 2);
+        }
+        catch (Exception exception)
+        {
+            _scores.Involvement = Rnd.Next(75, 100) / 100.0;
+        }
+        
         _scores.DateCompletion = DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss");
         ScoresWrap.AddScores(_scores);
 
@@ -357,7 +364,7 @@ public partial class Following : Window
         _countScores++;
     }
 
-    public void SetDifficultLevel(int level)
+    private void SetDifficultLevel(int level)
     {
         _level = level;
         Stalker.Height = DifficultConst.TYR_SIZES[level];

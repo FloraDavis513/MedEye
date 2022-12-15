@@ -38,7 +38,7 @@ namespace MedEye.Tracker
             tracker = Process.Start(psi);
         }
 
-        static public string GetResult()
+        public static string GetResult()
         {
             tracker.StandardInput.WriteLine("x");
             string result = tracker.StandardOutput.ReadToEnd();

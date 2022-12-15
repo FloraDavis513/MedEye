@@ -11,7 +11,7 @@ namespace MedEye.Views
     public partial class Registry : Window
     {
         private SortedDictionary<string, int> actual_users;
-        private static readonly DispatcherTimer close_timer = new DispatcherTimer();
+        private readonly DispatcherTimer close_timer = new DispatcherTimer();
 
         public Registry()
         {
