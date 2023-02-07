@@ -34,8 +34,6 @@ namespace MedEye.Views
             var buttonWidth = Width / 3;
 
             Next.Width = buttonWidth;
-            Next.FontSize = 32 * (ClientSize.Width / 1920);
-            Header.FontSize = 48 * (ClientSize.Height / 1920);
         }
     }
 }

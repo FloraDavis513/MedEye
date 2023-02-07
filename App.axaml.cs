@@ -6,7 +6,7 @@ using MedEye.Views;
 
 namespace MedEye
 {
-    public partial class App : Application
+    public class App : Application
     {
         public override void Initialize() => AvaloniaXamlLoader.Load(this);
 

@@ -17,10 +17,10 @@
           Grid.Column="1">
       <TextBlock Classes="H1" Name="MainHeader" Text="MedEye" Grid.Row="0"/>
       <TextBlock Classes="H2" Name="SubHeader" Text="Главное меню" Grid.Row="1" />
-      <Button Name="Registry" Content="Регистратура" Grid.Row="2"/>
-      <Button Name="Cabinet" Content="Кабинет" Grid.Row="3"/>
-      <Button Name="Exit" Content="Выход" Grid.Row="4"/>
-      <Button Name="Info" Content="Справка" Grid.Row="5"/>
+      <Button Command="{Binding GoRegistry}" Content="Регистратура" Grid.Row="2"/>
+      <Button Click="ToCabinet" Content="Кабинет" Grid.Row="3"/>
+      <Button Click="ClickExit" Content="Выход" Grid.Row="4"/>
+      <Button Command="{Binding ShowInfo}" Name="Info" Content="Справка" Grid.Row="5"/>
 
       <Grid.Styles>
         <Style Selector="Button#Info">

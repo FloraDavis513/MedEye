@@ -15,7 +15,7 @@
           BorderThickness="4"
           CornerRadius="25">
     <Grid RowDefinitions="*, 3*, *" ColumnDefinitions="*, *">
-      <TextBlock Name="Header" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" FontSize="48" TextAlignment="Center" Margin="0 50 0 0" TextWrapping="Wrap">
+      <TextBlock Classes="H2" Name="Header" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Margin="0 50 0 0">
         ―――――――― Игроки ――――――――
       </TextBlock>
       <ListBox Grid.Row="1" Grid.ColumnSpan="2" Items="{Binding ShowUsers}"
@@ -24,14 +24,26 @@
                Margin="25 0 25 0">
         <ListBox.DataTemplates>
           <DataTemplate>
-            <TextBlock Text="{Binding}" FontSize="48"/>
+            <TextBlock Classes="List" Text="{Binding}" />
           </DataTemplate>
         </ListBox.DataTemplates>
       </ListBox>
-      <Button Name="Next" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" FontSize="36"
-              IsEnabled="{Binding IsButtonEnabled}">
-        Далее
-      </Button>
+      <Button Name="Next"
+              Grid.Row="2"
+              Grid.Column="1"
+              HorizontalAlignment="Center"
+              Content="Далее"
+              IsEnabled="{Binding IsButtonEnabled}"
+              FontSize="{Binding $parent[Window].Width,
+                Converter={StaticResource TextSizeConverter},
+                ConverterParameter=H2}"/>
+      <Grid.Styles>
+        <Style Selector="TextBlock.List">
+          <Setter Property="FontSize" Value="{Binding $parent[Window].Width,
+                Converter={StaticResource TextSizeConverter},
+                ConverterParameter=48}"/>
+        </Style>
+      </Grid.Styles>
     </Grid>
   </Border>
 </Window>

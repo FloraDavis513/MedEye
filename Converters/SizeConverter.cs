@@ -21,8 +21,14 @@ public class SizeConverter : IValueConverter
 				return baseButtonWidth / ((intTargetSize + 100f) / 100f);
 			}
 
-			throw new ArgumentException();
+			switch (targetSize)
+			{
+				case "60%":
+					return originalSize / 100 * 60;
+				break;
+			}
 
+			throw new ArgumentException();
 		}
 		return new BindingNotification(new InvalidCastException(), BindingErrorType.Error);
 	}

@@ -1,21 +1,18 @@
 ﻿using System.Globalization;
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Primitives;
 using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.ReactiveUI;
-using Avalonia.Threading;
 using MedEye.DB;
 using MedEye.ViewModels;
+using ReactiveUI;
 
 namespace MedEye.Views;
 
 public partial class SetupMenu : ReactiveUserControl<SetupMenuViewModel>
 {
-    private readonly DispatcherTimer CloseTimer = new DispatcherTimer();
-
     private int _currentGame = 0;
     private int _userId = -1;
     private int _gameNumber = -1;
@@ -27,122 +24,72 @@ public partial class SetupMenu : ReactiveUserControl<SetupMenuViewModel>
     private readonly Thickness _selectedThickness = new(5);
     private readonly SolidColorBrush _selectedBackground = new(Color.Parse("#93B9E2"));
 
-    public new readonly Size ClientSize;
     public SetupMenu()
     {
-        var desktopMainWindow = Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop
-            ? desktop.MainWindow
-            : null;
-        ClientSize = desktopMainWindow!.ClientSize;
         InitializeComponent();
-
-        MainMenu.Click += (s, e) =>
+        this.WhenActivated(d =>
         {
-            new ConfirmAction("Вы уверены что хотите выйти в главное меню? Настройки приложения не будут сохранены!",
-                MainMenuClick).Show();
+            _userId = ViewModel!.UserId;
+            _gamesSettings = SettingsWrap.GetSettings(_userId);
+
+            if (_gamesSettings.Count == 0)
+            {
+                ResetSettings();
+                return;
+            }
+
+            if (_userId == -1)
+            {
+                foreach (var settings in _gamesSettings)
+                {
+                    SettingsWrap.DeleteSettings(settings);
+                }
+
+                _gamesSettings.Clear();
+                ResetSettings();
+            }
+            else
+            {
+                foreach (var settings in _gamesSettings)
+                {
+                    AddGameToGrid();
+                    _gameNumber++;
+                    var game = (ComboBox)Games.Children[_gameNumber];
+                    game.SelectedIndex = settings.GameId - 1;
+                }
+
+                SelectGame((ComboBox)Games.Children[_gameNumber]);
+
+                SetSettings(_gamesSettings[_gameNumber]);
+                GameSetupHeader.Text = "Настройки игры №" + (_gameNumber + 1);
+            }
+        });
+        
+        MainMenu.Click += async (s, e) =>
+        {
+            await new ConfirmAction("Вы уверены что хотите выйти в главное меню? Настройки приложения не будут сохранены!",
+                (sender, e) => ViewModel!.GoMainMenu.Execute())
+                .ShowDialog(ViewModel!.HostWindow);
+            SaveSettings();
         };
+
         StartGame.Click += PreStartGameClick;
         AddGame.Click += AddGameHandle;
-        SaveGame.Click += (s, e) =>
+        SaveGame.Click += async (s, e) =>
         {
-            new ConfirmAction("Вы уверены, что хотите сохранить изменения?", SaveGameHandle).Show();
+            await new ConfirmAction("Вы уверены, что хотите сохранить изменения?", SaveGameHandle)
+                .ShowDialog(ViewModel!.HostWindow);
         };
-        DeleteGame.Click += (s, e) =>
+        DeleteGame.Click += async (s, e) =>
         {
             if (Games.Children.Count == 0) return;
-            new ConfirmAction("Вы уверены, что хотите удалить игру из списка?", DeleteGameHandle).Show();
+            await new ConfirmAction("Вы уверены, что хотите удалить игру?", DeleteGameHandle).ShowDialog(ViewModel!.HostWindow);
         };
-
-        GamesScroll.Height = ClientSize.Height / 1.2;
-        GamesScroll.MaxHeight = ClientSize.Height / 1.2;
-
-
-        CloseTimer.Tick += CloseAfterRoute;
-        CloseTimer.Interval = new TimeSpan(1000000);
-
-        _gamesSettings = SettingsWrap.GetSettings(_userId);
-        foreach (var settings in _gamesSettings)
-        {
-            SettingsWrap.DeleteSettings(settings);
-            _gamesSettings.Remove(settings);
-        }
-
-        ResetSettings();
-    }
-
-    public SetupMenu(int userId)
-    {
-        InitializeComponent();
-
-        _userId = userId;
-
-        MainMenu.Click += (s, e) =>
-        {
-            new ConfirmAction("Вы уверены, что хотите перейти в главное меню? Все несохраненные измения будут потеряны!",
-                MainMenuClick).Show();
-        };
-        StartGame.Click += PreStartGameClick;
-        AddGame.Click += AddGameHandle;
-        SaveGame.Click += (s, e) =>
-        {
-            new ConfirmAction("Вы уверены, что хотите сохранить изменения?", SaveGameHandle).Show();
-        };
-        DeleteGame.Click += (s, e) =>
-        {
-            if (Games.Children.Count == 0) return;
-            new ConfirmAction("Вы уверены, что хотите удалить игру?", DeleteGameHandle).Show();
-        };
-
-        GamesScroll.Height = ClientSize.Height / 1.2;
-        GamesScroll.MaxHeight = ClientSize.Height / 1.2;
 
         Games.Children.Remove(DefaultGame);
-
-        CloseTimer.Tick += CloseAfterRoute;
-        CloseTimer.Interval = new TimeSpan(1000000);
-
-        _gamesSettings = SettingsWrap.GetSettings(_userId);
-
-        if (_gamesSettings.Count == 0)
-        {
-            ResetSettings();
-            return;
-        }
-
-        if (_userId == -1)
-        {
-            foreach (var settings in _gamesSettings)
-            {
-                SettingsWrap.DeleteSettings(settings);
-            }
-
-            _gamesSettings.Clear();
-            ResetSettings();
-        }
-        else
-        {
-            foreach (var settings in _gamesSettings)
-            {
-                AddGameToGrid();
-                _gameNumber++;
-                var game = (ComboBox)Games.Children[_gameNumber];
-                game.SelectedIndex = settings.GameId - 1;
-            }
-
-            SelectGame((ComboBox)Games.Children[_gameNumber]);
-
-            SetSettings(_gamesSettings[_gameNumber]);
-            Header2.Text = "Настройки игры №" + (_gameNumber + 1);
-        }
     }
 
-    private void MainMenuClick(object? sender, RoutedEventArgs e)
-    {
-        //new MainMenu().Show();
-        CloseTimer.Start();
-    }
-
-    private void CloseAfterRoute(object? sender, EventArgs e)
+    private void SaveSettings()
     {
         foreach (var setting in SettingsWrap.GetSettings(_userId))
         {
@@ -154,9 +101,6 @@ public partial class SetupMenu : ReactiveUserControl<SetupMenuViewModel>
         {
             SettingsWrap.AddSettings(setting.SetPriority(priority++));
         }
-
-        //Close();
-        CloseTimer.Stop();
     }
 
     private Settings GetCurrentSettings()
@@ -359,11 +303,11 @@ public partial class SetupMenu : ReactiveUserControl<SetupMenuViewModel>
             }
 
             SelectGame((ComboBox)Games.Children[_gameNumber]);
-            Header2.Text = "Настройки игры №" + (_gameNumber + 1);
+            GameSetupHeader.Text = "Настройки игры №" + (_gameNumber + 1);
         }
         else
         {
-            Header2.Text = "Настройки игры";
+            GameSetupHeader.Text = "Настройки игры";
             ResetSettings();
         }
     }
@@ -379,9 +323,7 @@ public partial class SetupMenu : ReactiveUserControl<SetupMenuViewModel>
                 new() { Content = "Погоня" },
                 new() { Content = "Совмещение" },
                 new() { Content = "Слияние" }
-            },
-            Width = 2 * ClientSize.Width / 9,
-            FontSize = 32 * (ClientSize.Width / 1920)
+            }
         };
 
         game.Tapped += ClickGame;
@@ -405,7 +347,7 @@ public partial class SetupMenu : ReactiveUserControl<SetupMenuViewModel>
         AddGameToGrid();
         SelectGame((ComboBox)Games.Children[_gameNumber]);
         ResetSettings();
-        Header2.Text = "Настройки игры №" + (_gameNumber + 1);
+        GameSetupHeader.Text = "Настройки игры №" + (_gameNumber + 1);
     }
 
     private void ClickGame(object? sender, RoutedEventArgs e)
@@ -429,7 +371,7 @@ public partial class SetupMenu : ReactiveUserControl<SetupMenuViewModel>
             ResetSettings();
         }
 
-        Header2.Text = "Настройки игры №" + (_gameNumber + 1);
+        GameSetupHeader.Text = "Настройки игры №" + (_gameNumber + 1);
     }
 
     private void SelectGame(TemplatedControl game)
@@ -442,57 +384,5 @@ public partial class SetupMenu : ReactiveUserControl<SetupMenuViewModel>
     {
         game.BorderThickness = _unselectedThickness;
         game.Background = _unselectedBackground;
-    }
-
-    private void AdaptToScreen()
-    {
-        var buttonWidth = 2 * this.ClientSize.Width / 9;
-        var fontSize = 32 * (this.ClientSize.Width / 1920);
-
-        foreach (var comboBox in Games.Children.OfType<ComboBox>())
-        {
-            comboBox.Width = buttonWidth;
-            comboBox.FontSize = fontSize;
-        }
-
-        foreach (var radioButton in DistanceRadioButtons.Children.OfType<RadioButton>())
-        {
-            radioButton.FontSize = fontSize;
-        }
-
-        foreach (var radioButton in IsRedRadioButtons.Children.OfType<RadioButton>())
-        {
-            radioButton.FontSize = fontSize;
-        }
-
-        DefaultGame.Width = buttonWidth;
-        MainMenu.Width = buttonWidth;
-        DeleteGame.Width = buttonWidth;
-        StartGame.Width = buttonWidth;
-        FrequencyFlickerBox.Width = buttonWidth;
-        TypeFlickerBox.Width = buttonWidth;
-        AddGame.Width = buttonWidth;
-        SaveGame.Width = buttonWidth;
-
-        DefaultGame.FontSize = fontSize;
-        MainMenu.FontSize = fontSize;
-        DeleteGame.FontSize = fontSize;
-        StartGame.FontSize = fontSize;
-        Distance.FontSize = fontSize;
-        LeftFilterColor.FontSize = fontSize;
-        FrequencyFlickerText.FontSize = fontSize;
-        FrequencyFlickerBox.FontSize = fontSize;
-        TypeFlickerText.FontSize = fontSize;
-        TypeFlickerBox.FontSize = fontSize;
-        BrightRedColor.FontSize = fontSize;
-        BrightBlueColor.FontSize = fontSize;
-        Level.FontSize = fontSize;
-        Timer.FontSize = fontSize;
-        TimerTextBox.FontSize = fontSize;
-        AddGame.FontSize = fontSize;
-        SaveGame.FontSize = fontSize;
-
-        Header1.FontSize = 48 * (this.ClientSize.Width / 1920);
-        Header2.FontSize = 48 * (this.ClientSize.Width / 1920);
     }
 }

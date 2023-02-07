@@ -43,53 +43,8 @@
               <Setter Property="VerticalAlignment" Value="Center"/>
               <Setter Property="HorizontalAlignment" Value="Center"/>
             </Style>
-            <!-- <Style Selector="ScrollViewer > Grid > TextBox"> -->
-            <!--   <Setter Property="BorderBrush" Value="#1372B7"/> -->
-            <!-- </Style> -->
-            <!-- <Style Selector="ScrollViewer > Grid > TextBox.Error"> -->
-            <!--   <Setter Property="BorderBrush" Value="Red"/> -->
-            <!-- </Style> -->
           </Grid.Styles>
         </Grid>
-        <!-- <ContentControl Content="{Binding CurrentGamer}"/> -->
-        <!-- <ScrollViewer.DataTemplates> -->
-        <!--   <DataTemplate DataType="{x:Type db:Gamer}"> -->
-        <!--     <Grid Name="GamerData" RowDefinitions="*, *, *, *, *, *, *, *" ColumnDefinitions="*, *, *, *" Background="White" Opacity="10" Margin="50 0 50 0"> -->
-        <!--       <TextBlock Classes="H2" Grid.Column="0" Grid.Row="1" Text="Фамилия"/> -->
-        <!--       <TextBlock Classes="H2" Grid.Column="0" Grid.Row="2" Text="Имя"/> -->
-        <!--       <TextBlock Classes="H2" Grid.Column="0" Grid.Row="3" Text="Отчество"/> -->
-        <!--       <TextBlock Classes="H2" Grid.Column="0" Grid.Row="4" Text="Дата рождения"/> -->
-        <!--       <TextBlock Classes="H2" Grid.Column="2" Grid.Row="4" Text="Пол"/> -->
-        <!--       <TextBlock Classes="H2" Grid.Column="0" -->
-        <!--                  Grid.Row="5" -->
-        <!--                  Grid.ColumnSpan="4" -->
-        <!--                  MaxLines="2" -->
-        <!--                  TextWrapping="Wrap" -->
-        <!--                  Margin="0 0 0 0" -->
-        <!--                  Text="―――――――― Примечания ――――――――"/> -->
-        <!-- -->
-        <!--       <TextBox Text="{Binding last_name}" Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="1"/> -->
-        <!--       <TextBox Text="{Binding first_name}" Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="2"/> -->
-        <!--       <TextBox Text="{Binding second_name}" Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="3"/> -->
-        <!--       <TextBox Text="{Binding birth_date}" Grid.Column="1" Grid.Row="4"/> -->
-        <!--       <TextBox Text="{Binding sex}" Grid.Column="3" Grid.Row="4"/> -->
-        <!-- -->
-        <!--       <TextBox Grid.Column="0" Grid.Row="6" Grid.ColumnSpan="4" TextWrapping="Wrap"/> -->
-        <!--       <Grid.Styles> -->
-        <!--         <Style Selector="TextBox"> -->
-        <!--           <Setter Property="BorderBrush" Value="#1372B7"></Setter> -->
-        <!--           <Setter Property="BorderThickness" Value="2.5"></Setter> -->
-        <!--           <Setter Property="Margin" Value="50 50 50 50"></Setter> -->
-        <!--           <Setter Property="TextBlock.FontSize" Value="48"></Setter> -->
-        <!--         </Style> -->
-        <!--         <Style Selector="TextBlock"> -->
-        <!--           <Setter Property="VerticalAlignment" Value="Center"/> -->
-        <!--           <Setter Property="HorizontalAlignment" Value="Center"/> -->
-        <!--         </Style> -->
-        <!--       </Grid.Styles> -->
-        <!--     </Grid> -->
-        <!--   </DataTemplate> -->
-        <!-- </ScrollViewer.DataTemplates> -->
       </ScrollViewer>
       <Grid Grid.Column="0" Grid.Row="2" ColumnDefinitions="*, *, *" Background="#1372B7" Opacity="0.01">
         <Button Name="Save" Grid.Column="2" HorizontalAlignment="Right">
@@ -103,7 +58,6 @@
           <Style Selector="Button">
             <Setter Property="Margin" Value="100 0 100 0"/>
             <Setter Property="Padding" Value="0 15 0 15"/>
-            <Setter Property="TextBlock.FontSize" Value="32"/>
             <Setter Property="Opacity" Value="100"/>
           </Style>
         </Grid.Styles>

@@ -29,6 +29,10 @@ public class TextSizeConverter : IValueConverter
 				case "ButtonWidthBase":
 					return originalSize / (int) TextSizes.ButtonWidthBase;
 			}
+
+			var isParsed = int.TryParse(targetSize, out var result);
+			if (isParsed)
+				return result * (originalSize / BASE_WIDTH);
 		}
 		return new BindingNotification(new InvalidCastException(), BindingErrorType.Error);
 	}
