@@ -1,11 +1,9 @@
-<Window xmlns="https://github.com/avaloniaui"
+<UserControl xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
-        x:Class="MedEye.Views.Registry"
-        Title="Registry"
-        WindowState="FullScreen">
+        x:Class="MedEye.Views.Registry">
   <Grid
     Background="#1372B7"
     Opacity="0.25"
@@ -13,51 +11,43 @@
     <Panel Grid.Row="0" Grid.Column="0">
     </Panel>
     <Grid RowDefinitions="*, 8*, 2*" Background="White" Opacity="100" Grid.Row="0" Grid.Column="1"  Name="GroupButton">
-      <TextBlock Grid.Row="0" Name="MainHeader" FontSize="48" TextAlignment="Center" TextWrapping="Wrap" Margin="0 30 0 0">
+      <TextBlock Grid.Row="0" Classes="H2" Name="MainHeader" TextAlignment="Center" TextWrapping="Wrap" Margin="0 30 0 0">
         Регистратура
       </TextBlock>
       <StackPanel Grid.Row="1">
-        <Button Name="Add" HorizontalAlignment="Center" Margin="0 30 0 0">
-          Добавить игрока
-        </Button>
-        <Button Name="Change" HorizontalAlignment="Center" Margin="0 30 0 0">
-          Изменить данные
-        </Button>
-        <Button Name="Delete" HorizontalAlignment="Center" Margin="0 30 0 0">
-          Удалить
-        </Button>
-        <Button Name="Results" HorizontalAlignment="Center" Margin="0 30 0 0">
-          Результаты игрока
-        </Button>
+        <Button Content="Добавить игрока" Command="{Binding GoGameCard}"/>
+        <Button Content="Изменить данные"
+                Command="{Binding GoChangeGameCard}"
+                IsEnabled="{Binding IsButtonEnabled}"/>
+        <Button Content="Удалить"
+                Name="Delete"
+                IsEnabled="{Binding IsButtonEnabled}"/>
+        <Button Content="Результаты игрока"
+                Command="{Binding GoStatTable}"
+                Name="Results"
+                IsEnabled="{Binding IsButtonEnabled}"/>
       </StackPanel>
-      <Button Grid.Row="2" Name="MainMenu" HorizontalAlignment="Center" Margin="0 30 0 0">
-        Главное меню
-      </Button>
+      <Button Grid.Row="2" Content="Главное меню" Command="{Binding GoMainMenu}" Margin="0 30 0 0"/>
       <Grid.Styles>
         <Style Selector="Button">
-          <Setter Property="BorderBrush" Value="#00B1A7"></Setter>
-          <Setter Property="Background" Value="#CFE0F2"></Setter>
-          <Setter Property="BorderThickness" Value="2.5"></Setter>
-          <Setter Property="CornerRadius" Value="15"></Setter>
-          <Setter Property="Margin" Value="0 25 0 0"></Setter>
-          <Setter Property="Padding" Value="0 15 0 15"></Setter>
-          <Setter Property="TextBlock.FontSize" Value="32"></Setter>
-          <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
+          <Setter Property="Margin" Value="0 25 0 0"/>
+          <Setter Property="Padding" Value="0 15 0 15"/>
         </Style>
-        <Style Selector="Button:pointerover /template/ ContentPresenter">
-          <Setter Property="BorderBrush" Value="Red"></Setter>
-          <Setter Property="Background" Value="#CFE0F2"></Setter>
-          <Setter Property="TextBlock.Foreground" Value="Red"></Setter>
+        <Style Selector="StackPanel > Button">
+          <Setter Property="Margin" Value="0 30 0 0"/>
         </Style>
       </Grid.Styles>
     </Grid>
     <Panel Grid.Row="0" Grid.Column="2">
     </Panel>
     <Grid RowDefinitions="*, 8*" Background="White" Opacity="100" Grid.Row="0" Grid.Column="3">
-      <TextBlock Grid.Row="0" Name="PlayersHeader" FontSize="48" TextAlignment="Center" TextWrapping="Wrap" Margin="0 30 0 0">
+      <TextBlock Grid.Row="0" Classes="H2" Name="PlayersHeader" TextAlignment="Center" TextWrapping="Wrap" Margin="0 30 0 0">
         ―――――――― Игроки ――――――――
       </TextBlock>
-      <ListBox Grid.Row="1" Name="UserList">
+      <ListBox Grid.Row="1"
+               Items="{Binding ShowUsers, Mode=TwoWay}"
+               SelectedItem="{Binding SelectedUser}"
+               SelectedIndex="{Binding SelectedIndex}">
         <ListBox.DataTemplates>
           <DataTemplate>
             <TextBlock Text="{Binding}" FontSize="48"/>
@@ -66,21 +56,10 @@
       </ListBox>
       <Grid.Styles>
         <Style Selector="Button">
-          <Setter Property="BorderBrush" Value="#00B1A7"></Setter>
-          <Setter Property="Background" Value="#CFE0F2"></Setter>
-          <Setter Property="BorderThickness" Value="2.5"></Setter>
-          <Setter Property="CornerRadius" Value="15"></Setter>
           <Setter Property="Margin" Value="0 25 0 0"></Setter>
           <Setter Property="Padding" Value="0 15 0 15"></Setter>
-          <Setter Property="TextBlock.FontSize" Value="32"></Setter>
-          <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
-        </Style>
-        <Style Selector="Button:pointerover /template/ ContentPresenter">
-          <Setter Property="BorderBrush" Value="Red"></Setter>
-          <Setter Property="Background" Value="#CFE0F2"></Setter>
-          <Setter Property="TextBlock.Foreground" Value="Red"></Setter>
         </Style>
       </Grid.Styles>
     </Grid>
   </Grid>
-</Window>
+</UserControl>

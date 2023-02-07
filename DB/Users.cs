@@ -5,7 +5,7 @@ using System.Data.SQLite;
 
 namespace MedEye.DB
 {
-    struct Gamer
+    public struct Gamer
     {
         public int id { get; set; }
         public string first_name { get; set; }

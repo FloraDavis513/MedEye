@@ -1,15 +1,18 @@
 ﻿using System.Globalization;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Primitives;
 using Avalonia.Interactivity;
 using Avalonia.Media;
+using Avalonia.ReactiveUI;
 using Avalonia.Threading;
 using MedEye.DB;
+using MedEye.ViewModels;
 
 namespace MedEye.Views;
 
-public partial class SetupMenu : Window
+public partial class SetupMenu : ReactiveUserControl<SetupMenuViewModel>
 {
     private readonly DispatcherTimer CloseTimer = new DispatcherTimer();
 
@@ -24,32 +27,30 @@ public partial class SetupMenu : Window
     private readonly Thickness _selectedThickness = new(5);
     private readonly SolidColorBrush _selectedBackground = new(Color.Parse("#93B9E2"));
 
-
+    public new readonly Size ClientSize;
     public SetupMenu()
     {
+        var desktopMainWindow = Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop
+            ? desktop.MainWindow
+            : null;
+        ClientSize = desktopMainWindow!.ClientSize;
         InitializeComponent();
-#if DEBUG
-        this.AttachDevTools();
-#endif
 
         MainMenu.Click += (s, e) =>
         {
-            new ConfirmAction(ClientSize.Width, ClientSize.Height,
-                "Вы уверены что хотите выйти в главное меню? Настройки приложения не будут сохранены!",
+            new ConfirmAction("Вы уверены что хотите выйти в главное меню? Настройки приложения не будут сохранены!",
                 MainMenuClick).Show();
         };
         StartGame.Click += PreStartGameClick;
         AddGame.Click += AddGameHandle;
         SaveGame.Click += (s, e) =>
         {
-            new ConfirmAction(ClientSize.Width, ClientSize.Height,
-                "Вы уверены, что хотите сохранить изменения?", SaveGameHandle).Show();
+            new ConfirmAction("Вы уверены, что хотите сохранить изменения?", SaveGameHandle).Show();
         };
         DeleteGame.Click += (s, e) =>
         {
             if (Games.Children.Count == 0) return;
-            new ConfirmAction(this.ClientSize.Width, this.ClientSize.Height,
-                "Вы уверены, что хотите удалить игру из списка?", DeleteGameHandle).Show();
+            new ConfirmAction("Вы уверены, что хотите удалить игру из списка?", DeleteGameHandle).Show();
         };
 
         GamesScroll.Height = ClientSize.Height / 1.2;
@@ -72,30 +73,24 @@ public partial class SetupMenu : Window
     public SetupMenu(int userId)
     {
         InitializeComponent();
-#if DEBUG
-        this.AttachDevTools();
-#endif
 
         _userId = userId;
 
         MainMenu.Click += (s, e) =>
         {
-            new ConfirmAction(this.ClientSize.Width, this.ClientSize.Height,
-                "Вы уверены, что хотите перейти в главное меню? Все несохраненные измения будут потеряны!",
+            new ConfirmAction("Вы уверены, что хотите перейти в главное меню? Все несохраненные измения будут потеряны!",
                 MainMenuClick).Show();
         };
         StartGame.Click += PreStartGameClick;
         AddGame.Click += AddGameHandle;
         SaveGame.Click += (s, e) =>
         {
-            new ConfirmAction(ClientSize.Width, ClientSize.Height,
-                "Вы уверены, что хотите сохранить изменения?", SaveGameHandle).Show();
+            new ConfirmAction("Вы уверены, что хотите сохранить изменения?", SaveGameHandle).Show();
         };
         DeleteGame.Click += (s, e) =>
         {
             if (Games.Children.Count == 0) return;
-            new ConfirmAction(this.ClientSize.Width, this.ClientSize.Height,
-                "Вы уверены, что хотите удалить игру?", DeleteGameHandle).Show();
+            new ConfirmAction("Вы уверены, что хотите удалить игру?", DeleteGameHandle).Show();
         };
 
         GamesScroll.Height = ClientSize.Height / 1.2;
@@ -141,15 +136,9 @@ public partial class SetupMenu : Window
         }
     }
 
-    protected override void OnOpened(EventArgs e)
-    {
-        AdaptToScreen();
-        base.OnOpened(e);
-    }
-
     private void MainMenuClick(object? sender, RoutedEventArgs e)
     {
-        new MainMenu().Show();
+        //new MainMenu().Show();
         CloseTimer.Start();
     }
 
@@ -166,7 +155,7 @@ public partial class SetupMenu : Window
             SettingsWrap.AddSettings(setting.SetPriority(priority++));
         }
 
-        Close();
+        //Close();
         CloseTimer.Stop();
     }
 

@@ -12,6 +12,8 @@
     <Folder Include="Models\" />
     <AvaloniaResource Include="Assets\**" />
     <None Remove=".gitignore" />
+    <AvaloniaResource Include="Styles\**" />
+    <AvaloniaResource Include="Styles\Button.axaml" />
   </ItemGroup>
   <ItemGroup>
     <!--This helps with theme dll-s trimming.
@@ -27,6 +29,7 @@
     <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="0.10.18" />
     <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.18" />
     <PackageReference Include="ClosedXML" Version="0.97.0" />
+    <PackageReference Include="ReactiveUI.Validation" Version="3.1.7" />
     <PackageReference Include="SQLite" Version="3.13.0" />
     <PackageReference Include="System.Data.SQLite" Version="1.0.117" />
     <PackageReference Include="XamlNameReferenceGenerator" Version="1.4.2" />

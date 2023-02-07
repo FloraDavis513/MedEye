@@ -28,7 +28,7 @@ namespace MedEye.ViewModels
 
         public void Start()
         {
-            new MainMenu().Show();
+            //new MainMenu().Show();
         }
     }
 }
