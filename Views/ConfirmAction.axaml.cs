@@ -1,21 +1,14 @@
-using Avalonia;
-using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using MedEye.ViewModels;
 
 namespace MedEye.Views
 {
-    public partial class ConfirmAction : Window
+    public partial class ConfirmAction : BaseDialogWindow<ViewModelBase>
     {
-        private double windowWidth;
-        private double windowHeight;
-        private double mainWindowWidth;
-        private double mainWindowHeight;
-
         public ConfirmAction()
         {
             InitializeComponent();
-
             No.Click += ExitClick;
         }
 
@@ -28,59 +21,33 @@ namespace MedEye.Views
             No.Click += ExitClick;
             Yes.Click += act;
             Yes.Click += ExitClick;
+
+            AdaptToScreen();
         }
 
-        public ConfirmAction(double main_window_width, double main_window_height, string message, EventHandler<RoutedEventArgs> act)
-        {
-            InitializeComponent();
+        private void ExitClick(object? sender, RoutedEventArgs e) => Close();
 
-            mainWindowWidth = main_window_width;
-            mainWindowHeight = main_window_height;
-            windowWidth = 1055 * (main_window_width / 1920);
-            windowHeight = 600 * (main_window_height / 1080);
-
-            ConfirmText.Text = message;
-
-            No.Click += ExitClick;
-            Yes.Click += act;
-            Yes.Click += ExitClick;
-        }
-
-        private void ExitClick(object? sender, RoutedEventArgs e)
-        {
-            this.Close();
-        }
-        
         protected override void OnKeyDown(KeyEventArgs e)
         {
-            if (e.Key == Key.Escape)
-            {
+            if (e.Key == Key.Escape) 
                 Close();
-            }
 
             base.OnKeyDown(e);
         }
 
-        protected override void OnOpened(EventArgs e)
-        {
-            AdaptToScreen();
-            base.OnOpened(e);
-        }
-
         private void AdaptToScreen()
         {
-            this.Width = windowWidth;
-            this.Height = windowHeight;
-            this.Position = new PixelPoint( (int)(432.5 * (mainWindowWidth / 1920)),
-                                            (int)(240 * (mainWindowHeight / 1080)));
-            var buttonWidth = this.Width / 3;
+            Width = 1055 * (ClientSize.Width / 1920);
+            Height = 600 * (ClientSize.Height / 1080);
+
+            var buttonWidth = Width / 3;
 
             No.Width = buttonWidth;
             Yes.Width = buttonWidth;
-            ConfirmText.Width = 0.9 * windowWidth;
-            Yes.FontSize = 36 * (mainWindowWidth / 1920);
-            No.FontSize = 36 * (mainWindowWidth / 1920);
-            ConfirmText.FontSize = 48 * (mainWindowWidth / 1920);
+            ConfirmText.Width = 0.9 * Width;
+            Yes.FontSize = 36 * (ClientSize.Width / 1920);
+            No.FontSize = 36 * (ClientSize.Width / 1920);
+            ConfirmText.FontSize = 48 * (ClientSize.Width / 1920);
         }
     }
 }

@@ -5,11 +5,10 @@
         mc:Ignorable="d" d:DesignWidth="1000" d:DesignHeight="600"
         x:Class="MedEye.Views.ModalWindow"
         Title="ModalWindow"
-        HasSystemDecorations="False"
+        SystemDecorations="None"
         WindowStartupLocation="CenterScreen"
         TransparencyLevelHint="Transparent"
-        Background="Transparent"
-        >
+        Background="Transparent">
   <Border Background="#CFE0F2"
           BorderBrush="#00B1A7"
           BorderThickness="4"
@@ -45,7 +44,6 @@
           <Setter Property="TextBlock.Foreground" Value="Red"></Setter>
         </Style>
       </Grid.Styles>
-    
-  </Grid>
+    </Grid>
   </Border>
 </Window>

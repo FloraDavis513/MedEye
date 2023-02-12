@@ -1,55 +1,35 @@
-<Window xmlns="https://github.com/avaloniaui"
+<UserControl xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
-        x:Class="MedEye.Views.MainMenu"
-        Title="MainMenu"
-        WindowState="FullScreen">
-  <Grid
-    Background="#1372B7"
-    Opacity="0.25"
-    ColumnDefinitions="*, 5*, 12*">
-    <Panel Grid.Row="0" Grid.Column="0">
-    </Panel>
-    <Grid ColumnDefinitions="*" RowDefinitions="*, *, *, *, *, 4*" Background="White" Opacity="100" Grid.Row="0" Grid.Column="1" Name="GroupButton">
-      <TextBlock Grid.Row="0" Name="MainHeader" FontSize="96" TextAlignment="Center" TextWrapping="Wrap">
-        MedEye
-      </TextBlock>
-      <TextBlock Grid.Row="1" Name="SubHeader" FontSize="48" TextAlignment="Center" TextWrapping="Wrap">
-        Главное меню
-      </TextBlock>
-      <Button Name="Registry" Grid.Row="2" HorizontalAlignment="Center">
-        Регистратура
-      </Button>
-      <Button Name="Cabinet" Grid.Row="3" HorizontalAlignment="Center">
-        Кабинет
-      </Button>
-      <Button Name="Exit" Grid.Row="4" HorizontalAlignment="Center">
-        Выход
-      </Button>
-      <Button Name="Info" Grid.Row="5" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0 0 0 50">
-        Справка
-      </Button>
+        x:Class="MedEye.Views.MainMenu">
+  <Grid Background="#1372B7"
+        Opacity="0.25"
+        ColumnDefinitions="*, 5*, 12*">
+    <Panel Grid.Row="0" Grid.Column="0"/>
+    <Grid Name="GroupButton"
+          ColumnDefinitions="*"
+          RowDefinitions="*, *, *, *, *, 4*"
+          Background="White"
+          Opacity="100"
+          Grid.Row="0"
+          Grid.Column="1">
+      <TextBlock Classes="H1" Name="MainHeader" Text="MedEye" Grid.Row="0"/>
+      <TextBlock Classes="H2" Name="SubHeader" Text="Главное меню" Grid.Row="1" />
+      <Button Command="{Binding GoRegistry}" Content="Регистратура" Grid.Row="2"/>
+      <Button Click="ToCabinet" Content="Кабинет" Grid.Row="3"/>
+      <Button Click="ClickExit" Content="Выход" Grid.Row="4"/>
+      <Button Command="{Binding ShowInfo}" Name="Info" Content="Справка" Grid.Row="5"/>
+
       <Grid.Styles>
-        <Style Selector="Button">
-          <Setter Property="BorderBrush" Value="#00B1A7"></Setter>
-          <Setter Property="Background" Value="#CFE0F2"></Setter>
-          <Setter Property="BorderThickness" Value="2.5"></Setter>
-          <Setter Property="CornerRadius" Value="15"></Setter>
-          <Setter Property="Margin" Value="0 25 0 0"></Setter>
-          <Setter Property="Padding" Value="0 15 0 15"></Setter>
-          <Setter Property="TextBlock.FontSize" Value="32"></Setter>
-          <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
-        </Style>
-        <Style Selector="Button:pointerover /template/ ContentPresenter">
-          <Setter Property="BorderBrush" Value="Red"></Setter>
-          <Setter Property="Background" Value="#CFE0F2"></Setter>
-          <Setter Property="TextBlock.Foreground" Value="Red"></Setter>
+        <Style Selector="Button#Info">
+          <Setter Property="VerticalAlignment" Value="Bottom"/>
+          <Setter Property="Margin" Value="0 0 0 50"/>
         </Style>
       </Grid.Styles>
     </Grid>
     <Image Name="Logo" Grid.Row="0" Grid.Column="3" Opacity="100">
     </Image>
   </Grid>
-</Window>
+</UserControl>

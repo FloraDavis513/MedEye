@@ -1,11 +1,9 @@
-﻿<Window xmlns="https://github.com/avaloniaui"
+﻿<UserControl xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-        x:Class="MedEye.Views.SetupMenu"
-        Title="SetupMenu"
-        WindowState="FullScreen">
+        x:Class="MedEye.Views.SetupMenu">
     <Grid
         Background="#1372B7"
         Opacity="0.25"
@@ -13,12 +11,19 @@
         <Panel Grid.Row="0" Grid.Column="0">
         </Panel>
         <StackPanel Background="White" Opacity="100" Grid.Row="0" Grid.Column="1" Name="LeftPartSetupMenu">
-            <TextBlock Name="Header1" FontSize="36" Margin="0 5 0 0" TextAlignment="Center" TextWrapping="Wrap">
+            <TextBlock Classes="H2" Name="GameSetupHeader" Margin="0 5 0 0">
                 Игры
             </TextBlock>
             <Grid RowDefinitions="*, *, *, *" HorizontalAlignment="Center" VerticalAlignment="Center"
                   Margin="0 0 0 0">
-                <ScrollViewer Name="GamesScroll" Grid.Row="0">
+                <ScrollViewer Name="GamesScroll"
+                              Grid.Row="0"
+                              Height="{Binding $parent[Window].Height,
+                                Converter={StaticResource SizeConverter},
+                                ConverterParameter=60%}"
+                              MaxHeight="{Binding $parent[Window].Height,
+                                Converter={StaticResource SizeConverter},
+                                ConverterParameter=60%}">
                     <Grid Name="Games" RowDefinitions="*, *, *" HorizontalAlignment="Center"
                           Margin="0 75 0 0">
                         <ComboBox Grid.Row="0" Name="DefaultGame" PlaceholderText="Выбрать игру">
@@ -35,7 +40,7 @@
             </Grid>
         </StackPanel>
         <StackPanel Background="White" Opacity="100" Grid.Row="0" Grid.Column="3" Name="Settings">
-            <TextBlock Name="Header2" Margin="0 5 0 0" FontSize="36" TextAlignment="Center" TextWrapping="Wrap">
+            <TextBlock Classes="H2" Margin="0 5 0 0">
                 Настройки игры
             </TextBlock>
             <Grid Name="SettingControls" RowDefinitions="*, *, *, *, *, *, *, *, *" ColumnDefinitions="*, *"
@@ -89,56 +94,29 @@
                 <TextBlock Name="Timer" Grid.Row="7" Grid.Column="0" TextAlignment="Left" TextWrapping="Wrap">
                     Таймер (в минутах)
                 </TextBlock>
-                <TextBox Name="TimerTextBox" Text="0" Grid.Row="7" Grid.Column="1"></TextBox>
+                <TextBox Name="TimerTextBox" Text="0" Grid.Row="7" Grid.Column="1"
+                         FontSize="{Binding $parent[Window].Width,
+                Converter={StaticResource TextSizeConverter},
+                ConverterParameter=H3}"/>
                 <Button Name="DeleteGame" Grid.Row="8" Grid.Column="0" Margin="10">Удалить</Button>
                 <Button Name="SaveGame" Grid.Row="8" Grid.Column="1" Margin="10">Сохранить</Button>
                 <Grid.Styles>
                     <Style Selector="TextBlock">
-                        <Setter Property="VerticalAlignment" Value="Center"></Setter>
-                    </Style>
-                    <Style Selector="Button">
-                        <Setter Property="BorderBrush" Value="#00B1A7"></Setter>
-                        <Setter Property="Background" Value="#CFE0F2"></Setter>
-                        <Setter Property="BorderThickness" Value="2.5"></Setter>
-                        <Setter Property="CornerRadius" Value="15"></Setter>
-                        <Setter Property="Margin" Value="0 25 0 0"></Setter>
-                        <Setter Property="Padding" Value="0 15 0 15"></Setter>
-                        <Setter Property="TextBlock.FontSize" Value="32"></Setter>
-                        <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
-                    </Style>
-                    <Style Selector="ComboBox">
-                        <Setter Property="BorderBrush" Value="#00B1A7"></Setter>
-                        <Setter Property="Background" Value="#CFE0F2"></Setter>
-                        <Setter Property="BorderThickness" Value="2.5"></Setter>
-                        <Setter Property="CornerRadius" Value="15"></Setter>
-                        <Setter Property="Margin" Value="0 25 0 0"></Setter>
-                        <Setter Property="Padding" Value="0 15 0 15"></Setter>
-                        <Setter Property="TextBlock.FontSize" Value="32"></Setter>
-                        <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
-                    </Style>
-                    <Style Selector="Button:pointerover /template/ ContentPresenter">
-                        <Setter Property="BorderBrush" Value="Red"></Setter>
-                        <Setter Property="Background" Value="#CFE0F2"></Setter>
-                        <Setter Property="TextBlock.Foreground" Value="Red"></Setter>
-                    </Style>
-                    <Style Selector="ComboBox:pointerover /template/ ContentPresenter">
-                        <Setter Property="BorderBrush" Value="Red"></Setter>
-                        <Setter Property="Background" Value="#CFE0F2"></Setter>
-                        <Setter Property="TextBlock.Foreground" Value="Red"></Setter>
+                        <Setter Property="VerticalAlignment" Value="Center"/>
                     </Style>
                 </Grid.Styles>
             </Grid>
         </StackPanel>
         <Grid.Styles>
             <Style Selector="Button">
-                <Setter Property="BorderBrush" Value="#00B1A7"></Setter>
-                <Setter Property="Background" Value="#CFE0F2"></Setter>
-                <Setter Property="BorderThickness" Value="2.5"></Setter>
-                <Setter Property="CornerRadius" Value="15"></Setter>
-                <Setter Property="Margin" Value="0 25 0 0"></Setter>
-                <Setter Property="Padding" Value="0 15 0 15"></Setter>
-                <Setter Property="TextBlock.FontSize" Value="32"></Setter>
-                <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
+                <Setter Property="FontSize" Value="{Binding $parent[Window].Width,
+                Converter={StaticResource TextSizeConverter},
+                ConverterParameter=H3}"/>
+                <Setter Property="Width" Value="{Binding $parent[Window].Width,
+                Converter={StaticResource SizeConverter},
+                ConverterParameter=0}"/>
+                <Setter Property="Margin" Value="0 25 0 0"/>
+                <Setter Property="Padding" Value="0 15 0 15"/>
             </Style>
             <Style Selector="ComboBox">
                 <Setter Property="BorderBrush" Value="#00B1A7"></Setter>
@@ -147,19 +125,29 @@
                 <Setter Property="CornerRadius" Value="15"></Setter>
                 <Setter Property="Margin" Value="0 25 0 0"></Setter>
                 <Setter Property="Padding" Value="0 15 0 15"></Setter>
-                <Setter Property="TextBlock.FontSize" Value="32"></Setter>
+                <Setter Property="FontSize" Value="{Binding $parent[Window].Width,
+                Converter={StaticResource TextSizeConverter},
+                ConverterParameter=H3}"/>
+                <Setter Property="Width" Value="{Binding $parent[Window].Width,
+                Converter={StaticResource SizeConverter},
+                ConverterParameter=0}"/>
                 <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
-            </Style>
-            <Style Selector="Button:pointerover /template/ ContentPresenter">
-                <Setter Property="BorderBrush" Value="Red"></Setter>
-                <Setter Property="Background" Value="#CFE0F2"></Setter>
-                <Setter Property="TextBlock.Foreground" Value="Red"></Setter>
             </Style>
             <Style Selector="ComboBox:pointerover /template/ ContentPresenter">
                 <Setter Property="BorderBrush" Value="Red"></Setter>
                 <Setter Property="Background" Value="#CFE0F2"></Setter>
                 <Setter Property="TextBlock.Foreground" Value="Red"></Setter>
             </Style>
+            <Style Selector="RadioButton">
+                <Setter Property="FontSize" Value="{Binding $parent[Window].Width,
+                Converter={StaticResource TextSizeConverter},
+                ConverterParameter=H3}"/>
+            </Style>
+            <Style Selector="TextBlock">
+                <Setter Property="FontSize" Value="{Binding $parent[Window].Width,
+                Converter={StaticResource TextSizeConverter},
+                ConverterParameter=H3}"/>
+            </Style>
         </Grid.Styles>
     </Grid>
-</Window>
+</UserControl>

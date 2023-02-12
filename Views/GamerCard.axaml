@@ -1,53 +1,47 @@
-<Window xmlns="https://github.com/avaloniaui"
+<UserControl xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
-        x:Class="MedEye.Views.GamerCard"
-        Title="GamerCard"
-        WindowState="FullScreen">
+        x:Class="MedEye.Views.GamerCard">
   <Border Background="#1372B7"
-          Opacity="0.25"
-          >
+          Opacity="0.25">
     <Grid ColumnDefinitions="*" RowDefinitions="*, 10*, 2*" Opacity="4">
       <TextBlock Name="GamerHeader" Grid.Column="0" Grid.Row="0" FontSize="48" TextAlignment="Center" Margin="0 50 0 0" Width="1820">
         ―――――――― Карта игрока № ――――――――
       </TextBlock>
-      <ScrollViewer Grid.Column="0" Grid.Row="1" >
+      <ScrollViewer Grid.Column="0" Grid.Row="1">
         <Grid Name="GamerData" RowDefinitions="*, *, *, *, *, *, *, *" ColumnDefinitions="*, *, *, *" Background="White" Opacity="10" Margin="50 0 50 0">
-          <TextBlock Grid.Column="0" Grid.Row="1" FontSize="48" VerticalAlignment="Center" HorizontalAlignment="Center">
-            Фамилия
-          </TextBlock>
-          <TextBlock Grid.Column="0" Grid.Row="2" FontSize="48" VerticalAlignment="Center" HorizontalAlignment="Center">
-            Имя
-          </TextBlock>
-          <TextBlock Grid.Column="0" Grid.Row="4" FontSize="48" VerticalAlignment="Center" HorizontalAlignment="Center">
-            Дата рождения
-          </TextBlock>
-          <TextBlock Grid.Column="2" Grid.Row="4" FontSize="48" VerticalAlignment="Center" HorizontalAlignment="Center">
-            Пол
-          </TextBlock>
-          <TextBlock Grid.Column="0" Grid.Row="3" FontSize="48" VerticalAlignment="Center" HorizontalAlignment="Center">
-            Отчество
-          </TextBlock>
-          
-          <TextBlock Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="4" FontSize="48" VerticalAlignment="Center" HorizontalAlignment="Center" MaxLines="2" TextWrapping="Wrap" Margin="0 0 0 0">
-            ―――――――― Примечания ――――――――
-          </TextBlock>
-          
-          <TextBox Name="LastName" Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="1"/>
-          <TextBox Name="FirstName" Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="2"/>
-          <TextBox Name="SecondName" Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="3"/>
-          <TextBox Name="BirthDate" Grid.Column="1" Grid.Row="4"/>
-          <TextBox Name="Sex" Grid.Column="3" Grid.Row="4"/>
-
+          <TextBlock Classes="H2" Grid.Column="0" Grid.Row="1" Text="Фамилия"/>
+          <TextBlock Classes="H2" Grid.Column="0" Grid.Row="2" Text="Имя"/>
+          <TextBlock Classes="H2" Grid.Column="0" Grid.Row="3" Text="Отчество"/>
+          <TextBlock Classes="H2" Grid.Column="0" Grid.Row="4" Text="Дата рождения"/>
+          <TextBlock Classes="H2" Grid.Column="2" Grid.Row="4" Text="Пол"/>
+          <TextBlock Classes="H2" Grid.Column="0"
+                     Grid.Row="5"
+                     Grid.ColumnSpan="4"
+                     MaxLines="2"
+                     TextWrapping="Wrap"
+                     Margin="0 0 0 0"
+                     Text="―――――――― Примечания ――――――――"/>
+    
+          <TextBox Name="LastName" Text="{Binding LastName}" Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="1"/>
+          <TextBox Name="FirstName" Text="{Binding FirstName}" Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="2"/>
+          <TextBox Name="SecondName" Text="{Binding SecondName}" Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="3"/>
+          <TextBox Name="BirthDate" Text="{Binding BirthDate}" Grid.Column="1" Grid.Row="4"/>
+          <TextBox Name="Sex" Text="{Binding Sex}" Grid.Column="3" Grid.Row="4"/>
+    
           <TextBox Grid.Column="0" Grid.Row="6" Grid.ColumnSpan="4" TextWrapping="Wrap"/>
           <Grid.Styles>
             <Style Selector="TextBox">
-              <Setter Property="BorderBrush" Value="#1372B7"></Setter>
-              <Setter Property="BorderThickness" Value="2.5"></Setter>
-              <Setter Property="Margin" Value="50 50 50 50"></Setter>
-              <Setter Property="TextBlock.FontSize" Value="48"></Setter>
+              <Setter Property="BorderBrush" Value="#1372B7"/>
+              <Setter Property="BorderThickness" Value="2.5"/>
+              <Setter Property="Margin" Value="50 50 50 50"/>
+              <Setter Property="TextBlock.FontSize" Value="48"/>
+            </Style>
+            <Style Selector="TextBlock">
+              <Setter Property="VerticalAlignment" Value="Center"/>
+              <Setter Property="HorizontalAlignment" Value="Center"/>
             </Style>
           </Grid.Styles>
         </Grid>
@@ -59,29 +53,15 @@
         <TextBlock Name="Caption" Foreground="Red" Grid.Column="1" FontSize="36" VerticalAlignment="Center" HorizontalAlignment="Center" Opacity="100" IsVisible="False">
           Не заполнены обязательные поля
         </TextBlock>
-        <Button Name="Back"  Grid.Column="0">
-          Назад
-        </Button>
+        <Button Command="{Binding GoRegistry}" Content="Назад" Grid.Column="0"/>
         <Grid.Styles>
           <Style Selector="Button">
-            <Setter Property="BorderBrush" Value="#00B1A7"></Setter>
-            <Setter Property="Background" Value="#CFE0F2"></Setter>
-            <Setter Property="BorderThickness" Value="2.5"></Setter>
-            <Setter Property="CornerRadius" Value="15"></Setter>
-            <Setter Property="Margin" Value="100 0 100 0"></Setter>
-            <Setter Property="Padding" Value="0 15 0 15"></Setter>
-            <Setter Property="TextBlock.FontSize" Value="32"></Setter>
-            <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
-            <Setter Property="Opacity" Value="100"></Setter>
-          </Style>
-          <Style Selector="Button:pointerover /template/ ContentPresenter">
-            <Setter Property="BorderBrush" Value="Red"></Setter>
-            <Setter Property="Background" Value="#CFE0F2"></Setter>
-            <Setter Property="TextBlock.Foreground" Value="Red"></Setter>
+            <Setter Property="Margin" Value="100 0 100 0"/>
+            <Setter Property="Padding" Value="0 15 0 15"/>
+            <Setter Property="Opacity" Value="100"/>
           </Style>
         </Grid.Styles>
       </Grid>
     </Grid>
-    
   </Border>
-</Window>
+</UserControl>

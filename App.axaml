@@ -1,15 +1,43 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="using:MedEye"
+             xmlns:converters="clr-namespace:MedEye.Converters"
              x:Class="MedEye.App">
     <Application.DataTemplates>
         <local:ViewLocator/>
     </Application.DataTemplates>
+    <Application.Resources>
+        <converters:TextSizeConverter x:Key="TextSizeConverter"/>
+        <converters:SizeConverter x:Key="SizeConverter"/>
+    </Application.Resources>
 
     <Application.Styles>
         <FluentTheme Mode="Light"/>
         <StyleInclude Source="avares://Avalonia.Themes.Default/DefaultTheme.xaml"/>
         <StyleInclude Source="avares://Avalonia.Themes.Default/Accents/BaseLight.xaml"/>
         <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Default.xaml"/>
+        <StyleInclude Source="/Styles/Button.axaml"/>
+        <Style Selector="TextBlock.H1">
+            <Setter Property="FontSize" Value="{Binding $parent[Window].Width,
+                Converter={StaticResource TextSizeConverter},
+                ConverterParameter=H1}"/>
+            <Setter Property="TextAlignment" Value="Center"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+        </Style>
+
+        <Style Selector="TextBlock.H2">
+            <Setter Property="FontSize" Value="{Binding $parent[Window].Width,
+                Converter={StaticResource TextSizeConverter},
+                ConverterParameter=H2}"/>
+            <Setter Property="TextAlignment" Value="Center"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+        </Style>
+        <Style Selector="TextBlock.H3">
+            <Setter Property="FontSize" Value="{Binding $parent[Window].Width,
+                Converter={StaticResource TextSizeConverter},
+                ConverterParameter=H3}"/>
+            <!-- <Setter Property="TextAlignment" Value="Center"/> -->
+            <!-- <Setter Property="TextWrapping" Value="Wrap"/> -->
+        </Style>
     </Application.Styles>
 </Application>
